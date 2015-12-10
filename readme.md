@@ -2,8 +2,9 @@
 
 # TODO
 
-* mysql schema
+* [mysql schema](http://ondras.zarovi.cz/sql/demo/?keyword=dd_tyhou) 
 * polling/voting system STV?
+* Code based unit testing
 
 
 Main sections:
@@ -64,4 +65,11 @@ http://stackoverflow.com/questions/192220/what-is-the-most-efficient-elegant-way
 
 use alpha-ids
 http://kvz.io/blog/2009/06/10/create-short-ids-with-php-like-youtube-or-tinyurl/
+
+STV example:
+https://en.wikipedia.org/wiki/Single_transferable_vote#Counting_the_votes
+https://en.wikipedia.org/wiki/Counting_single_transferable_votes
+https://en.wikipedia.org/wiki/Comparison_of_the_Hare_and_Droop_quotas
+
+
 
