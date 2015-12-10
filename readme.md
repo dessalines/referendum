@@ -1,25 +1,27 @@
 # Direct democracy
 
-TODO
+# TODO
 
 * mysql schema
 * polling/voting system STV?
-* 
 
 
 Main sections:
+
 * Polls(Dynamic polls)
 * Discussions(reddit style or disqus)
 * Collaborative documents(git with forking/branching)
 
 
 What is decided by poll makers?
+
 * The question, or the poll title/text
 * The # of winners
 * The poll algorithm? (Always ranked though)
-* 
+
 
 What is hardcoded?
+
 * Categories, or custom subreddit/forum/community style?
 * Or allow multiple custom tags?
 
@@ -28,6 +30,7 @@ Research areas:
 
 
 Sites: 
+
 * Model voting off of http://demochoice.org/
 
 
