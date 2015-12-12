@@ -64,24 +64,31 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 
 		fillCandidateMaps();
 
+		Integer aliveCandidates = roundToCandidateToItem.get(roundNumber).size();
+
 		while (winners < seats) {
+			log.info("alive = " + aliveCandidates + " seats = " + seats);
 
 			Integer threshold = getThreshold(votePool, seats);
+
+			aliveCandidates = roundToCandidateToItem.get(roundNumber).size();
 
 
 
 			//			log.info("candidate ballots total: " + Tools.GSON2.toJson(candidateBallots));
-			log.info("round to candidate items: " + Tools.GSON2.toJson(roundToCandidateToItem));
+
 
 			List<ElectionRoundItem> roundItems = new ArrayList<>();
 
-			ElectionRound er = new ElectionRound(roundItems);
+			ElectionRound er = new ElectionRound(roundItems, threshold);
 
 			electionRounds.add(er);
 
 			Boolean areWinners = false;
 
 			log.info("treshold = " + threshold);
+
+
 
 			// Now you have all the ballots round counted, now do the rules
 			for (Entry<Integer, ElectionRoundItem> e : roundToCandidateToItem.get(roundNumber).entrySet()) {
@@ -96,6 +103,7 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 				ElectionRoundItem eri = e.getValue();
 
 				Integer votes = eri.getVotes();
+
 
 
 
@@ -133,8 +141,11 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 
 			}
 
+
+
 			// If there were no winners after those were counted, then eliminate the lowest, and distribute them
-			if (!areWinners) {
+			log.info("winners2 = " + winners + " seats = " + seats);
+			if (!areWinners && winners < seats) {
 				log.info("No Winners");
 
 				RankedCandidate eliminatedCandidate = null;
@@ -146,35 +157,49 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 				for (Entry<Integer, ElectionRoundItem> e : roundToCandidateToItem.get(roundNumber).entrySet()) {
 					Integer cVotes = e.getValue().getVotes();
 
-					log.info("cVotes = " + cVotes);
 					if (cVotes < maxVotes) {
 						Integer eliminatedCandidateId = e.getKey();
 						eliminatedCandidate = candidateIdToCandidate.get(eliminatedCandidateId);
 						maxVotes = e.getValue().getVotes();
-						log.info("new max votes = " + maxVotes);
-						log.info("ec = " + eliminatedCandidate.getId());
 					}
 
 				}
 
 				// Set them as defeated
 				log.info("round # " + roundNumber + " eliminatedCandidate = " + eliminatedCandidate.getId());
-				log.info(roundToCandidateToItem.get(0).get(eliminatedCandidate.getId()).status.toString());
 				roundToCandidateToItem.get(roundNumber).get(eliminatedCandidate.getId()).status = Status.DEFEATED;
 
 				log.info("Candidate " + eliminatedCandidate.getId() + " defeated");
-				log.info(roundToCandidateToItem.get(0).get(eliminatedCandidate.getId()).status.toString());
 
 				// Transfer their votes to their next choice
+				// should've transferred ballots previously
+
 				for (RankedBallot ballot : candidateBallots.get(eliminatedCandidate.getId())) {
 					distributeVote(roundNumber, eliminatedCandidate, ballot);
 				}
 
 			}
 
+
+
 			transferVotesToNextRound();
 			roundNumber++;
 
+
+		}
+
+
+
+		// Set the remaining candidates as a winners(as long as its not single winner)
+		for (Entry<Integer, ElectionRoundItem> e : roundToCandidateToItem.get(roundNumber-1).entrySet()) {
+			if (e.getValue().status == Status.STAYS) {
+				
+				if (seats > 1) {
+					e.getValue().status = Status.ELECTED;
+				} else {
+					e.getValue().status = Status.DEFEATED;
+				}
+			}
 
 		}
 
@@ -193,23 +218,19 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 
 
 
-		log.info("round number = " + roundNumber + " ballot rankings size = " + ballot.getRankings().size());
-
-
-		log.info(Tools.GSON2.toJson(ballot));
+		//		log.info("round number = " + roundNumber + " ballot rankings size = " + ballot.getRankings().size());
+		//		log.info(Tools.GSON2.toJson(ballot));
 
 
 		// TODO what if ToCandidate is out of race? Don't do any distribution
 		if (ballot.getRankings().size() <= roundNumber) {
-			votePool--;
-
+			//			votePool -= eri.getVotes();
+			votePool -= 1;
 			log.info("Couldn't distributed because no next candidate, vote pool now = " + votePool);
 		}
 
 		// distributed candidate is still in race
 		else {
-
-			log.info("Distributing vote");
 
 			// add those excess votes to the first alive choice on their ballot
 			RankedCandidate distributedToCandidate = null;
@@ -254,15 +275,20 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 
 			}
 
+			// Add the vote
 			roundToCandidateToItem.get(roundNumber + 1).get(distributedToCandidate.getId()).addVote();
-			log.info("Distributed next eri = " 
-					+ Tools.GSON2.toJson(roundToCandidateToItem.get(roundNumber + 1).
-							get(distributedToCandidate.getId())));
+
+			// Also distribute the ballot over
+			candidateBallots.get(distributedToCandidate.getId()).add(ballot);
+
+			//			log.info("Distributed next eri = " 
+			//					+ Tools.GSON2.toJson(roundToCandidateToItem.get(roundNumber + 1).
+			//							get(distributedToCandidate.getId())));
 
 
 		}
 
-		log.info(Tools.GSON2.toJson(eri));
+		//		log.info(Tools.GSON2.toJson(eri));
 
 	}
 
@@ -279,18 +305,20 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 			Integer candidateId = e.getKey();
 			ElectionRoundItem eri = e.getValue();
 
-			
+
 
 
 			// Only transfer the candidates still in the race, 
 			// and if they haven't been distributed already
 			if (eri.status == Status.STAYS) {
-				
+
 				ElectionRoundItem nextERI = roundToCandidateToItem.get(roundNumber + 1).get(candidateId);
-				
-				log.info("transferred eri to next round = " + Tools.GSON2.toJson(eri));
+
+				//				log.info("transferred eri to next round = " + Tools.GSON2.toJson(eri));
 				if (nextERI == null) {
-					roundToCandidateToItem.get(roundNumber + 1).put(candidateId, eri);
+					ElectionRoundItem newERI = new ElectionRoundItem(candidateIdToCandidate.get(candidateId));
+					newERI.addVotes(eri.getVotes());
+					roundToCandidateToItem.get(roundNumber + 1).put(candidateId, newERI);
 				} else {
 					roundToCandidateToItem.get(roundNumber + 1).get(candidateId).addVotes(eri.getVotes());
 				}
@@ -299,6 +327,8 @@ public class STVElection implements MultipleWinnerElectionResults, RankedVotingS
 
 
 		}
+
+		log.info("round to candidate items: " + Tools.GSON2.toJson(roundToCandidateToItem.get(roundNumber)));
 
 
 	}

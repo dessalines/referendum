@@ -101,7 +101,7 @@ public class STVTest extends TestCase {
 
 	public void testSTVElection() {
 		
-		Integer seats = 3;
+		Integer seats = 2;
 		
 		List<RankedBallot> ballots = setupBallots1();
 		
