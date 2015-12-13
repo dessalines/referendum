@@ -7,7 +7,7 @@ import com.dd.voting.election.ElectionRound;
 
 public interface MultipleWinnerElectionResults extends ElectionResults {
 
-	List<ElectionRound> getElectionRounds();
+	List<ElectionRound> getRounds();
 	
 	List<RankedBallot> getBallots();
 	

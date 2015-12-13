@@ -6,13 +6,13 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RankedBallot;
 import com.dd.voting.candidate.RankedCandidate;
+import com.dd.voting.election.ElectionRoundItem;
 import com.dd.voting.election.STVElection;
 import com.dd.voting.election.STVElection.Quota;
 
@@ -23,11 +23,9 @@ public class STVTest extends TestCase {
 	
 	static final Logger log = LoggerFactory.getLogger(STVTest.class);
 
-
-	
 	Integer orange = 1, pear = 2, chocolate = 3, strawberry = 4, mixed = 5;
 	
-	private List<RankedBallot> setupBallots1() {
+	private List<RankedBallot> setupBallots() {
 		
 		List<RankedBallot> ballots = new ArrayList<>();
 		
@@ -101,17 +99,57 @@ public class STVTest extends TestCase {
 
 	public void testSTVElection() {
 		
-		Integer seats = 2;
+		Integer seats = 3;
 		
-		List<RankedBallot> ballots = setupBallots1();
+		List<RankedBallot> ballots = setupBallots();
 		
-		STVElection election = new STVElection(Quota.DROOP, ballots, seats);
+		STVElection stv = new STVElection(Quota.DROOP, ballots, seats);
 		
-		log.info(Tools.GSON2.toJson(election.getElectionRounds()));
+		log.info(Tools.GSON2.toJson(stv.getRounds()));
 		
+		Integer rn = 0, c;
+		
+		// first round
+		c = 0;
+		assertEquals(Integer.valueOf(4), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(2), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(12), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(1), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(1), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 
+		assertEquals(ElectionRoundItem.Status.ELECTED, stv.getRounds().get(rn++).getRoundItems().get(2).getStatus());
+		
+		
+		// second round
+		c = 0;
+		assertEquals(Integer.valueOf(4), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(2), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(3), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 
+		assertEquals(ElectionRoundItem.Status.DEFEATED, stv.getRounds().get(rn++).getRoundItems().get(1).getStatus());
 
+		// third round
+		c = 0;
+		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(3), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+
+		assertEquals(ElectionRoundItem.Status.ELECTED, stv.getRounds().get(rn++).getRoundItems().get(0).getStatus());
+
+		// fourth round
+		c = 0;
+		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(3), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+
+		assertEquals(ElectionRoundItem.Status.DEFEATED, stv.getRounds().get(rn++).getRoundItems().get(1).getStatus());
+
+		// fifth round
+		c = 0;
+		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+
+		assertEquals(ElectionRoundItem.Status.ELECTED, stv.getRounds().get(rn++).getRoundItems().get(0).getStatus());
+		
 	}
 
 }

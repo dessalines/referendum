@@ -1,5 +1,6 @@
 package com.dd.voting.election;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,11 +8,11 @@ import com.dd.voting.candidate.RankedCandidate;
 
 public class ElectionRoundItem {
 
-	enum Status {
+	public enum Status {
 		STAYS, DEFEATED, ELECTED;
 	}
 	
-	public Status status = Status.STAYS;
+	private Status status = Status.STAYS;
 	
 	private RankedCandidate candidate;
 	private Integer votes;
@@ -34,7 +35,7 @@ public class ElectionRoundItem {
 	
 	public ElectionRoundItem(RankedCandidate candidate) {
 		this.candidate = candidate;
-		votes = 1;
+		votes = 0;
 		distributedVotes = new HashMap<>();
 	}
 	
@@ -46,13 +47,30 @@ public class ElectionRoundItem {
 		return votes;
 	}
 	
+	public Status getStatus() {
+		return status;
+	}
+	
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	
 	public RankedCandidate getCandidate() {
 		return candidate;
 	}
 
 	public void addVotes(Integer votes) {
-		this.votes += votes - 1;
+		this.votes += votes;
 		
+	}
+	
+	public static class ElectionRoundItemComparator implements Comparator<ElectionRoundItem> {
+
+		@Override
+		public int compare(ElectionRoundItem o1, ElectionRoundItem o2) {
+			return o1.getCandidate().getId().compareTo(o2.getCandidate().getId());
+		}
+
 	}
 	
 	

@@ -1,10 +1,10 @@
 package com.dd.voting.ballot;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.dd.voting.candidate.RankedCandidate;
+import com.dd.voting.candidate.RankedCandidate.RankedCandidateComparator;
 
 public class RankedBallot implements Ballot {
 
@@ -19,14 +19,7 @@ public class RankedBallot implements Ballot {
 		return rankings;
 	}
 	
-	public class RankedCandidateComparator implements Comparator<RankedCandidate> {
 
-		@Override
-		public int compare(RankedCandidate o1, RankedCandidate o2) {
-			return o1.getRank().compareTo(o2.getRank());
-		}
-
-	}
 
 
 
