@@ -72,4 +72,13 @@ https://en.wikipedia.org/wiki/Counting_single_transferable_votes
 https://en.wikipedia.org/wiki/Comparison_of_the_Hare_and_Droop_quotas
 
 
+Markdown:
+http://www.codingdrama.com/bootstrap-markdown/
+
+
+https://github.com/myabc/markdownj
+https://github.com/evilstreak/markdown-js
+
+
+
 

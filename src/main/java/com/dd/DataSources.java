@@ -1,10 +1,7 @@
 package com.dd;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 
 import com.dd.tools.Tools;
 
@@ -15,8 +12,8 @@ public class DataSources {
 	
 	public static Integer EXTERNAL_SPARK_WEB_PORT = 80; // Main is port 80, dev is port 4567
 	
-	// iptables are used to route all requests to 80 to 8080.
-	public static Integer INTERNAL_SPARK_WEB_PORT = 8080;
+	// iptables are used to route all requests to 80 to 4567.
+	public static Integer INTERNAL_SPARK_WEB_PORT = 4567;
 	
 	public static final String WEB_SERVICE_URL = "http://localhost:" + EXTERNAL_SPARK_WEB_PORT + "/";
 	
@@ -80,7 +77,7 @@ public class DataSources {
 	
 	public static final Date APP_START_DATE = new Date();
 	
-	public static final String DB_PROP_FILE  = System.getProperty("user.home") + "/tt_db.properties";
+	public static final String DB_PROP_FILE = HOME_DIR() + "/db.properties";
 
 	public static final Properties DB_PROP = Tools.loadProperties(DB_PROP_FILE);
 

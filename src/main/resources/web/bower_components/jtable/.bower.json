@@ -1,0 +1,15 @@
+{
+  "name": "jtable",
+  "homepage": "https://github.com/hikalkan/jtable",
+  "version": "2.4.0",
+  "_release": "2.4.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.4.0",
+    "commit": "c1d6eb9eb3eb1fa279c13a51b2a163a275f7f5e3"
+  },
+  "_source": "git://github.com/hikalkan/jtable.git",
+  "_target": "~2.4.0",
+  "_originalSource": "jtable",
+  "_direct": true
+}

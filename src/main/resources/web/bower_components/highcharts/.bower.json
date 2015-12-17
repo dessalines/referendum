@@ -1,0 +1,49 @@
+{
+  "name": "highcharts",
+  "version": "4.2.0",
+  "description": "JavaScript charting framework",
+  "main": "lib/highcharts",
+  "authors": [
+    "Highsoft AS <support@highcharts.com> (http://www.highcharts.com/about)"
+  ],
+  "keywords": [
+    "charts",
+    "graphs",
+    "visualization",
+    "data",
+    "browserify",
+    "webpack"
+  ],
+  "ignore": [
+    "build",
+    "copy-release.js",
+    "errors",
+    "exporting-server",
+    "generate-changelog.js",
+    "grunt-tasks",
+    "gruntfile.js",
+    "js",
+    "vendor",
+    "samples",
+    "studies",
+    "test",
+    "tools",
+    "utils",
+    ".gitignore",
+    "ant",
+    "build.md",
+    "build.properties",
+    "build.xml"
+  ],
+  "homepage": "https://github.com/highcharts/highcharts",
+  "_release": "4.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.2.0",
+    "commit": "83c55972af6f5af78af613342c11b5b708687407"
+  },
+  "_source": "git://github.com/highcharts/highcharts.git",
+  "_target": "~4.2.0",
+  "_originalSource": "highcharts",
+  "_direct": true
+}
