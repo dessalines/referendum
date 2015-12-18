@@ -16,6 +16,11 @@
       bottom:0;
       }*/
 /* sidebar */
+.select_candidate {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+}
 
 .table-striped tbody tr.highlight td {
     background-color: #1995DC;

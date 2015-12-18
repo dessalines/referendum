@@ -141,16 +141,7 @@
           <form id="ballot_form" role="form">
             <div id="ballot_div">
               <script id="ballot_template" type="x-tmpl-mustache">
-                <table id="ballot_table" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Vote</th>
-                      <th>Rank</th>
-                      <th>ID</th>
-                      <th>subject</th>
-                      <th>poll id</th>
-                    </tr>
-                  </thead>
+                <table id="ballot_table">
                   <tbody id="ballot_body">
                     {{#.}}
                     <tr>
@@ -160,7 +151,7 @@
                       </td>
                       <!-- Create Ballot form -->
                       <td>
-                        <select id="select_candidate_{{id}}" class="select_candidate form-control"></select>
+                        <select id="select_candidate_{{id}}" disabled class="select_candidate form-control"></select>
                       </td>
                       <td>{{id}}</td>
                       <td>{{subject}}</td>

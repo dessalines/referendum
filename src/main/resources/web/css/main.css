@@ -53,6 +53,12 @@
 
 }*/
 
+.select_candidate {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+}
+
 #qrcode > canvas:nth-child(1) {
   border: solid 15px White;
 }
