@@ -1,13 +1,14 @@
 // var categoryId = getLastUrlPath();
 
 var ballotTemplate = $('#ballot_template').html();
-var ballotDiv = '#ballot_div';
+var ballotDiv = '#ballot_form';
 
 $(document).ready(function() {
   setupPollForm();
   setupCandidateForm(4);
 
   fillBallot(4);
+  setupBallotForm(4);
 
 });
 
@@ -37,6 +38,22 @@ function setupCandidateForm(pollId) {
       standardFormPost('create_candidate/' + pollId, candidateForm, null, null, null, null, null);
     });
 }
+
+function setupBallotForm(pollId) {
+  var ballotForm = '#ballot_form';
+  $(ballotForm).bootstrapValidator({
+      message: 'This value is not valid',
+      excluded: [':disabled'],
+      submitButtons: 'button[type="submit"]'
+    })
+    .on('success.form.bv', function(event) {
+      event.preventDefault();
+      var formData = $(ballotForm).serializeArray();
+      console.log(formData);
+      standardFormPost('create_ballot/' + pollId, ballotForm, null, null, null, null, null);
+    });
+}
+
 
 function fillBallot(pollId) {
   getJson('get_poll_candidates/' + pollId).done(function(e) {

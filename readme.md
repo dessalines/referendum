@@ -79,6 +79,13 @@ http://www.codingdrama.com/bootstrap-markdown/
 https://github.com/myabc/markdownj
 https://github.com/evilstreak/markdown-js
 
+Charting:
 
+https://github.com/nnnick/Chart.js
+http://www.highcharts.com/
+https://github.com/mbostock/d3/wiki/Gallery
 
+http://bost.ocks.org/mike/bar/2/
+
+http://bl.ocks.org/Caged/6476579
 
