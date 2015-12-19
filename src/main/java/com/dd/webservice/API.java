@@ -5,9 +5,13 @@ import static spark.Spark.post;
 
 
 
+
+
+
+
+
+import java.util.List;
 import java.util.Map;
-
-
 import java.util.Map.Entry;
 
 import org.slf4j.Logger;
@@ -15,10 +19,19 @@ import org.slf4j.LoggerFactory;
 
 
 
+
+
+
+
+
 import com.dd.db.Actions;
 import com.dd.db.Tables.Poll;
+import com.dd.tools.SampleData;
 import com.dd.tools.Tools;
-
+import com.dd.voting.ballot.RankedBallot;
+import com.dd.voting.election.ElectionRound;
+import com.dd.voting.election.STVElection;
+import com.dd.voting.election.STVElection.Quota;
 
 import static com.dd.db.Tables.*;
 
@@ -155,6 +168,40 @@ public class API {
 				String json = Actions.runSTVElection(pollId);
 
 
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+		
+		
+		get("/get_sample_stv_election", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+
+
+				Tools.dbInit();
+				
+				List<RankedBallot> ballots = SampleData.setupBallots();
+
+				STVElection stv = new STVElection(Quota.DROOP, ballots, 3);
+
+				List<ElectionRound> rounds = stv.getRounds();
+				
+				
+				String json = Tools.GSON.toJson(rounds);
+				
+				log.info(json);
+				
+				
 				return json;
 			} catch (Exception e) {
 				res.status(666);

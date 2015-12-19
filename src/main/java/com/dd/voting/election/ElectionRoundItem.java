@@ -9,7 +9,7 @@ import com.dd.voting.candidate.RankedCandidate;
 public class ElectionRoundItem {
 
 	public enum Status {
-		STAYS, DEFEATED, ELECTED;
+		STAYS, DEFEATED, ELECTED, ELECTED_PREVIOUSLY;
 	}
 	
 	private Status status = Status.STAYS;

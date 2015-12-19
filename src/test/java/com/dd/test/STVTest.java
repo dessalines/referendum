@@ -1,4 +1,4 @@
-package com.dd;
+package com.dd.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,31 +124,43 @@ public class STVTest extends TestCase {
 		c = 0;
 		assertEquals(Integer.valueOf(4), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(2), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(3), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 
+		assertEquals(ElectionRoundItem.Status.ELECTED_PREVIOUSLY, stv.getRounds().get(rn).getRoundItems().get(2).getStatus());
 		assertEquals(ElectionRoundItem.Status.DEFEATED, stv.getRounds().get(rn++).getRoundItems().get(1).getStatus());
 
 		// third round
 		c = 0;
 		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(3), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 
+		assertEquals(ElectionRoundItem.Status.ELECTED_PREVIOUSLY, stv.getRounds().get(rn).getRoundItems().get(1).getStatus());
 		assertEquals(ElectionRoundItem.Status.ELECTED, stv.getRounds().get(rn++).getRoundItems().get(0).getStatus());
 
 		// fourth round
 		c = 0;
+		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(3), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 
-		assertEquals(ElectionRoundItem.Status.DEFEATED, stv.getRounds().get(rn++).getRoundItems().get(1).getStatus());
+		assertEquals(ElectionRoundItem.Status.ELECTED_PREVIOUSLY, stv.getRounds().get(rn).getRoundItems().get(0).getStatus());
+		assertEquals(ElectionRoundItem.Status.ELECTED_PREVIOUSLY, stv.getRounds().get(rn).getRoundItems().get(1).getStatus());
+		assertEquals(ElectionRoundItem.Status.DEFEATED, stv.getRounds().get(rn++).getRoundItems().get(3).getStatus());
 
 		// fifth round
 		c = 0;
+		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
+		assertEquals(Integer.valueOf(6), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 		assertEquals(Integer.valueOf(5), stv.getRounds().get(rn).getRoundItems().get(c++).getVotes());
 
-		assertEquals(ElectionRoundItem.Status.ELECTED, stv.getRounds().get(rn++).getRoundItems().get(0).getStatus());
+		assertEquals(ElectionRoundItem.Status.ELECTED_PREVIOUSLY, stv.getRounds().get(rn).getRoundItems().get(0).getStatus());
+		assertEquals(ElectionRoundItem.Status.ELECTED_PREVIOUSLY, stv.getRounds().get(rn).getRoundItems().get(1).getStatus());
+		assertEquals(ElectionRoundItem.Status.ELECTED, stv.getRounds().get(rn++).getRoundItems().get(2).getStatus());
 		
 	}
 

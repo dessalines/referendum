@@ -2,15 +2,38 @@
 
 var ballotTemplate = $('#ballot_template').html();
 var ballotDiv = '#ballot_form';
+var testPollId = 1;
+
+var electionTemplate = $('#election_template').html();
+var electionDiv = '#election_form';
 
 $(document).ready(function() {
   setupPollForm();
-  setupCandidateForm(4);
+  setupCandidateForm(testPollId);
 
-  fillBallot(4);
-  setupBallotForm(4);
+  fillBallot(testPollId);
+  setupBallotForm(testPollId);
+
+  // getElection(testPollId);
+  getSampleElection();
 
 });
+
+function getElection(pollId) {
+  getJson('get_stv_election/' + pollId).done(function(e) {
+    var data = JSON.parse(e);
+    console.log(data);
+    fillMustacheWithJson(data, electionTemplate, electionDiv);
+  });
+}
+
+function getSampleElection() {
+  getJson('get_sample_stv_election').done(function(e) {
+    var data = JSON.parse(e);
+    console.log(data);
+    fillMustacheWithJson(data, electionTemplate, electionDiv);
+  });
+}
 
 
 function setupPollForm() {
@@ -48,8 +71,6 @@ function setupBallotForm(pollId) {
     })
     .on('success.form.bv', function(event) {
       event.preventDefault();
-      var formData = $(ballotForm).serializeArray();
-      console.log(formData);
       standardFormPost('create_ballot/' + pollId, ballotForm, null, null, null, null, null);
     });
 }

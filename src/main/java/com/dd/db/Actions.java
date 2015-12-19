@@ -77,18 +77,19 @@ public class Actions {
 		
 		
 		// Get all the ballots for the poll
-		List<BallotItemView> dbBallots = BALLOT_ITEM_VIEW.find("id = ?", pollId);
+		List<BallotItemView> dbBallots = BALLOT_ITEM_VIEW.find("poll_id = ?", pollId);
 		
 		
 		// Group them up by ballot id to ballot items
 		Map<Integer, List<RankedCandidate>> ballotMap = new HashMap<>();
 		for (BallotItemView dbBallot : dbBallots) {
-			Integer ballotId = Integer.valueOf(dbBallot.getId().toString());
+			Integer ballotId = Integer.valueOf(dbBallot.getString("ballot_id"));
 			
 			RankedCandidate rc = new RankedCandidate(dbBallot.getInteger("candidate_id"), 
 					dbBallot.getInteger("rank"));
 			
-			ballotMap.get(ballotId);
+			log.info(Tools.GSON2.toJson(rc));
+			
 			
 			// The list needs to be created
 			if (ballotMap.get(ballotId) == null) {
@@ -107,12 +108,16 @@ public class Actions {
 		for (Entry<Integer, List<RankedCandidate>> e : ballotMap.entrySet()) {
 			RankedBallot rb = new RankedBallot(e.getValue());
 			ballots.add(rb);
+			log.info("ballot id = " + e.getKey());
+			log.info(Tools.GSON2.toJson(rb));
 		}
 		
 		
 		STVElection election = new STVElection(Quota.DROOP, ballots, 1);
 		
 		String json = Tools.GSON.toJson(election.getRounds());
+		
+		log.info(json);
 		
 		return json;
 		
