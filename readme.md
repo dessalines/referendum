@@ -89,3 +89,8 @@ http://bost.ocks.org/mike/bar/2/
 
 http://bl.ocks.org/Caged/6476579
 
+
+
+Star rating :
+
+http://plugins.krajee.com/star-rating/demo

@@ -107,63 +107,12 @@
     <div class="container-fluid">
       <!--Main Content -->
       <div class="row-fluid">
-        <div id="election_div" class="col-md-12">
-          <script id="election_template" type="x-tmpl-mustache">
-          </script>
+        <div class="col-md-1">
+          <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+          <br>
+          <i id='unvote' href="#" class="fa fa-minus-circle fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Clear Vote"></i>
         </div>
-        <!-- Create poll form -->
-        <div class="col-md-6">
-          <form id="poll_form" role="form">
-            <div class="form-group">
-              <input class="form-control" name="subject" type="text" placeholder="Subject" data-bv-notempty="true" data-bv-notempty-message="A Subject is required" />
-            </div>
-            <div class="form-group">
-              <textarea class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="1" placeholder="Text"></textarea>
-            </div>
-            <button type="submit" class="btn btn-default btn-block">Create Poll</button>
-          </form>
-        </div>
-        <!-- Create Candidate form -->
-        <div class="col-md-6">
-          <form id="candidate_form" role="form">
-            <div class="form-group">
-              <input class="form-control" name="subject" type="text" placeholder="Subject" data-bv-notempty="true" data-bv-notempty-message="A Subject is required" />
-            </div>
-            <div class="form-group">
-              <textarea class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="1" placeholder="Text"></textarea>
-            </div>
-            <button type="submit" class="btn btn-default btn-block">Create Candidate</button>
-          </form>
-        </div>
-        <!-- Create Ballot form -->
-        <div class="col-md-6">
-          <form id="ballot_form" role="form">
-            <!-- <div id="ballot_div"> -->
-            <script id="ballot_template" type="x-tmpl-mustache">
-              <table id="ballot_table">
-                <tbody id="ballot_body">
-                  {{#.}}
-                  <tr>
-                    <td>
-                      <button type="button" id="rank_next_candidate_{{id}}" class="btn btn-default rank_next_candidate" rank="0">
-                        <i class="fa fa-fw fa-2 fa-check"></i></button>
-                    </td>
-                    <!-- Create Ballot form -->
-                    <td>
-                      <select name="{{id}}" id="select_candidate_{{id}}" class="select_candidate form-control" form="ballot_form"></select>
-                    </td>
-                    <td>{{id}}</td>
-                    <td>{{subject}}</td>
-                    <td>{{poll_id}}</td>
-                  </tr>
-                  {{/.}}
-                </tbody>
-              </table>
-              <button type="submit" class="btn btn-default btn-block" form="ballot_form">Vote</button>
-            </script>
-            <!-- </div> -->
-          </form>
-        </div>
+      
       </div>
     </div>
   </div>
@@ -191,7 +140,8 @@
   <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
   <!-- my scripts -->
   <script src="../js/tools.js"></script>
-  <script src="../js/main.js"></script>
+  <script src="../js/test.js"></script>
+
 </body>
 
 </html>
