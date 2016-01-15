@@ -108,9 +108,17 @@
       <!--Main Content -->
       <div class="row-fluid">
         <div class="col-md-1">
-          <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+          <i id='ex1_vote' class="fa fa-thumbs-up fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Vote"></i>
+          <input id="ex1" class="range_vote" data-slider-id='ex1_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
           <br>
-          <i id='unvote' href="#" class="fa fa-minus-circle fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Clear Vote"></i>
+          <i id='ex1_clear_vote' class="fa fa-minus-circle fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Clear Vote"></i>
+        </div>
+
+        <div class="col-md-1">
+         <i id='ex2_vote' class="fa fa-thumbs-up fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Vote"></i>
+          <input id="ex2" class="range_vote" data-slider-id='ex2_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+          <br>
+          <i id='ex2_clear_vote' class="fa fa-minus-circle fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Clear Vote"></i>
         </div>
       
       </div>
