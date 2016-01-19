@@ -32,15 +32,50 @@
   background: #BABABA;
 }*/
 
+.range_vote_table {
+  position: fixed;
+  background-color:#FFF;
+  z-index: 2;
+  top: 25%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  /*width: 100px;*/
+  /*height: 100px;*/
+  border-radius: 5px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+.badge {
+  vertical-align: middle;
+  margin-top: -5px;
+  line-height: inherit;
+}
+
+i.fa {
+  line-height: inherit;
+}
+
+.panel-heading {
+  line-height: 16px;
+}
+
+.range_vote_table,
+.panel-title {
+  display: inline;
+}
+
 .hand {
   cursor: pointer;
 }
 
 .fa-2 {
   font-size: 1.65em;
+  vertical-align: middle;
+  margin-top: -5px;
 }
 
-#unvote:hover {
+.unvote:hover {
   color: #990000;
 }
 

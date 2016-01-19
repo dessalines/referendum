@@ -104,23 +104,44 @@
       </div>
       <!-- /.container-fluid -->
     </nav>
-    <div class="container-fluid">
-      <!--Main Content -->
-      <div class="row-fluid">
-        <div class="col-md-1">
-          <i id='ex1_vote' class="fa fa-thumbs-up fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Vote"></i>
+    <!-- A sample range vote table -->
+    <table id="ex1_range_vote_table" class="range_vote_table hide">
+      <tr>
+        <td>
           <input id="ex1" class="range_vote" data-slider-id='ex1_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
-          <br>
-          <i id='ex1_clear_vote' class="fa fa-minus-circle fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Clear Vote"></i>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <i id='ex1_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+        </td>
+      </tr>
+    </table>
+    <div class="container">
+      <!--Main Content -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <span class="badge hand" data-toggle="tooltip" data-placement="auto" title="Average Score: 57">57</span>
+              <i id='ex1_vote' class="fa fa-thumbs-up fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Vote"></i>
+              <h1 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Okay this is the subject right here
+                </a>
+                </h1>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="col-md-1">
-         <i id='ex2_vote' class="fa fa-thumbs-up fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Vote"></i>
-          <input id="ex2" class="range_vote" data-slider-id='ex2_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
-          <br>
-          <i id='ex2_clear_vote' class="fa fa-minus-circle fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Clear Vote"></i>
+        <div class="row-fluid">
+          <div class="col-md-2">
+            GARP FISH
+          </div>
         </div>
-      
       </div>
     </div>
   </div>
@@ -146,10 +167,10 @@
   <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
   <script src="../bower_components/d3/d3.min.js"></script>
   <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+  <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
   <!-- my scripts -->
   <script src="../js/tools.js"></script>
-  <script src="../js/test.js"></script>
-
+  <script src="../js/range_voting.js"></script>
 </body>
 
 </html>

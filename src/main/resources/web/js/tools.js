@@ -334,3 +334,9 @@ $.fn.sort_select_box = function() {
   // clearing any selections
   $("#" + this.attr('id')).val(selected);
 }
+
+function setupToolTips() {
+  $('[data-toggle="tooltip"]').tooltip({
+    container: 'body'
+  });
+}
