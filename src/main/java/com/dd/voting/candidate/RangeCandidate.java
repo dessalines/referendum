@@ -4,9 +4,10 @@ import java.util.Comparator;
 
 public class RangeCandidate implements Candidate {
 
-	private Integer id, rank;
+	private Integer id;
+	private Double rank;
 	
-	public RangeCandidate(Integer id, Integer rank) {
+	public RangeCandidate(Integer id, Double rank) {
 		this.id = id;
 		this.rank = rank;
 	}
@@ -22,7 +23,7 @@ public class RangeCandidate implements Candidate {
 	}
 
 
-	public Integer getRank() {
+	public Double getRank() {
 		return rank;
 	}
 	

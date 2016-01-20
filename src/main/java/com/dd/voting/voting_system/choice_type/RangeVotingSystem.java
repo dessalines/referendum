@@ -5,7 +5,7 @@ import com.dd.voting.voting_system.VotingSystem;
 public interface RangeVotingSystem extends VotingSystem {
 	
 	enum RangeVotingSystemType {
-		REGULAR, MEDIAN;
+		AVERAGE, MEDIAN;
 	}
 	
 	RangeVotingSystemType getRangeVotingSystemType();	
