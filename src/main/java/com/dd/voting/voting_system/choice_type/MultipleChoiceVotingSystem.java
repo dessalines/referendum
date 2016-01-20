@@ -6,8 +6,6 @@ import com.dd.voting.voting_system.VotingSystem.VotingSystemType;
 
 public interface MultipleChoiceVotingSystem extends VotingSystem {
 	
-	
-	
 	enum MultipleChoiceVotingSystemType {
 		UNRANKED, RANKED;
 	}

@@ -47,7 +47,7 @@ function slideStopActions(obj, cleared) {
     $(obj + '_vote').css('color', RGBChange(obj));
     $(obj + '_vote').attr('title', 'Vote: ' + $(obj).bootstrapSlider('getValue')).tooltip('fixTitle');
   } else {
-    $(obj + '_vote').css('color', '#333');
+    $(obj + '_vote').css('color', '#888');
     $(obj + '_vote').attr('title', 'Vote').tooltip('fixTitle');
   }
 
