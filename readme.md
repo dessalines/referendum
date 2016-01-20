@@ -94,3 +94,9 @@ http://bl.ocks.org/Caged/6476579
 Star rating :
 
 http://plugins.krajee.com/star-rating/demo
+
+Slider instead:
+https://github.com/seiyria/bootstrap-slider
+http://seiyria.com/bootstrap-slider/
+
+Main page - Discuss, Vote, Results

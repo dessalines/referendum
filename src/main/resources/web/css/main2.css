@@ -32,11 +32,12 @@
   background: #BABABA;
 }*/
 
+
 .range_vote_table {
   position: fixed;
-  background-color:#FFF;
+  /*background-color:#FFF;*/
   z-index: 2;
-  top: 25%;
+  top: 30%;
   left: 50%;
   margin-top: -50px;
   margin-left: -50px;
@@ -46,10 +47,12 @@
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 }
 
-.badge {
+.label-as-badge {
   vertical-align: middle;
   margin-top: -5px;
   line-height: inherit;
+  border-radius: 1em;
+  /*font-size: inherit;*/
 }
 
 i.fa {
