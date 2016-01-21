@@ -54,7 +54,7 @@ public class API {
         });
 		
 		
-		post("/create_poll", (req, res) -> {
+		post("/create_empty_poll", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
@@ -62,16 +62,42 @@ public class API {
 				UserView uv = req.attribute("user");
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
-				
-				String subject = vars.get("subject");
-				String text = vars.get("text");
-				String password = vars.get("password");
 
 				Tools.dbInit();
 
-				String message = Actions.createPoll(uv.getId().toString(), subject, text, password);
+				String pollId = Actions.createEmptyPoll(uv.getId().toString());
+				
+				String pollAid = ALPHA_ID.encode(new BigInteger(pollId));
 
+				return pollAid;
 
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
+		post("/save_poll", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+				
+				UserView uv = req.attribute("user");
+
+				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
+
+				Tools.dbInit();
+				
+				String subject = vars.get("subject");
+				String text = vars.get("text");
+				String pollId = vars.get("poll_id");
+				String password = vars.get("private_password");
+				
+				String message = Actions.savePoll(pollId, subject, text, password);
 
 				return message;
 
@@ -84,6 +110,8 @@ public class API {
 			}
 
 		});
+		
+		
 
 		post("/create_candidate/:pollId", (req, res) -> {
 			try {

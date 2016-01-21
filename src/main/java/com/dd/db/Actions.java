@@ -25,20 +25,28 @@ public class Actions {
 
 	static final Logger log = LoggerFactory.getLogger(Actions.class);
 
-	
-	public static String createPoll(String userId, String subject, String text, String password) {
-		
+	public static String createEmptyPoll(String userId) {
 		
 		// First create a discussion
-		Discussion d = DISCUSSION.createIt("subject", subject,
-				"text", text);
+		Discussion d = DISCUSSION.createIt();
 		
-		POLL.createIt("poll_type_id", 1,
-				"discussion_id", d.getId().toString(),
+		Poll p = POLL.createIt("discussion_id", d.getId().toString(),
 				"user_id", userId,
-				"private_password", password);
+				"poll_type_id", 1);
 		
-		return "Poll created";
+		return p.getId().toString();
+	}
+	
+	public static String savePoll(String pollId, String subject, String text, String password) {
+		
+		Poll p = POLL.findFirst("id = ?", pollId);
+		p.set("private_password", password).saveIt();
+		
+		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
+		d.set("subject", subject,
+				"text", text).saveIt();
+		
+		return "Poll Saved";
 		
 		
 	}
