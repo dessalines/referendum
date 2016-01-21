@@ -53,8 +53,14 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="user" row="id" />
 </row>
+<row name="private_password" null="1" autoincrement="0">
+<datatype>VARCHAR(140)</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>discussion_id</part>
 </key>
 </table>
 <table x="701" y="269" name="ballot_item">
@@ -95,13 +101,16 @@
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
+<key type="UNIQUE" name="">
+<part>discussion_id</part>
+</key>
 </table>
 <table x="249" y="509" name="discussion">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="subject" null="0" autoincrement="0">
-<datatype>VARCHAR(144)</datatype>
+<datatype>VARCHAR(140)</datatype>
 <default>'NULL'</default></row>
 <row name="text" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
@@ -186,7 +195,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="491" y="195" name="ballot">
+<table x="505" y="169" name="ballot">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -207,13 +216,13 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="ip_address" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
+<datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="355" y="28" name="full_user">
+<table x="368" y="27" name="full_user">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

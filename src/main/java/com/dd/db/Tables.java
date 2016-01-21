@@ -55,6 +55,14 @@ public class Tables {
 	public static class CommentTree extends Model {}
 	public static final CommentTree COMMENT_TREE = new CommentTree();
 	
+	@Table("user")
+	public static class User extends Model {}
+	public static final User USER = new User();
+	
+	@Table("user_view")
+	public static class UserView extends Model {}
+	public static final UserView USER_VIEW = new UserView();
+	
 	
 	
 }

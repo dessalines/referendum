@@ -104,31 +104,6 @@
       </div>
       <!-- /.container-fluid -->
     </nav>
-    <!-- A sample range vote table -->
-    <table id="ex1_range_vote_table" class="range_vote_table hide">
-      <tr>
-        <td>
-          <input id="ex1" class="range_vote" data-slider-id='ex1_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <i id='ex1_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
-        </td>
-      </tr>
-    </table>
-    <table id="ex2_range_vote_table" class="range_vote_table hide">
-      <tr>
-        <td>
-          <input id="ex2" class="range_vote" data-slider-id='ex2_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <i id='ex2_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
-        </td>
-      </tr>
-    </table>
     <!--Main Content -->
     <div class="container">
       <ul id="main_tab_list" class="nav nav-tabs nav-tabs-left nav-tabs-special nav-justified" role="tablist">
@@ -169,12 +144,26 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="vote_tab">
+          <br>
+          <br>
           <div class="row">
             <div class="col-md-12">
-              <br>
               <div class="panel-group">
                 <div class="panel panel-default">
                   <div class="panel-heading">
+                    <!-- A sample range vote table -->
+                    <table id="ex1_range_vote_table" class="range_vote_table hide">
+                      <tr>
+                        <td>
+                          <input id="ex1" class="range_vote" data-slider-id='ex1_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <i id='ex1_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                        </td>
+                      </tr>
+                    </table>
                     <span class="label label-warning label-as-badge hand" data-toggle="tooltip" data-placement="auto" title="Average Score: 5.7">5.7</span>
                     <i id='ex1_vote' class="fa fa-thumbs-up fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Vote"></i>
                     <h1 class="panel-title">
@@ -191,12 +180,25 @@
                 </div>
                 <div class="panel panel-default">
                   <div class="panel-heading">
+                    <table id="ex2_range_vote_table" class="range_vote_table hide">
+                      <tr>
+                        <td>
+                          <input id="ex2" class="range_vote" data-slider-id='ex2_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <i id='ex2_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                        </td>
+                      </tr>
+                    </table>
                     <span class="label label-danger label-as-badge hand" data-toggle="tooltip" data-placement="auto" title="Average Score: 3.1">3.1</span>
                     <i id='ex2_vote' class="fa fa-thumbs-up fa-2 hand" data-toggle="tooltip" data-placement="auto" title="Vote"></i>
-                    <h1 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_ex2" aria-expanded="true" aria-controls="collapse_ex2">
-                Okay this is the subject right here
-                </a>
-                </h1>
+                    <h1 class="panel-title">
+                      <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_ex2" aria-expanded="true" aria-controls="collapse_ex2">
+                        Okay this is the subject right here
+                      </a>
+                    </h1>
                   </div>
                   <div id="collapse_ex2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
@@ -205,6 +207,26 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              <button id='add_a_candidate' class="btn btn-default btn-block"><i class="fa fa-plus fa-fw fa-2 hand" data-toggle="tooltip" data-placement="right" title="Add a candidate"></i> Add a Candidate</button>
+            </div>
+          </div>
+          <!-- Create poll form -->
+          <div class="row">
+            <div class="col-md-12">
+              <form id="candidate_form" role="form" class="hide">
+                <div class="form-group">
+                  <input class="form-control" name="subject" type="text" placeholder="Subject" data-bv-notempty="true" data-bv-notempty-message="A Subject is required" />
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-default btn-block">Create Candidate</button>
+              </form>
             </div>
           </div>
         </div>
@@ -236,6 +258,7 @@
     <!-- my scripts -->
     <script src="../js/tools.js"></script>
     <script src="../js/range_voting.js"></script>
+    <script src="../js/test.js"></script>
 </body>
 
 </html>

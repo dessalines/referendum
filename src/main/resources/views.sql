@@ -20,5 +20,14 @@ poll_id,
 user_id
 from ballot_item
 inner join ballot
-on ballot.id = ballot_item.ballot_id
+on ballot.id = ballot_item.ballot_id;
+
+create view user_view as 
+select user.id,
+ip_address,
+name,
+password_encrypted
+from user
+left join full_user
+on full_user.user_id = user.id;
 

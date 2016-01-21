@@ -2,30 +2,20 @@ package com.dd.webservice;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.before;
 
-
-
-
-
-
-
-
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
-
-
-
-
-
 import com.dd.db.Actions;
 import com.dd.db.Tables.Poll;
+import com.dd.db.Tables.User;
 import com.dd.tools.SampleData;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RankedBallot;
@@ -33,32 +23,53 @@ import com.dd.voting.election.ElectionRound;
 import com.dd.voting.election.STVElection;
 import com.dd.voting.election.STVElection.Quota;
 
+
 import static com.dd.db.Tables.*;
+import static com.dd.tools.Tools.ALPHA_ID;
 
 
 
 public class API {
 
 	static final Logger log = LoggerFactory.getLogger(API.class);
-
-	private static final String USER = "1"; // TODO implement the user system
-			
 			
 	public static void setup() {
 
+		// Get the user id
+		before((req, res) -> {
+            String uid = req.cookie("uid");
+            BigInteger id = ALPHA_ID.decode(uid);
+            
+            UserView uv = USER_VIEW.findFirst("id = ?" , id);
+           
+            if (uv == null) {
+            	// TODO use an IP hash instead
+            	User user = USER.createIt("ip_address", req.ip());
+            	uv = USER_VIEW.findFirst("id = ?", user.getId());
+            }
+            
+            // Set the user attribute
+            req.attribute("user", uv);
+
+        });
+		
+		
 		post("/create_poll", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
+				
+				UserView uv = req.attribute("user");
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
-
+				
 				String subject = vars.get("subject");
 				String text = vars.get("text");
+				String password = vars.get("password");
 
 				Tools.dbInit();
 
-				String message = Actions.createPoll(USER, subject, text);
+				String message = Actions.createPoll(uv.getId().toString(), subject, text, password);
 
 
 
@@ -79,6 +90,8 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
+				UserView uv = req.attribute("user");
+
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
 				String subject = vars.get("subject");
@@ -87,7 +100,7 @@ public class API {
 
 				Tools.dbInit();
 
-				String message = Actions.createCandidate(USER, pollId, subject, text);
+				String message = Actions.createCandidate(uv.getId().toString(), pollId, subject, text);
 
 
 
@@ -132,6 +145,8 @@ public class API {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
+				
+				UserView uv = req.attribute("user");
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 				
@@ -139,7 +154,7 @@ public class API {
 
 				Tools.dbInit();
 
-				String message = Actions.createBallot(USER, pollId, vars);
+				String message = Actions.createBallot(uv.getId().toString(), pollId, vars);
 
 
 

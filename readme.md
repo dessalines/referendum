@@ -100,3 +100,4 @@ https://github.com/seiyria/bootstrap-slider
 http://seiyria.com/bootstrap-slider/
 
 Main page - Discuss, Vote, Results
+

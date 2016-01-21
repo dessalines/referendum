@@ -68,6 +68,8 @@ public class Tools {
 	
 	public static final SimpleDateFormat RESPONSE_HEADER_DATE_FORMAT = 
 			new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
+	
+	public static final BaseX ALPHA_ID = new BaseX();
 
 
 	public static void allowOnlyLocalHeaders(Request req, Response res) {

@@ -3,7 +3,7 @@
 -- ---
 
 -- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET FOREIGN_KEY_CHECKS=0;
+-- SET FOREIGN_KEY_CHECKS=0;
 
 -- ---
 -- Table 'poll'
@@ -17,7 +17,9 @@ CREATE TABLE `poll` (
   `poll_type_id` INTEGER NULL DEFAULT NULL,
   `discussion_id` INTEGER NULL DEFAULT NULL,
   `user_id` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `private_password` VARCHAR(140) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`discussion_id`)
 );
 
 -- ---
@@ -47,7 +49,8 @@ CREATE TABLE `candidate` (
   `poll_id` INTEGER NULL DEFAULT NULL,
   `discussion_id` INTEGER NULL DEFAULT NULL,
   `user_id` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`discussion_id`)
 );
 
 -- ---
@@ -59,7 +62,7 @@ DROP TABLE IF EXISTS `discussion`;
     
 CREATE TABLE `discussion` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `subject` VARCHAR(144) NOT NULL DEFAULT 'NULL',
+  `subject` VARCHAR(140) NOT NULL DEFAULT 'NULL',
   `text` MEDIUMTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
@@ -157,7 +160,7 @@ DROP TABLE IF EXISTS `user`;
     
 CREATE TABLE `user` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `ip_address` INTEGER NULL DEFAULT NULL,
+  `ip_address` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -219,8 +222,8 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 -- Test Data
 -- ---
 
--- INSERT INTO `poll` (`id`,`poll_type_id`,`discussion_id`,`user_id`) VALUES
--- ('','','','');
+-- INSERT INTO `poll` (`id`,`poll_type_id`,`discussion_id`,`user_id`,`private_password`) VALUES
+-- ('','','','','');
 -- INSERT INTO `ballot_item` (`id`,`ballot_id`,`candidate_id`,`rank`) VALUES
 -- ('','','','');
 -- INSERT INTO `candidate` (`id`,`poll_id`,`discussion_id`,`user_id`) VALUES

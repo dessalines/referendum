@@ -32,6 +32,23 @@
   background: #BABABA;
 }*/
 
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+  outline:none;
+}
+
+.md-editor > textarea {
+  min-height: 50px;
+  border-style: none;
+}
+
+.md-editor {
+  border-radius: 4px;
+  border: 1px solid #282828
+}
+.form-control, .md-header, .md-preview, .md-editor.md-fullscreen-mod {
+  background-color: #000;
+  background: #000 !important;
+}
 
 .range_vote_table {
   position: fixed;

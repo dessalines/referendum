@@ -26,14 +26,17 @@ public class Actions {
 	static final Logger log = LoggerFactory.getLogger(Actions.class);
 
 	
-	public static String createPoll(String userId, String subject, String text) {
+	public static String createPoll(String userId, String subject, String text, String password) {
+		
 		
 		// First create a discussion
 		Discussion d = DISCUSSION.createIt("subject", subject,
 				"text", text);
 		
 		POLL.createIt("poll_type_id", 1,
-				"discussion_id", d.getId().toString());
+				"discussion_id", d.getId().toString(),
+				"user_id", userId,
+				"private_password", password);
 		
 		return "Poll created";
 		
