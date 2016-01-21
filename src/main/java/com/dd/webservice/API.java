@@ -9,20 +9,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import spark.Response;
 
 import com.dd.db.Actions;
 import com.dd.db.Tables.Poll;
 import com.dd.db.Tables.User;
+import com.dd.db.Tables.UserView;
 import com.dd.tools.SampleData;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RankedBallot;
 import com.dd.voting.election.ElectionRound;
 import com.dd.voting.election.STVElection;
 import com.dd.voting.election.STVElection.Quota;
-
 
 import static com.dd.db.Tables.*;
 import static com.dd.tools.Tools.ALPHA_ID;
@@ -32,41 +33,42 @@ import static com.dd.tools.Tools.ALPHA_ID;
 public class API {
 
 	static final Logger log = LoggerFactory.getLogger(API.class);
-			
+
 	public static void setup() {
 
 		// Get the user id
-		before((req, res) -> {
-            String uid = req.cookie("uid");
-            BigInteger id = ALPHA_ID.decode(uid);
-            
-            UserView uv = USER_VIEW.findFirst("id = ?" , id);
-           
-            if (uv == null) {
-            	// TODO use an IP hash instead
-            	User user = USER.createIt("ip_address", req.ip());
-            	uv = USER_VIEW.findFirst("id = ?", user.getId());
-            }
-            
-            // Set the user attribute
-            req.attribute("user", uv);
+		get("get_user", (req, res) -> {
 
-        });
-		
-		
+			try {
+				
+				UserView uv = Actions.getUserFromCookie(req, res);
+				
+				return uv.getId().toString();
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+
+
 		post("/create_empty_poll", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
-				UserView uv = req.attribute("user");
+
+				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
 				Tools.dbInit();
 
 				String pollId = Actions.createEmptyPoll(uv.getId().toString());
-				
+
 				String pollAid = ALPHA_ID.encode(new BigInteger(pollId));
 
 				return pollAid;
@@ -80,23 +82,23 @@ public class API {
 			}
 
 		});
-		
+
 		post("/save_poll", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
-				UserView uv = req.attribute("user");
+
+				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
 				Tools.dbInit();
-				
+
 				String subject = vars.get("subject");
 				String text = vars.get("text");
 				String pollId = vars.get("poll_id");
 				String password = vars.get("private_password");
-				
+
 				String message = Actions.savePoll(pollId, subject, text, password);
 
 				return message;
@@ -110,8 +112,8 @@ public class API {
 			}
 
 		});
-		
-		
+
+
 
 		post("/create_candidate/:pollId", (req, res) -> {
 			try {
@@ -173,11 +175,11 @@ public class API {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				UserView uv = req.attribute("user");
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
-				
+
 				String pollId = req.params(":pollId");
 
 				Tools.dbInit();
@@ -222,8 +224,8 @@ public class API {
 
 
 		});
-		
-		
+
+
 		get("/get_sample_stv_election", (req, res) -> {
 
 			try {	
@@ -232,19 +234,19 @@ public class API {
 
 
 				Tools.dbInit();
-				
+
 				List<RankedBallot> ballots = SampleData.setupBallots();
 
 				STVElection stv = new STVElection(Quota.DROOP, ballots, 3);
 
 				List<ElectionRound> rounds = stv.getRounds();
-				
-				
+
+
 				String json = Tools.GSON.toJson(rounds);
-				
+
 				log.info(json);
-				
-				
+
+
 				return json;
 			} catch (Exception e) {
 				res.status(666);

@@ -3,7 +3,7 @@
 -- ---
 
 -- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
--- SET FOREIGN_KEY_CHECKS=0;
+SET FOREIGN_KEY_CHECKS=0;
 
 -- ---
 -- Table 'poll'
@@ -246,3 +246,4 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 -- ('','');
 -- INSERT INTO `full_user` (`id`,`user_id`,`name`,`password_encrypted`) VALUES
 -- ('','','','');
+SET FOREIGN_KEY_CHECKS=1;

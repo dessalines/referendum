@@ -1,6 +1,9 @@
 package com.dd.db;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +14,12 @@ import org.javalite.activejdbc.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import spark.Request;
+import spark.Response;
+
+import com.dd.DataSources;
+import com.dd.db.Tables.User;
+import com.dd.db.Tables.UserView;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RankedBallot;
 import com.dd.voting.candidate.RankedCandidate;
@@ -18,6 +27,7 @@ import com.dd.voting.election.STVElection;
 import com.dd.voting.election.STVElection.Quota;
 
 import static com.dd.db.Tables.*;
+import static com.dd.tools.Tools.ALPHA_ID;
 
 // http://ondras.zarovi.cz/sql/demo/?keyword=dd_tyhou
 
@@ -40,7 +50,10 @@ public class Actions {
 	public static String savePoll(String pollId, String subject, String text, String password) {
 		
 		Poll p = POLL.findFirst("id = ?", pollId);
-		p.set("private_password", password).saveIt();
+		
+		if (password != null) {
+			p.set("private_password", password).saveIt();
+		}
 		
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
 		d.set("subject", subject,
@@ -132,6 +145,63 @@ public class Actions {
 		
 		return json;
 		
+	}
+	
+	
+	public static String setCookiesForLogin(UserView uv, Response res) {
+
+		Integer expireSeconds = DataSources.EXPIRE_SECONDS;
+
+//		long now = new Date().getTime();
+
+//		long expireTime = now + expireSeconds*1000;
+
+//		Timestamp expireTS = new Timestamp(expireTime);
+
+
+		// Not sure if this is necessary yet
+		Boolean secure = false;
+
+		// Set some cookies for that users login
+//		res.cookie("auth", auth, expireSeconds, secure);
+		res.cookie("uid", uv.getId().toString(), expireSeconds, secure);
+//		res.cookie("user_name", client.getString("name"), expireSeconds, secure);
+
+		return "Logged in";
+
+
+
+	}
+	
+	public static UserView getUserFromCookie(Request req, Response res) {
+		
+		String uid = req.cookie("uid");
+
+		UserView uv = null;
+		BigInteger id = null;
+
+		Tools.dbInit();
+		// If no cookie, fetch user by ip address
+		if (uid == null) {
+			uv = USER_VIEW.findFirst("ip_address = ?", req.ip());
+			
+			if (uv != null) {
+				Actions.setCookiesForLogin(uv, res);
+			}
+			
+		} else {
+			id = ALPHA_ID.decode(uid);
+			uv = USER_VIEW.findFirst("id = ?" , id);
+		}
+
+		if (uv == null) {
+			User user = USER.createIt("ip_address", req.ip());
+			uv = USER_VIEW.findFirst("id = ?", user.getId());
+			Actions.setCookiesForLogin(uv, res);
+		}
+		Tools.dbClose();
+		
+		return uv;
 	}
 	
 	

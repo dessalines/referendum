@@ -1,4 +1,4 @@
-drop view if exists candidate_view, ballot_item_view;
+drop view if exists candidate_view, ballot_item_view, user_view;
 
 create view candidate_view as
 select 

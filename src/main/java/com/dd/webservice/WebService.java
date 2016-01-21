@@ -25,7 +25,7 @@ public class WebService {
 		port(DataSources.INTERNAL_SPARK_WEB_PORT);
 		
 		API.setup();
-		
+		DynamicPages.setup();
 	
 		get("/hello", (req, res) -> {
 			Tools.allowOnlyLocalHeaders(req, res);

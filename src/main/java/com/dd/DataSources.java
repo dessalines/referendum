@@ -15,7 +15,7 @@ public class DataSources {
 	// iptables are used to route all requests to 80 to 4567.
 	public static Integer INTERNAL_SPARK_WEB_PORT = 4567;
 	
-	public static final String WEB_SERVICE_URL = "http://localhost:" + EXTERNAL_SPARK_WEB_PORT + "/";
+	public static final String WEB_SERVICE_URL = "http://localhost:" + INTERNAL_SPARK_WEB_PORT + "/";
 	
 	public static String EXTERNAL_IP = Tools.httpGetString("http://api.ipify.org/").trim();
 	
@@ -72,8 +72,11 @@ public class DataSources {
 	
 //	public static String BASE_ENDPOINT = MAIN_PAGE_URL_EN();
 	
-	public static String BASE_ENDPOINT = WEB_HTML() + "/main.html";
+	public static String BASE_ENDPOINT = WEB_HTML() + "/home.html";
 	
+	public static final String PAGES(String pageName) {
+		return WEB_HTML() + "/" + pageName + ".html";
+	}
 	
 	public static final Date APP_START_DATE = new Date();
 	
@@ -81,5 +84,5 @@ public class DataSources {
 
 	public static final Properties DB_PROP = Tools.loadProperties(DB_PROP_FILE);
 
-	
+	public static final Integer EXPIRE_SECONDS = 86400;
 }

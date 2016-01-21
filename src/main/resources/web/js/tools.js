@@ -1,6 +1,14 @@
 // the digital ocean service
 var sparkService = "http://127.0.0.1:4567/"
 
+
+
+
+
+
+
+var sparkService = localSparkService;
+
 function getJson(shortUrl) {
   var url = sparkService + shortUrl; // the script where you handle the form input.
   return $.ajax({
@@ -190,6 +198,15 @@ function delete_cookie(name) {
 
 }
 
+function getUrlPathArray() {
+  return window.location.pathname.split('/');
+}
+
+function getLastUrlPath() {
+  return getUrlPathArray().slice(-1)[0];
+
+}
+
 function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, noToast, clearForm) {
   // !!!!!!They must have names unfortunately
   // An optional arg
@@ -274,6 +291,91 @@ function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, n
   // event.preventDefault();
 }
 
+function simplePost(shortUrl, postData, reload, successFunctions, noToast, external, btnId) {
+
+
+  // !!!!!!They must have names unfortunately
+  // An optional arg
+  modalId = (typeof modalId === "undefined") ? "defaultValue" : modalId;
+
+  reload = (typeof reload === "undefined") ? false : reload;
+
+  noToast = (typeof noToast === "undefined") ? false : noToast;
+  external = (typeof external === "undefined") ? false : external;
+
+  btnId = (typeof btnId === "undefined") ? false : btnId;
+
+  var url;
+  if (external) {
+    url = externalSparkService + shortUrl;
+  } else {
+    url = sparkService + shortUrl;
+  }
+
+  // var btn = $("[type=submit]");
+  // var btn = $(this).closest(".btn");
+  var btn = $(btnId);
+
+  // Loading
+  btn.button('loading');
+
+  // console.log(url);
+  $.ajax({
+    type: "POST",
+    url: url,
+    xhrFields: {
+      withCredentials: true
+    },
+    data: postData,
+    success: function(data, status, xhr) {
+
+      // console.log('posted the data');
+      xhr.getResponseHeader('Set-Cookie');
+      // document.cookie="authenticated_session_id=" + data + 
+      // "; expires=" + expireTimeString(60*60); // 1 hour (field is in seconds)
+      // Hide the modal, reset the form, show successful
+
+      // $(formId)[0].reset();
+
+      // console.log(modalId);
+      if (!noToast) {
+        toastr.success(data);
+      }
+      if (successFunctions != null) {
+        successFunctions(data);
+      }
+      btn.button('reset');
+      if (reload) {
+        // refresh the page, too much info has now changed
+        window.setTimeout(function() {
+          location.reload();
+        }, 3000);
+      }
+
+
+
+      // console.log(document.cookie);
+      return data;
+
+    },
+    error: function(request, status, error) {
+      if (!noToast) {
+        toastr.error(request.responseText);
+      }
+      btn.button('reset');
+    }
+  });
+
+
+  return false;
+
+
+
+  // event.preventDefault();
+
+
+}
+
 
 var standardDateFormatObj = {
   "dateformat": function() {
@@ -340,3 +442,11 @@ function setupToolTips() {
     container: 'body'
   });
 }
+
+var delay = (function() {
+  var timer = 0;
+  return function(callback, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
