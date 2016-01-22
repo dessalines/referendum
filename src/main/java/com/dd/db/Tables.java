@@ -11,6 +11,10 @@ public class Tables {
 	public static class Poll extends Model {}
 	public static final Poll POLL = new Poll();
 	
+	@Table("poll_view")
+	public static class PollView extends Model {}
+	public static final PollView POLL_VIEW = new PollView();
+	
 	@Table("poll_type")
 	public static class PollType extends Model {}
 	public static final PollType POLL_TYPE = new PollType();

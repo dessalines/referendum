@@ -7,8 +7,8 @@ $(document).ready(function() {
 function setupPollForm() {
   var pollForm = '#poll_form';
 
-  // Setting the poll id
-  $('input[name="poll_id"]').val(pollId);
+  // Setting the vars
+  fillPollForm();
 
   $(pollForm).bootstrapValidator({
       message: 'This value is not valid',
@@ -30,4 +30,34 @@ function setupPollForm() {
     }
   });
 
+}
+
+function fillPollForm() {
+  getJson('get_poll/' + pollId).done(function(e) {
+
+  	console.log(e);
+
+    var data = JSON.parse(replaceNewlines(e));
+
+    console.log(data);
+
+    $('#view_poll').attr('href','/poll/' + pollId);
+    $('input[name="poll_id"]').val(pollId);
+    $('input[name="subject"]').val(data['subject']);
+    $('#poll_text').data('markdown').setContent(data['text']);
+    updateTextAreaHeight();
+
+    var password = data['private_password'];
+    console.log(password);
+    if (password != null) {
+      $("input[name=public_radio][value='private']").prop("checked", true);
+      $('input[name="private_password"]').val(data['private_password']);
+      $('#private_password').removeClass('hide');
+      $('#advanced_options').collapse('show');
+    } else {
+      $("input[name=public_radio][value='public']").prop("checked", true);
+    }
+
+
+  });
 }

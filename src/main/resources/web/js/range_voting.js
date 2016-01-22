@@ -1,7 +1,7 @@
 $(document).ready(function() {
-  initializeAllRangeVotes();
+  // initializeAllRangeVotes();
 
-  setupToolTips();
+  
 
 });
 
@@ -11,6 +11,8 @@ function initializeAllRangeVotes() {
     var cId = '#' + this.id;
     setupRangeVote(cId);
   });
+
+  setupToolTips();
 }
 
 function setupRangeVote(obj) {

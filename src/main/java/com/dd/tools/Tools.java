@@ -508,5 +508,9 @@ public class Tools {
 	public static void setJsonContentType(Response res) {
 		res.type("application/json; charset=utf-8");
 	}
+	
+	public static String replaceNewlines(String text) {
+		return text.replace("\r", "").replace("\n", "--lb--").replace("\\", "");
+	}
 
 }

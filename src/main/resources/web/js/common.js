@@ -19,7 +19,8 @@ function getUser() {
 }
 
 function setUserInfo() {
-  $('#user_dropdown').text('User ' + getCookie('uid'));
+  var ui = 'User ' + getCookie('uid') + ' <span class="caret"></span>';
+  $('#user_dropdown').html(ui);
 }
 
 function setupCreateEmptyPoll() {

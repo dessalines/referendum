@@ -93,13 +93,17 @@ public class API {
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
 				Tools.dbInit();
+				
+				
 
 				String subject = vars.get("subject");
-				String text = vars.get("text");
-				String pollId = vars.get("poll_id");
-				String password = vars.get("private_password");
+				String text = vars.get("poll_text");
+				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
+				Boolean private_ = vars.get("public_radio").equals("private");
+				String password = (private_) ? vars.get("private_password") : null;
+//				log.info(text);
 
-				String message = Actions.savePoll(pollId, subject, text, password);
+				String message = Actions.savePoll(uv.getId().toString(), pollId, subject, text, password);
 
 				return message;
 
@@ -115,18 +119,18 @@ public class API {
 
 
 
-		post("/create_candidate/:pollId", (req, res) -> {
+		post("/create_candidate", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
-				UserView uv = req.attribute("user");
+				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
 				String subject = vars.get("subject");
 				String text = vars.get("text");
-				String pollId = req.params(":pollId");
+				String pollId = vars.get("poll_id");
 
 				Tools.dbInit();
 
@@ -156,8 +160,34 @@ public class API {
 
 				Tools.dbInit();
 
-				String json = CANDIDATE_VIEW.find("poll_id = ?", pollId).toJson(false);
+				String json = Tools.replaceNewlines(CANDIDATE_VIEW.find("poll_id = ?", pollId).toJson(false));
 
+
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+		
+		get("/get_poll/:pollId", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+
+				Tools.dbInit();
+
+				String json = Tools.replaceNewlines(POLL_VIEW.findFirst("id = ?", pollId).toJson(false));
+				
+				log.info(json);
 
 				return json;
 			} catch (Exception e) {

@@ -16,9 +16,14 @@ public class DynamicPages {
 		
 		get("edit_poll/:pollId", (req, res) -> {
 			Tools.allowAllHeaders(req, res);
-			Tools.set15MinuteCache(req, res);
 			
 			return Tools.readFile(DataSources.PAGES("edit_poll"));
+		});
+		
+		get("poll/:pollId", (req, res) -> {
+			Tools.allowAllHeaders(req, res);
+			
+			return Tools.readFile(DataSources.PAGES("poll"));
 		});
 	}
 }

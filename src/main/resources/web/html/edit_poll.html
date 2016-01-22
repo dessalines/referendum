@@ -106,7 +106,7 @@
     </nav>
     <!--Main Content -->
     <div class="container">
-      <h4> Edit Poll</h4>
+      <h5> Edit Poll <small><a href="#" id="view_poll">View <i class="fa fa-arrow-right"></i></a></small></h5>
       <!-- Create candidate form -->
       <div class="row">
         <div class="col-md-12">
@@ -116,7 +116,7 @@
             </div>
             <div class="form-group">
               <input type="hidden" name="poll_id" value="">
-              <textarea class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
+              <textarea id="poll_text" class="form-control" name="poll_text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
             </div>
             <a class="" role="button" data-toggle="collapse" href="#advanced_options" aria-expanded="false" aria-controls="advanced_options">
               <i id='ex1_clear_vote' class="fa fa-fw fa-plus"></i> Advanced Options
@@ -139,7 +139,6 @@
                 </div>
               </div>
             </div>
-            
             <button type="submit" class="btn btn-default btn-block">Save Poll</button>
           </form>
         </div>
@@ -170,6 +169,7 @@
     <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
     <!-- my scripts -->
     <script src="../js/tools.js"></script>
+    <script src="../js/common.js"></script>
     <script src="../js/range_voting.js"></script>
     <script src="../js/edit_poll.js"></script>
 </body>

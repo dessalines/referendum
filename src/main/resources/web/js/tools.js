@@ -78,6 +78,8 @@ function fillMustacheWithJson(data, templateHtml, divId) {
 
   // $.extend(data, standardDateFormatObj);
 
+  $.extend(data, m2htmlObj);
+
   Mustache.parse(templateHtml); // optional, speeds up future uses
   var rendered = Mustache.render(templateHtml, data);
   $(divId).html(rendered);
@@ -191,6 +193,15 @@ function getCookie(name) {
     return cookie;
   }
 
+}
+
+function createCookie(name, value, days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    var expires = "; expires=" + date.toGMTString();
+  } else var expires = "";
+  document.cookie = name + "=" + value + expires + "; path=/";
 }
 
 function delete_cookie(name) {
@@ -389,6 +400,15 @@ var standardDateFormatObj = {
   }
 };
 
+var m2htmlObj = {
+  "m2html": function() {
+    return function(text, render) {
+      var t = render(text);
+      return markdown.toHTML(t);
+    }
+  }
+}
+
 
 Date.prototype.customFormat = function(formatString) {
   var YYYY, YY, MMMM, MMM, MM, M, DDDD, DDD, DD, D, hhh, hh, h, mm, m, ss, s, ampm, AMPM, dMod, th;
@@ -413,12 +433,17 @@ Date.prototype.customFormat = function(formatString) {
 
 
 // Auto resizing textareas
-$('textarea').each(function() {
-  this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
-}).on('input', function() {
-  this.style.height = 'auto';
-  this.style.height = (this.scrollHeight) + 'px';
-});
+
+function updateTextAreaHeight() {
+  $('textarea').each(function() {
+    this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+  }).on('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+  });
+}
+
+updateTextAreaHeight();
 
 $.fn.sort_select_box = function() {
   // Get options from select box
@@ -450,3 +475,11 @@ var delay = (function() {
     timer = setTimeout(callback, ms);
   };
 })();
+
+function replaceNewlines(e) {
+  return e.replace(/--lb--/g, "\\n");
+}
+
+function replaceNewlinesV2(e) {
+  return e.replace(/--lb--/g, "<br>");
+}
