@@ -1,26 +1,21 @@
-drop view if exists candidate_view, ballot_item_view, user_view, poll_view;
+drop view if exists candidate_view, user_view, poll_view;
 
 create view candidate_view as
 select 
 candidate.id,
-poll_id,
+candidate.poll_id,
 discussion_id,
 discussion.subject,
-user_id
+discussion.text,
+candidate.user_id as candidate_user_id,
+ballot.user_id as ballot_user_id,
+rank
 from candidate
 inner join discussion
-on candidate.discussion_id = discussion.id;
+on candidate.discussion_id = discussion.id
+left join ballot
+on ballot.candidate_id = candidate.id;
 
-create view ballot_item_view as 
-select ballot_item.id,
-ballot_id,
-candidate_id,
-rank,
-poll_id,
-user_id
-from ballot_item
-inner join ballot
-on ballot.id = ballot_item.ballot_id;
 
 create view user_view as 
 select user.id,
@@ -37,6 +32,7 @@ poll_type_id,
 poll_type.name as poll_type_name,
 private_password,
 discussion_id,
+user_id,
 subject,
 text
 from poll

@@ -23,21 +23,6 @@ CREATE TABLE `poll` (
 );
 
 -- ---
--- Table 'ballot_item'
--- 
--- ---
-
-DROP TABLE IF EXISTS `ballot_item`;
-    
-CREATE TABLE `ballot_item` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `ballot_id` INTEGER NULL DEFAULT NULL,
-  `candidate_id` INTEGER NULL DEFAULT NULL,
-  `rank` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
-
--- ---
 -- Table 'candidate'
 -- 
 -- ---
@@ -148,6 +133,8 @@ CREATE TABLE `ballot` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `poll_id` INTEGER NULL DEFAULT NULL,
   `user_id` INTEGER NULL DEFAULT NULL,
+  `candidate_id` INTEGER NULL DEFAULT NULL,
+  `rank` INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -186,8 +173,6 @@ CREATE TABLE `full_user` (
 ALTER TABLE `poll` ADD FOREIGN KEY (poll_type_id) REFERENCES `poll_type` (`id`);
 ALTER TABLE `poll` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`);
 ALTER TABLE `poll` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
-ALTER TABLE `ballot_item` ADD FOREIGN KEY (ballot_id) REFERENCES `ballot` (`id`);
-ALTER TABLE `ballot_item` ADD FOREIGN KEY (candidate_id) REFERENCES `candidate` (`id`);
 ALTER TABLE `candidate` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
 ALTER TABLE `candidate` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`);
 ALTER TABLE `candidate` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
@@ -199,6 +184,7 @@ ALTER TABLE `poll_tag` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
 ALTER TABLE `poll_tag` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
 ALTER TABLE `ballot` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
 ALTER TABLE `ballot` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
+ALTER TABLE `ballot` ADD FOREIGN KEY (candidate_id) REFERENCES `candidate` (`id`);
 ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 
 -- ---
@@ -206,7 +192,6 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 -- ---
 
 -- ALTER TABLE `poll` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `ballot_item` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `candidate` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `discussion` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `comment` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -224,8 +209,6 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 
 -- INSERT INTO `poll` (`id`,`poll_type_id`,`discussion_id`,`user_id`,`private_password`) VALUES
 -- ('','','','','');
--- INSERT INTO `ballot_item` (`id`,`ballot_id`,`candidate_id`,`rank`) VALUES
--- ('','','','');
 -- INSERT INTO `candidate` (`id`,`poll_id`,`discussion_id`,`user_id`) VALUES
 -- ('','','','');
 -- INSERT INTO `discussion` (`id`,`subject`,`text`) VALUES
@@ -240,10 +223,11 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 -- ('','');
 -- INSERT INTO `poll_tag` (`id`,`poll_id`,`tag_id`) VALUES
 -- ('','','');
--- INSERT INTO `ballot` (`id`,`poll_id`,`user_id`) VALUES
--- ('','','');
+-- INSERT INTO `ballot` (`id`,`poll_id`,`user_id`,`candidate_id`,`rank`) VALUES
+-- ('','','','','');
 -- INSERT INTO `user` (`id`,`ip_address`) VALUES
 -- ('','');
 -- INSERT INTO `full_user` (`id`,`user_id`,`name`,`password_encrypted`) VALUES
 -- ('','','','');
+
 SET FOREIGN_KEY_CHECKS=1;

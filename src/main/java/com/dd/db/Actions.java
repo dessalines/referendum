@@ -55,7 +55,7 @@ public class Actions {
 		if (p == null) {
 			throw new NoSuchElementException("Wrong User");
 		}
-		
+
 		p.set("private_password", password).saveIt();
 
 
@@ -81,75 +81,44 @@ public class Actions {
 
 	}
 
-	public static String createBallot(String userId, String pollId, 
-			Map<String, String> vars) {
+	public static String saveBallot(String userId, String pollId, String candidateId,
+			String rank) {
 
-		// TODO always just create a new ballot for now
-		// In the future just get the current one if it doesn't exist
-		Ballot b = BALLOT.createIt("poll_id", pollId,
-				"user_id", userId);
+		String message = null;
+		// fetch the vote if it exists
+		Ballot b = BALLOT.findFirst("poll_id = ? and user_id = ? and candidate_id = ?", 
+				pollId, 
+				userId,
+				candidateId);
 
-
-		for (Entry<String, String> e: vars.entrySet()) {
-			BALLOT_ITEM.createIt("ballot_id", b.getId(),
-					"candidate_id", e.getKey(),
-					"rank", e.getValue());
-		}
-
-		return "Ballot created";
-
-
-	}
-
-	public static String runSTVElection(String pollId) {
-
-
-		// Get all the ballots for the poll
-		List<BallotItemView> dbBallots = BALLOT_ITEM_VIEW.find("poll_id = ?", pollId);
-
-
-		// Group them up by ballot id to ballot items
-		Map<Integer, List<RankedCandidate>> ballotMap = new HashMap<>();
-		for (BallotItemView dbBallot : dbBallots) {
-			Integer ballotId = Integer.valueOf(dbBallot.getString("ballot_id"));
-
-			RankedCandidate rc = new RankedCandidate(dbBallot.getInteger("candidate_id"), 
-					dbBallot.getInteger("rank"));
-
-			log.info(Tools.GSON2.toJson(rc));
-
-
-			// The list needs to be created
-			if (ballotMap.get(ballotId) == null) {
-				List<RankedCandidate> rcs = new ArrayList<>();
-				rcs.add(rc);
-				ballotMap.put(ballotId, rcs);
+		if (b == null) {
+			if (rank != null) {
+				b = BALLOT.createIt(
+						"poll_id", pollId,
+						"user_id", userId,
+						"candidate_id", candidateId,
+						"rank", rank);
+				message = "Ballot Created";
 			} else {
-				List<RankedCandidate> rcs = ballotMap.get(ballotId);
-				rcs.add(rc);
+				message = "Ballot not created";
 			}
-
+		} else {
+			if (rank != null) {
+				b.set("rank", rank).saveIt();
+				message = "Ballot updated";
+			}
+			// If the rank is null, then delete the ballot
+			else {
+				b.delete();
+				message = "Ballot deleted";
+			}
 		}
 
-		// Add them to a list of ballots
-		List<RankedBallot> ballots = new ArrayList<>();
-		for (Entry<Integer, List<RankedCandidate>> e : ballotMap.entrySet()) {
-			RankedBallot rb = new RankedBallot(e.getValue());
-			ballots.add(rb);
-			log.info("ballot id = " + e.getKey());
-			log.info(Tools.GSON2.toJson(rb));
-		}
-
-
-		STVElection election = new STVElection(Quota.DROOP, ballots, 1);
-
-		String json = Tools.GSON.toJson(election.getRounds());
-
-		log.info(json);
-
-		return json;
+		return message;
 
 	}
+
+	
 
 
 	public static String setCookiesForLogin(UserView uv, Response res) {
@@ -173,8 +142,6 @@ public class Actions {
 
 		return "Logged in";
 
-
-
 	}
 
 	public static UserView getUserFromCookie(Request req, Response res) {
@@ -191,11 +158,13 @@ public class Actions {
 
 			if (uv != null) {
 				Actions.setCookiesForLogin(uv, res);
+				return uv;
 			}
 
 		} else {
 			id = ALPHA_ID.decode(uid);
 			uv = USER_VIEW.findFirst("id = ?" , id);
+
 		}
 
 		if (uv == null) {

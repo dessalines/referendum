@@ -1,21 +1,47 @@
+var pollId = getLastUrlPath();
+
 $(document).ready(function() {
   // initializeAllRangeVotes();
 
-  
+
 
 });
 
 
 function initializeAllRangeVotes() {
-  $('.range_vote').each(function() {
-    var cId = '#' + this.id;
-    setupRangeVote(cId);
+
+  getJson('get_user_poll_votes/' + pollId).done(function(e) {
+    var data = JSON.parse(e);
+
+    console.log(data);
+
+    var votesToCandidateMap = votesArrayToMap(data);
+
+    $('.range_vote').each(function() {
+      var candidateId = this.id.split("_")[1];
+      var cId = '#' + this.id;
+      setupRangeVote(cId, votesToCandidateMap[candidateId]);
+    });
   });
 
   setupToolTips();
 }
 
-function setupRangeVote(obj) {
+function votesArrayToMap(arr) {
+  var a = {};
+
+  arr.forEach(function(d) {
+    a[d['candidate_id']] = d;
+  });
+
+  console.log(a);
+
+  return a;
+
+}
+
+
+function setupRangeVote(obj, vote) {
 
   // With JQuery
   var slider = $(obj).bootstrapSlider({
@@ -30,7 +56,7 @@ function setupRangeVote(obj) {
 
     });
 
-  initializeSlider(obj);
+  initializeSlider(obj, vote);
   setupClearVote(obj);
   setupThumbs(obj);
 
@@ -45,10 +71,13 @@ function slideStopActions(obj, cleared) {
   $(obj + '_vote').removeClass('hide');
 
   // set the color and tooltip
+  var rank = null;
   if (!cleared) {
+    rank = $(obj).bootstrapSlider('getValue');
     $(obj + '_vote').css('color', RGBChange(obj));
-    $(obj + '_vote').attr('title', 'Vote: ' + $(obj).bootstrapSlider('getValue')).tooltip('fixTitle');
+    $(obj + '_vote').attr('title', 'Vote: ' + rank).tooltip('fixTitle');
   } else {
+    rank = null;
     $(obj + '_vote').css('color', '#888');
     $(obj + '_vote').attr('title', 'Vote').tooltip('fixTitle');
   }
@@ -57,6 +86,22 @@ function slideStopActions(obj, cleared) {
   $(obj + '_range_vote_table').addClass('hide');
   // $('.panel').foggy(false);
   // $('.tooltip').tooltip('destroy');
+
+  var candidateId = obj.split("_")[1];
+  console.log('candidate id = ' + candidateId);
+
+  console.log('rank = ' + rank);
+
+  // Always save to 10
+  if (rank != null) {
+    rank = rank * 10;
+  }
+  
+  simplePost('save_ballot/' + pollId + '/' + candidateId + '/' + rank, null, null,
+    function() {
+      // alert('ballot saved');
+    }, null, null, null);
+
 }
 
 function setupThumbs(obj) {
@@ -73,9 +118,25 @@ function setupThumbs(obj) {
   });
 }
 
-function initializeSlider(obj) {
-  $(obj).attr('vote', false);
+function initializeSlider(obj, vote) {
+
+
+  console.log(vote);
+  if (vote != null) {
+    var voteNum = parseFloat(vote['rank']) / 10;
+
+    // Fill the data
+    $(obj).bootstrapSlider('setValue', voteNum);
+    $(obj + '_vote').css('color', RGBChange(obj));
+    $(obj + '_vote').attr('title', 'Vote: ' + voteNum).tooltip('fixTitle');
+
+  } else {
+    $(obj).attr('vote', false);
+  }
+
   $(obj + 'Slider .slider-track-high').css('background', '#BABABA');
+
+
 }
 
 function RGBChange(obj) {

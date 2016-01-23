@@ -39,14 +39,6 @@ public class Tables {
 	public static class Ballot extends Model {}
 	public static final Ballot BALLOT = new Ballot();
 	
-	@Table("ballot_item")
-	public static class BallotItem extends Model {}
-	public static final BallotItem BALLOT_ITEM = new BallotItem();
-	
-	@Table("ballot_item_view")
-	public static class BallotItemView extends Model {}
-	public static final BallotItemView BALLOT_ITEM_VIEW = new BallotItemView();
-	
 	@Table("discussion")
 	public static class Discussion extends Model {}
 	public static final Discussion DISCUSSION = new Discussion();

@@ -63,25 +63,6 @@
 <part>discussion_id</part>
 </key>
 </table>
-<table x="701" y="269" name="ballot_item">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="ballot_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="ballot" row="id" />
-</row>
-<row name="candidate_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="candidate" row="id" />
-</row>
-<row name="rank" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
 <table x="486" y="315" name="candidate">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
@@ -109,9 +90,9 @@
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="subject" null="0" autoincrement="0">
+<row name="subject" null="1" autoincrement="0">
 <datatype>VARCHAR(140)</datatype>
-<default>'NULL'</default></row>
+<default>NULL</default></row>
 <row name="text" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
@@ -195,7 +176,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="505" y="169" name="ballot">
+<table x="489" y="156" name="ballot">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -207,6 +188,13 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="user" row="id" />
 </row>
+<row name="candidate_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="candidate" row="id" />
+</row>
+<row name="rank" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>

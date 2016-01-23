@@ -155,7 +155,6 @@ public class API {
 			try {	
 				Tools.allowAllHeaders(req, res);
 
-
 				String pollId = req.params(":pollId");
 
 				Tools.dbInit();
@@ -200,21 +199,50 @@ public class API {
 
 
 		});
+		
+		get("/get_user_poll_votes/:pollId", (req, res) -> {
 
-		post("/create_ballot/:pollId", (req, res) -> {
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+
+				Tools.dbInit();
+
+				String json = BALLOT.find("poll_id = ? and user_id = ?",
+						pollId, uv.getId().toString()).toJson(false);
+
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+
+		post("/save_ballot/:pollId/:candidateId/:rank", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
-				UserView uv = req.attribute("user");
+				UserView uv = Actions.getUserFromCookie(req, res);
 
-				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
-
-				String pollId = req.params(":pollId");
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+				String candidateId = req.params(":candidateId");
+				String rank = req.params(":rank");
+				if (rank.equals("null")) {
+					rank = null;
+				}
 
 				Tools.dbInit();
 
-				String message = Actions.createBallot(uv.getId().toString(), pollId, vars);
+				String message = Actions.saveBallot(uv.getId().toString(), pollId, candidateId, rank);
 
 
 
@@ -230,64 +258,7 @@ public class API {
 
 		});
 
-		get("/get_stv_election/:pollId", (req, res) -> {
-
-			try {	
-				Tools.allowAllHeaders(req, res);
-
-
-				String pollId = req.params(":pollId");
-
-				Tools.dbInit();
-
-				String json = Actions.runSTVElection(pollId);
-
-
-				return json;
-			} catch (Exception e) {
-				res.status(666);
-				e.printStackTrace();
-				return e.getMessage();
-			} finally {
-				Tools.dbClose();
-			}
-
-
-		});
-
-
-		get("/get_sample_stv_election", (req, res) -> {
-
-			try {	
-				Tools.allowAllHeaders(req, res);
-
-
-
-				Tools.dbInit();
-
-				List<RankedBallot> ballots = SampleData.setupBallots();
-
-				STVElection stv = new STVElection(Quota.DROOP, ballots, 3);
-
-				List<ElectionRound> rounds = stv.getRounds();
-
-
-				String json = Tools.GSON.toJson(rounds);
-
-				log.info(json);
-
-
-				return json;
-			} catch (Exception e) {
-				res.status(666);
-				e.printStackTrace();
-				return e.getMessage();
-			} finally {
-				Tools.dbClose();
-			}
-
-
-		});
+		
 
 
 
