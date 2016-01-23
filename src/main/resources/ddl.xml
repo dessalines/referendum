@@ -37,13 +37,17 @@
 		<type label="SET" length="1" sql="SET" quote=""/>
 		<type label="Bit" length="0" sql="bit" quote=""/>
 	</group>
-</datatypes><table x="252" y="335" name="poll">
+</datatypes><table x="245" y="321" name="poll">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="poll_type_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="poll_type" row="id" />
+</row>
+<row name="poll_sum_type_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="poll_sum_type" row="id" />
 </row>
 <row name="discussion_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -138,7 +142,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="49" y="390" name="poll_type">
+<table x="50" y="372" name="poll_type">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -198,6 +202,11 @@
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
+<key type="UNIQUE" name="">
+<part>poll_id</part>
+<part>user_id</part>
+<part>candidate_id</part>
+</key>
 </table>
 <table x="177" y="30" name="user">
 <row name="id" null="1" autoincrement="1">
@@ -224,6 +233,17 @@
 <row name="password_encrypted" null="1" autoincrement="0">
 <datatype>VARCHAR(512)</datatype>
 <default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="34" y="472" name="poll_sum_type">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="0" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<default>'NULL'</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>

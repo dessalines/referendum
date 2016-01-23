@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS `poll`;
 CREATE TABLE `poll` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `poll_type_id` INTEGER NULL DEFAULT NULL,
+  `poll_sum_type_id` INTEGER NULL DEFAULT NULL,
   `discussion_id` INTEGER NULL DEFAULT NULL,
   `user_id` INTEGER NULL DEFAULT NULL,
   `private_password` VARCHAR(140) NULL DEFAULT NULL,
@@ -135,7 +136,8 @@ CREATE TABLE `ballot` (
   `user_id` INTEGER NULL DEFAULT NULL,
   `candidate_id` INTEGER NULL DEFAULT NULL,
   `rank` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`poll_id`, `user_id`, `candidate_id`)
 );
 
 -- ---
@@ -167,10 +169,24 @@ CREATE TABLE `full_user` (
 );
 
 -- ---
+-- Table 'poll_sum_type'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `poll_sum_type`;
+    
+CREATE TABLE `poll_sum_type` (
+  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `name` VARCHAR(255) NOT NULL DEFAULT 'NULL',
+  PRIMARY KEY (`id`)
+);
+
+-- ---
 -- Foreign Keys 
 -- ---
 
 ALTER TABLE `poll` ADD FOREIGN KEY (poll_type_id) REFERENCES `poll_type` (`id`);
+ALTER TABLE `poll` ADD FOREIGN KEY (poll_sum_type_id) REFERENCES `poll_sum_type` (`id`);
 ALTER TABLE `poll` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`);
 ALTER TABLE `poll` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `candidate` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
@@ -202,13 +218,14 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 -- ALTER TABLE `ballot` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `user` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `full_user` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `poll_sum_type` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ---
 -- Test Data
 -- ---
 
--- INSERT INTO `poll` (`id`,`poll_type_id`,`discussion_id`,`user_id`,`private_password`) VALUES
--- ('','','','','');
+-- INSERT INTO `poll` (`id`,`poll_type_id`,`poll_sum_type_id`,`discussion_id`,`user_id`,`private_password`) VALUES
+-- ('','','','','','');
 -- INSERT INTO `candidate` (`id`,`poll_id`,`discussion_id`,`user_id`) VALUES
 -- ('','','','');
 -- INSERT INTO `discussion` (`id`,`subject`,`text`) VALUES
@@ -229,5 +246,6 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 -- ('','');
 -- INSERT INTO `full_user` (`id`,`user_id`,`name`,`password_encrypted`) VALUES
 -- ('','','','');
-
+-- INSERT INTO `poll_sum_type` (`id`,`name`) VALUES
+-- ('','');
 SET FOREIGN_KEY_CHECKS=1;

@@ -154,12 +154,14 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
-
-				String pollId = req.params(":pollId");
+				
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
 				Tools.dbInit();
 
-				String json = Tools.replaceNewlines(CANDIDATE_VIEW.find("poll_id = ?", pollId).toJson(false));
+				String json = Tools.replaceNewlines(
+						CANDIDATE_VIEW.find("poll_id = ?", 
+								pollId).toJson(false));
 
 
 				return json;
@@ -172,7 +174,8 @@ public class API {
 			}
 
 
-		});
+		});		
+		
 		
 		get("/get_poll/:pollId", (req, res) -> {
 
@@ -211,7 +214,7 @@ public class API {
 
 				Tools.dbInit();
 
-				String json = BALLOT.find("poll_id = ? and user_id = ?",
+				String json = BALLOT_VIEW.find("poll_id = ? and user_id = ?",
 						pollId, uv.getId().toString()).toJson(false);
 
 				return json;

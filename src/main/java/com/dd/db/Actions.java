@@ -1,17 +1,13 @@
 package com.dd.db;
 
+import static com.dd.db.Tables.*;
+import static com.dd.tools.Tools.ALPHA_ID;
+
 import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
-import org.javalite.activejdbc.LazyList;
-import org.javalite.activejdbc.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,16 +15,14 @@ import spark.Request;
 import spark.Response;
 
 import com.dd.DataSources;
+import com.dd.db.Tables.Ballot;
+import com.dd.db.Tables.Discussion;
+import com.dd.db.Tables.Poll;
 import com.dd.db.Tables.User;
 import com.dd.db.Tables.UserView;
 import com.dd.tools.Tools;
-import com.dd.voting.ballot.RankedBallot;
-import com.dd.voting.candidate.RankedCandidate;
-import com.dd.voting.election.STVElection;
-import com.dd.voting.election.STVElection.Quota;
-
-import static com.dd.db.Tables.*;
-import static com.dd.tools.Tools.ALPHA_ID;
+import com.dd.voting.ballot.RangeBallot;
+import com.dd.voting.candidate.RangeCandidate;
 
 // http://ondras.zarovi.cz/sql/demo/?keyword=dd_tyhou
 
@@ -75,7 +69,8 @@ public class Actions {
 				"text", text);
 
 		CANDIDATE.createIt("poll_id", pollId,
-				"discussion_id", d.getId().toString());
+				"discussion_id", d.getId().toString(),
+				"user_id", userId);
 
 		return "Candidate created";
 
@@ -175,6 +170,26 @@ public class Actions {
 		Tools.dbClose();
 
 		return uv;
+	}
+	
+	public static List<RangeBallot> convertDBBallots(String pollId) {
+		List<RangeBallot> ballots = new ArrayList<>();
+		
+		Tools.dbInit();
+		List<Ballot> dbBallots = BALLOT.find("poll_id = ?", pollId);
+		for (Ballot dbBallot : dbBallots) {
+			Integer candidateId = dbBallot.getInteger("candidate_id");
+			Double rank = dbBallot.getDouble("rank");
+			RangeBallot rb = new RangeBallot(new RangeCandidate(candidateId, rank));
+			ballots.add(rb);
+		}
+		Tools.dbClose();
+		
+		return ballots;
+	}
+	
+	public static String runRangeElection(String pollId) {
+		
 	}
 
 

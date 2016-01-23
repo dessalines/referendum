@@ -64,4 +64,5 @@ public class RangeElectionTest extends TestCase {
 		log.info(Tools.GSON2.toJson(re.getRankings()));
 		
 	}
+	
 }

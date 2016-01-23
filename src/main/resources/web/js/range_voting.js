@@ -70,15 +70,20 @@ function slideStopActions(obj, cleared) {
   $(obj).attr('vote', true);
   $(obj + '_vote').removeClass('hide');
 
+  
+
   // set the color and tooltip
   var rank = null;
   if (!cleared) {
     rank = $(obj).bootstrapSlider('getValue');
-    $(obj + '_vote').css('color', RGBChange(obj));
+    var color = RGBChange(obj);
+    $(obj + '_vote').css('color', color);
+    $(obj + '_vote_rank').css('background-color', color);
     $(obj + '_vote').attr('title', 'Vote: ' + rank).tooltip('fixTitle');
   } else {
     rank = null;
     $(obj + '_vote').css('color', '#888');
+    $(obj + '_vote_rank').css('background-color', '#888');
     $(obj + '_vote').attr('title', 'Vote').tooltip('fixTitle');
   }
 
@@ -90,17 +95,25 @@ function slideStopActions(obj, cleared) {
   var candidateId = obj.split("_")[1];
   console.log('candidate id = ' + candidateId);
 
+
+
+
   console.log('rank = ' + rank);
 
   // Always save to 10
   if (rank != null) {
+    $(obj + '_vote_rank').removeClass('hide');
+    $(obj + '_vote_rank').text(rank);
     rank = rank * 10;
+  } else {
+    $(obj + '_vote_rank').addClass('hide');
   }
-  
+
   simplePost('save_ballot/' + pollId + '/' + candidateId + '/' + rank, null, null,
     function() {
       // alert('ballot saved');
     }, null, null, null);
+
 
 }
 
@@ -111,6 +124,7 @@ function setupThumbs(obj) {
   // Unhide slider and clear
   $(obj + '_vote').click(function() {
     $(obj + '_range_vote_table').toggleClass('hide');
+    $('[data-toggle="tooltip"]').tooltip('hide');
     // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
     $(obj + '_vote').addClass('hide');
     // $('.panel').foggy();
@@ -127,8 +141,12 @@ function initializeSlider(obj, vote) {
 
     // Fill the data
     $(obj).bootstrapSlider('setValue', voteNum);
-    $(obj + '_vote').css('color', RGBChange(obj));
+    var color = RGBChange(obj);
+    $(obj + '_vote').css('color', color);
+    $(obj + '_vote_rank').css('background-color', color);
     $(obj + '_vote').attr('title', 'Vote: ' + voteNum).tooltip('fixTitle');
+    $(obj + '_vote_rank').removeClass('hide');
+    $(obj + '_vote_rank').text(voteNum);
 
   } else {
     $(obj).attr('vote', false);
