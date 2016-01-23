@@ -101,9 +101,11 @@ public class API {
 				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
 				Boolean private_ = vars.get("public_radio").equals("private");
 				String password = (private_) ? vars.get("private_password") : null;
+				String pollSumTypeId = vars.get("sum_type_radio");
 //				log.info(text);
 
-				String message = Actions.savePoll(uv.getId().toString(), pollId, subject, text, password);
+				String message = Actions.savePoll(uv.getId().toString(), pollId, 
+						subject, text, password, pollSumTypeId);
 
 				return message;
 
@@ -203,6 +205,8 @@ public class API {
 
 		});
 		
+		
+		
 		get("/get_user_poll_votes/:pollId", (req, res) -> {
 
 			try {	
@@ -216,6 +220,32 @@ public class API {
 
 				String json = BALLOT_VIEW.find("poll_id = ? and user_id = ?",
 						pollId, uv.getId().toString()).toJson(false);
+
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+		
+		get("/get_poll_results/:pollId", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+
+				Tools.dbInit();
+
+				String json = Actions.rangePollResults(pollId);
+				
+				log.info(json);
 
 				return json;
 			} catch (Exception e) {

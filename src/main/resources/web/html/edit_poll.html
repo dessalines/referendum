@@ -122,23 +122,38 @@
               <i id='ex1_clear_vote' class="fa fa-fw fa-plus"></i> Advanced Options
             </a>
             <div class="collapse" id="advanced_options">
-              <div class="radio">
-                <label>
-                  <input type="radio" name="public_radio" id="public_radio_public" value="public" checked> Public
-                </label>
+              <h5> Privacy</h5>
+              <div class="row">
+                <div class="col-md-12">
+                  <label class="radio-inline">
+                    <input type="radio" name="public_radio" value="public" checked> Public
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="public_radio" value="private"> Private (With Password)
+                  </label>
+                  <div id="private_password" class="form-group hide">
+                    <div class="col-md-4">
+                      <input class="form-control" name="private_password" type="text" placeholder="Password" minlength="4" maxlength="140" />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="radio">
-                <label>
-                  <input type="radio" name="public_radio" id="public_radio_private" value="private"> Private (With Password)
-                </label>
-              </div>
-              <div id="private_password" class="form-group hide">
-                <div class="col-md-4">
-                  <input class="form-control" name="private_password" type="text" placeholder="Password" minlength="4" maxlength="140" />
-                  <br>
+              <h5> Sum Type</h5>
+              <div class="row">
+                <div class="col-md-12">
+                  <label class="radio-inline">
+                    <input type="radio" name="sum_type_radio" value="1"> Average
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="sum_type_radio" value="2"> Median
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="sum_type_radio" value="3"> Normalized
+                  </label>
                 </div>
               </div>
             </div>
+            <br>
             <button type="submit" class="btn btn-default btn-block">Save Poll</button>
           </form>
         </div>

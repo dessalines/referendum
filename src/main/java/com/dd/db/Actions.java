@@ -5,7 +5,9 @@ import static com.dd.tools.Tools.ALPHA_ID;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
@@ -23,6 +25,9 @@ import com.dd.db.Tables.UserView;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RangeBallot;
 import com.dd.voting.candidate.RangeCandidate;
+import com.dd.voting.election.RangeElection;
+import com.dd.voting.voting_system.choice_type.RangeVotingSystem;
+import com.dd.voting.voting_system.choice_type.RangeVotingSystem.RangeVotingSystemType;
 
 // http://ondras.zarovi.cz/sql/demo/?keyword=dd_tyhou
 
@@ -37,12 +42,15 @@ public class Actions {
 
 		Poll p = POLL.createIt("discussion_id", d.getId().toString(),
 				"user_id", userId,
-				"poll_type_id", 1);
+				"poll_type_id", 1,
+				"poll_sum_type_id", 1);
 
 		return p.getId().toString();
 	}
 
-	public static String savePoll(String userId, String pollId, String subject, String text, String password) {
+	public static String savePoll(String userId, String pollId, 
+			String subject, String text, String password,
+			String pollSumTypeId) {
 
 		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
 
@@ -50,7 +58,8 @@ public class Actions {
 			throw new NoSuchElementException("Wrong User");
 		}
 
-		p.set("private_password", password).saveIt();
+		p.set("private_password", password,
+				"poll_sum_type_id", pollSumTypeId).saveIt();
 
 
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
@@ -113,7 +122,7 @@ public class Actions {
 
 	}
 
-	
+
 
 
 	public static String setCookiesForLogin(UserView uv, Response res) {
@@ -171,26 +180,49 @@ public class Actions {
 
 		return uv;
 	}
-	
-	public static List<RangeBallot> convertDBBallots(String pollId) {
+
+	public static List<RangeBallot> convertDBBallots(List<Ballot> dbBallots) {
 		List<RangeBallot> ballots = new ArrayList<>();
-		
-		Tools.dbInit();
-		List<Ballot> dbBallots = BALLOT.find("poll_id = ?", pollId);
+
+
 		for (Ballot dbBallot : dbBallots) {
 			Integer candidateId = dbBallot.getInteger("candidate_id");
 			Double rank = dbBallot.getDouble("rank");
 			RangeBallot rb = new RangeBallot(new RangeCandidate(candidateId, rank));
 			ballots.add(rb);
 		}
-		Tools.dbClose();
-		
+
 		return ballots;
 	}
-	
-	public static String runRangeElection(String pollId) {
+
+
+	public static String rangePollResults(String pollId) {
+
+		List<Ballot> dbBallots = BALLOT.find("poll_id = ?", pollId);
+
+		List<RangeBallot> ballots = convertDBBallots(dbBallots);
 		
+		Poll p = POLL.findFirst("id = ?", pollId);
+		
+		
+		RangeElection re = new RangeElection(
+				sumIdToRangeVotingSystemType().get(p.getInteger("poll_sum_type_id")), 
+				ballots);
+		
+		return Tools.GSON.toJson(re.getRankings());
+
 	}
+	
+	public static Map<Integer, RangeVotingSystemType> sumIdToRangeVotingSystemType() {
+		Map<Integer, RangeVotingSystemType> map = new HashMap<>();
+		
+		map.put(1, RangeVotingSystemType.AVERAGE);
+		map.put(2, RangeVotingSystemType.MEDIAN);
+		map.put(3, RangeVotingSystemType.NORMALIZED);
+		
+		return map;
+	}
+
 
 
 

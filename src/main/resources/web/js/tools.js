@@ -1,5 +1,5 @@
 // the digital ocean service
-var sparkService = "http://127.0.0.1:4567/"
+var localSparkService = "http://127.0.0.1:4567/"
 
 
 

@@ -12,9 +12,11 @@ import org.slf4j.LoggerFactory;
 
 import com.dd.voting.ballot.RangeBallot;
 import com.dd.voting.candidate.RangeCandidate;
+import com.dd.voting.candidate.RangeCandidateResult;
 import com.dd.voting.results.RangeElectionResults;
 import com.dd.voting.voting_system.choice_type.RangeVotingSystem;
-import static com.dd.voting.candidate.RangeCandidate.RangeCandidateComparator;
+
+import static com.dd.voting.candidate.RangeCandidateResult.RangeCandidateResultComparator;
 
 public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 
@@ -22,7 +24,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 
 	public RangeVotingSystemType type;
 	public List<RangeBallot> ballots;
-	public List<RangeCandidate> rankings;
+	public List<RangeCandidateResult> rankings;
 
 	// A helpful map of candidates ids to ballots
 	Map<Integer, List<RangeCandidate>> candidateBallots;
@@ -90,13 +92,14 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 				score = median(ints);
 			}
 
-			RangeCandidate result = new RangeCandidate(candidateGrouped.getKey(), score);
+			RangeCandidateResult result = new RangeCandidateResult(candidateGrouped.getKey(),
+					score, candidateGrouped.getValue().size());
 
 			rankings.add(result);
 
 		}
 
-		Collections.sort(rankings, new RangeCandidateComparator().reversed());
+		Collections.sort(rankings, new RangeCandidateResultComparator().reversed());
 		
 
 	}
@@ -132,7 +135,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 	}
 
 	@Override
-	public List<RangeCandidate> getRankings() {
+	public List<RangeCandidateResult> getRankings() {
 		return rankings;
 	}
 

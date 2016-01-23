@@ -44,6 +44,7 @@ function fillPollForm() {
     $('#view_poll').attr('href','/poll/' + pollId);
     $('input[name="poll_id"]').val(pollId);
     $('input[name="subject"]').val(data['subject']);
+    $("input[name=sum_type_radio][value='" + data['poll_sum_type_id'] + "']").prop("checked", true);
     $('#poll_text').data('markdown').setContent(data['text']);
     updateTextAreaHeight();
 
