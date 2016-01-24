@@ -59,9 +59,9 @@
   shape-rendering: crispEdges;
 }
 
-.chart rect {
+/*.chart rect {
   fill: steelblue;
-}
+}*/
 
 .chart text {
   fill: white;

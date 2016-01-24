@@ -101,3 +101,9 @@ http://seiyria.com/bootstrap-slider/
 
 Main page - Discuss, Vote, Results
 
+
+TODO 
+* Editing and deleting candidates, polls.
+* Paging for results and candidates
+* Commenting system
+* Full user setup / modals

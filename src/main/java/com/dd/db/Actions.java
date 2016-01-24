@@ -3,13 +3,17 @@ package com.dd.db;
 import static com.dd.db.Tables.*;
 import static com.dd.tools.Tools.ALPHA_ID;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +29,7 @@ import com.dd.db.Tables.UserView;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RangeBallot;
 import com.dd.voting.candidate.RangeCandidate;
+import com.dd.voting.candidate.RangeCandidateResult;
 import com.dd.voting.election.RangeElection;
 import com.dd.voting.voting_system.choice_type.RangeVotingSystem;
 import com.dd.voting.voting_system.choice_type.RangeVotingSystem.RangeVotingSystemType;
@@ -205,13 +210,16 @@ public class Actions {
 		Poll p = POLL.findFirst("id = ?", pollId);
 		
 		
-		RangeElection re = new RangeElection(
+		RangeElection re = new RangeElection(Integer.valueOf(pollId),
 				sumIdToRangeVotingSystemType().get(p.getInteger("poll_sum_type_id")), 
 				ballots);
 		
-		return Tools.GSON.toJson(re.getRankings());
+		
+		return Tools.nodeToJson(Transformations.rangeResultsJson(re));
 
 	}
+	
+	
 	
 	public static Map<Integer, RangeVotingSystemType> sumIdToRangeVotingSystemType() {
 		Map<Integer, RangeVotingSystemType> map = new HashMap<>();

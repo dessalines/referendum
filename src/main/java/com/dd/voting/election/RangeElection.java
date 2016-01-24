@@ -25,11 +25,13 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 	public RangeVotingSystemType type;
 	public List<RangeBallot> ballots;
 	public List<RangeCandidateResult> rankings;
+	public Integer id;
 
 	// A helpful map of candidates ids to ballots
 	Map<Integer, List<RangeCandidate>> candidateBallots;
 
-	public RangeElection(RangeVotingSystemType type, List<RangeBallot> ballots) {
+	public RangeElection(Integer id, RangeVotingSystemType type, List<RangeBallot> ballots) {
+		this.id = id;
 		this.type = type;
 		this.ballots = ballots;
 
@@ -75,7 +77,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 
 		// Loop over all the individual grouped candidates, and find the score
 		rankings = new ArrayList<>();
-		
+
 		for (Entry<Integer, List<RangeCandidate>> candidateGrouped : candidateBallots.entrySet()) {
 
 			Double score = null;
@@ -100,7 +102,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 		}
 
 		Collections.sort(rankings, new RangeCandidateResultComparator().reversed());
-		
+
 
 	}
 
@@ -109,14 +111,14 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 		Collections.sort(ints);
 
 		int middle = ints.size() / 2;
-		
+
 		Double median;
 		if (ints.size() % 2 == 1) {
 			median = (double) ints.get(middle);
 		} else {
 			median = (double) (ints.get(middle - 1) + ints.get(middle)) / 2;
 		}
-		
+
 		return median;
 	}
 
@@ -128,7 +130,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 			sum += i;
 			count++;
 		}
-		
+
 		Double avg = (double) (sum / count);
 
 		return avg;
@@ -141,8 +143,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 
 	@Override
 	public Integer getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	@Override

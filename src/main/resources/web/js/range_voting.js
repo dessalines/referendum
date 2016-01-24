@@ -34,7 +34,7 @@ function votesArrayToMap(arr) {
     a[d['candidate_id']] = d;
   });
 
-  console.log(a);
+  // console.log(a);
 
   return a;
 
@@ -112,9 +112,12 @@ function slideStopActions(obj, cleared) {
   simplePost('save_ballot/' + pollId + '/' + candidateId + '/' + rank, null, null,
     function() {
       // alert('ballot saved');
+       setupResults();
     }, null, null, null);
 
 
+  // recalculate the poll results
+ 
 }
 
 function setupThumbs(obj) {
@@ -135,7 +138,7 @@ function setupThumbs(obj) {
 function initializeSlider(obj, vote) {
 
 
-  console.log(vote);
+  // console.log(vote);
   if (vote != null) {
     var voteNum = parseFloat(vote['rank']) / 10;
 
