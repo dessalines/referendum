@@ -95,6 +95,24 @@ public class Actions {
 
 
 	}
+	
+	public static String deleteCandidate(String userId, String candidateId) {
+
+		Candidate c = CANDIDATE.findFirst("id = ? and user_id = ?", candidateId, userId);
+
+		if (c == null) {
+			throw new NoSuchElementException("Wrong User");
+		}
+		
+		Discussion d = DISCUSSION.findFirst("id = ?", c.getString("discussion_id"));
+		d.delete();
+		
+		c.delete();
+		
+		return "Candidate Deleted";
+
+
+	}
 
 	public static String createCandidate(String userId, String pollId, String subject, String text) {
 
@@ -107,6 +125,26 @@ public class Actions {
 				"user_id", userId);
 
 		return "Candidate created";
+
+	}
+	
+	public static String saveCandidate(String userId, String candidateId, String subject, String text) {
+
+		// find the candidate
+		Candidate c = CANDIDATE.findFirst("id = ? and user_id = ?", candidateId, userId);
+		
+		if (c == null) {
+			throw new NoSuchElementException("Wrong User");
+		}
+		
+		// Update the discussion
+		Discussion d = DISCUSSION.findFirst("id = ?", c.getInteger("discussion_id"));
+				
+		d.set("subject", subject,
+				"text", text).saveIt();
+		
+
+		return "Candidate updated";
 
 	}
 

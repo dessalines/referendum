@@ -147,7 +147,7 @@ public class API {
 
 
 
-		post("/create_candidate", (req, res) -> {
+		post("/save_candidate", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
@@ -159,10 +159,16 @@ public class API {
 				String subject = vars.get("subject");
 				String text = vars.get("text");
 				String pollId = vars.get("poll_id");
+				String candidateId = vars.get("candidate_id");
 
 				Tools.dbInit();
 
-				String message = Actions.createCandidate(uv.getId().toString(), pollId, subject, text);
+				String message;
+				if (candidateId == null) {
+					message = Actions.createCandidate(uv.getId().toString(), pollId, subject, text);
+				} else {
+					message = Actions.saveCandidate(uv.getId().toString(), candidateId, subject, text);
+				}
 
 
 
@@ -203,6 +209,32 @@ public class API {
 
 
 		});		
+		
+		post("/delete_candidate/:candidateId", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				Tools.dbInit();
+				
+				String candidateId = req.params(":candidateId");
+
+				String message = Actions.deleteCandidate(uv.getId().toString(), candidateId);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
 		
 		
 		get("/get_poll/:pollId", (req, res) -> {
