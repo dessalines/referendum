@@ -184,13 +184,21 @@ CREATE TABLE `poll_sum_type` (
 -- ---
 -- Foreign Keys 
 -- ---
+SELECT concat('alter table ',table_schema,'.',table_name,' DROP FOREIGN KEY ',constraint_name,';')
+FROM information_schema.table_constraints
+WHERE constraint_type='FOREIGN KEY'
+AND table_schema='dd';     
+
+
+
+-- if the second term is deleted, the first term is removed
 
 ALTER TABLE `poll` ADD FOREIGN KEY (poll_type_id) REFERENCES `poll_type` (`id`);
 ALTER TABLE `poll` ADD FOREIGN KEY (poll_sum_type_id) REFERENCES `poll_sum_type` (`id`);
-ALTER TABLE `poll` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`);
+ALTER TABLE `poll` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`) ON DELETE CASCADE;
 ALTER TABLE `poll` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
-ALTER TABLE `candidate` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
-ALTER TABLE `candidate` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`);
+ALTER TABLE `candidate` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
+ALTER TABLE `candidate` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`) ON DELETE CASCADE;
 ALTER TABLE `candidate` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `comment` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`id`);
 ALTER TABLE `comment` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
@@ -198,9 +206,9 @@ ALTER TABLE `comment_tree` ADD FOREIGN KEY (parent_id) REFERENCES `comment` (`id
 ALTER TABLE `comment_tree` ADD FOREIGN KEY (child_id) REFERENCES `comment` (`id`);
 ALTER TABLE `poll_tag` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
 ALTER TABLE `poll_tag` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
-ALTER TABLE `ballot` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `ballot` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 ALTER TABLE `ballot` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
-ALTER TABLE `ballot` ADD FOREIGN KEY (candidate_id) REFERENCES `candidate` (`id`);
+ALTER TABLE `ballot` ADD FOREIGN KEY (candidate_id) REFERENCES `candidate` (`id`) ON DELETE CASCADE;
 ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 
 -- ---

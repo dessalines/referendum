@@ -28,7 +28,7 @@ function setupCreateEmptyPoll() {
     simplePost('create_empty_poll', null, null,
       function(pollAid) {
         delay(function() {
-          window.location = 'edit_poll/' + pollAid;
+          window.location = 'poll/' + pollAid + '#edit';
         }, 1000);
 
       }, true, null, null);

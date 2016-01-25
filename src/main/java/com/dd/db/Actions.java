@@ -75,6 +75,26 @@ public class Actions {
 
 
 	}
+	
+	public static String deletePoll(String userId, String pollId) {
+
+		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
+
+		if (p == null) {
+			throw new NoSuchElementException("Wrong User");
+		}
+		
+		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
+		d.delete();
+		
+		p.delete();
+		
+
+
+		return "Poll Deleted";
+
+
+	}
 
 	public static String createCandidate(String userId, String pollId, String subject, String text) {
 

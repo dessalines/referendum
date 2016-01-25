@@ -118,6 +118,32 @@ public class API {
 			}
 
 		});
+		
+		post("/delete_poll/:pollId", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				Tools.dbInit();
+				
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+
+				String message = Actions.deletePoll(uv.getId().toString(), pollId);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+
 
 
 

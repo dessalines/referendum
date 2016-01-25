@@ -107,5 +107,5 @@ TODO
 * Paging for results and candidates
 * Commenting system
 * Full user setup / modals
-* Move edit to regular poll page
+* Use a hashtag based system (easily create new tags, and tag things)
 
