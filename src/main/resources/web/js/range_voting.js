@@ -128,6 +128,7 @@ function setupThumbs(obj) {
   $(obj + '_vote').click(function() {
     $(obj + '_range_vote_table').toggleClass('hide');
     $('[data-toggle="tooltip"]').tooltip('hide');
+    
     // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
     $(obj + '_vote').addClass('hide');
     // $('.panel').foggy();

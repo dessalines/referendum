@@ -103,7 +103,9 @@ Main page - Discuss, Vote, Results
 
 
 TODO 
-* Editing and deleting candidates, polls.
+* Editing and deleting candidates, polls. Are you sure delete?
 * Paging for results and candidates
 * Commenting system
 * Full user setup / modals
+* Move edit to regular poll page
+
