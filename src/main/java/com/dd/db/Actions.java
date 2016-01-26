@@ -291,20 +291,24 @@ public class Actions {
 	}
 	
 	
-	public static String fetchDiscussionComments(Integer discussionId, Integer parentId) {
-		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(1));
+	public static String fetchDiscussionComments(Integer userId, 
+			Integer discussionId, Integer parentId) {
+		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
+				userId, discussionId, parentId));
 		return commentObjectsToJson(cvs);
 	}
 	
-	public static String fetchDiscussionComments(Integer discussionId, Integer parentId, 
+	public static String fetchDiscussionComments(Integer userId, 
+			Integer discussionId, Integer parentId, 
 			Integer minPathLength, Integer maxPathLength) {
 		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
-				1, minPathLength, maxPathLength));
+				userId, discussionId, parentId, minPathLength, maxPathLength));
 		return commentObjectsToJson(cvs);
 	}
 	
-	public static String fetchDiscussionComments(Integer discussionId) {
-		List<CommentView> cvs = COMMENT_VIEW.find("discussion_id = ?", discussionId);
+	public static String fetchDiscussionComments(Integer userId, Integer discussionId) {
+		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
+				userId, discussionId));
 		return commentObjectsToJson(cvs);
 	}
 	

@@ -105,8 +105,10 @@ Main page - Discuss, Vote, Results
 TODO 
 * Paging for results and candidates, and comments
 * Commenting system
+* Comment Voting
+* User pages w/ captchas
 * Full user setup / modals
 * Use a hashtag based system (easily create new tags, and tag things)
-* poll searching
+* poll searching, based on hashtags or 
 * add date stuff to tables
 

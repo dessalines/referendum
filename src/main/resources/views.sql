@@ -85,7 +85,8 @@ comment.discussion_id,
 text,
 comment.user_id,
 -- min(a.path_length,b.path_length),
-AVG(rank) as avg_rank,
+AVG(c.rank) as avg_rank,
+d.rank as user_rank,
 a.parent_id as parent_id,
 GROUP_CONCAT(distinct b.parent_id order by b.path_length desc) AS breadcrumbs,
 max(a.parent_id) as derp_id,
@@ -94,10 +95,15 @@ comment.modified
 from comment
 JOIN comment_tree a ON (comment.id = a.child_id) 
 JOIN comment_tree b ON (b.child_id = a.child_id) 
-left join comment_rank
-on comment.id = comment_rank.comment_id
--- WHERE a.parent_id = 3 
+left join comment_rank c
+on comment.id = c.comment_id
+left join comment_rank d
+on comment.id = d.comment_id 
+-- and d.user_id = ?
+-- where comment.discussion_id = ?
+-- and a.parent_id = 3 
 -- where b.id != a.parent_id
 -- and a.path_length = 1
+-- where d.user_id = 2
 GROUP BY a.child_id;
 

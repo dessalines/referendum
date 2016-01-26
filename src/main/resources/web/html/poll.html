@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Referendum</title>
+  <!-- favicon -->
+  <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon" />
+  <!-- Bootstrap core CSS -->
+  <link href="../css/cyborg.bootstrap.min.css" rel="stylesheet">
+  <!-- Link to font awesome -->
+  <!-- <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Bootstrap social css -->
+  <link href="../bower_components/bootstrap-social/bootstrap-social.css" rel="stylesheet">
+  <!--   Bootstrap validator -->
+  <link rel="stylesheet" href="../bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css" />
+  <!--   toastr css -->
+  <link href="../bower_components/toastr/toastr.css" rel="stylesheet" />
+  <!--   typeahead css -->
+  <link href="../css/typeaheadjs.css" rel="stylesheet" />
+  <!-- Pickadate -->
+  <link href="../bower_components/pickadate/lib/themes/default.css" rel="stylesheet" />
+  <link href="../bower_components/pickadate/lib/themes/default.date.css" rel="stylesheet" />
+  <!-- Jquery UI -->
+  <link rel="stylesheet" href="../bower_components/jquery-ui/themes/cupertino/jquery-ui.min.css">
+  <!-- The jtable crud interface -->
+  <link href="../bower_components/jtable/lib/themes/lightcolor/blue/jtable.min.css" rel="stylesheet" type="text/css" />
+  <!-- Bootstrap markdown -->
+  <link rel="stylesheet" href="../bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css">
+  <!-- Bootstrap slider css -->
+  <link rel="stylesheet" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
+  <!-- This main css -->
+  <link href="../css/main2.css" rel="stylesheet">
+  <!-- Just for debugging purposes. Don't actually copy this line! -->
+  <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+</head>
+
+<body>
+  <div id="wrapper">
+    <!-- plug into here -->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Referendum</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/updates">Updates</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tables <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/client">Client</a>
+                </li>
+                <li><a href="/product">Product</a>
+                </li>
+                <li><a href="/productcptcodes">Product CPT Codes</a>
+                </li>
+                <li><a href="/productpayers">Product Payers</a>
+                </li>
+                <li><a href="/policy">Policy</a>
+                </li>
+                <li><a href="/policyupdates">Policy Updates</a>
+                </li>
+                <li><a href="/policyattributevalues">Policy Attribute Values</a>
+                </li>
+                <li><a href="/policyattributes">Policy Attributes</a>
+                </li>
+                <li><a href="/coveragestatus">Coverage Status</a>
+                </li>
+                <li><a href="/payer">Payer</a>
+                </li>
+                <li><a href="/payercategory">Payer Category</a>
+                </li>
+                <li><a href="/region">Region</a>
+                </li>
+                <li><a href="/payerregion">Payer Region</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="/crud">Admin</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container-fluid -->
+    </nav>
+    <!--Main Content -->
+    <div class="container">
+      <ul id="main_tab_list" class="nav nav-tabs nav-tabs-left nav-tabs-special nav-justified" role="tablist">
+        <li class="active" role="presentation"><a href="#discuss_tab" aria-controls="home" role="tab" data-toggle="tab">Discuss</a></li>
+        <li name="vote_tab" role="presentation"><a class="text-normal" href="#vote_tab" aria-controls="vote_tab" role="tab" data-toggle="tab">Vote</a></li>
+        <li name="results_tab" role="presentation"><a class="text-normal" href="#results_tab" aria-controls="results_tab" role="tab" data-toggle="tab">Results</a></li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="discuss_tab">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="poll_div">
+                <script id="poll_template" type="x-tmpl-mustache">
+                  <h3> {{subject}} </h3>
+                  <br>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <div id="poll_text">
+                        {{#m2html}}{{{text}}}{{/m2html}}
+                      </div>
+                    </div>
+                  </div>
+                  <small> 
+                    <ul class="list-inline">
+                      <li><a id="edit_poll_btn" class="hide text-muted hand">Edit</a></li>
+                      <li><a id="delete_poll_btn" class="hide text-muted hand">Delete</a></li>
+                      <li><a id="delete_sure_yes_btn" class="hide text-danger hand">(Yes</a> 
+                      <a id="delete_sure_no_btn" class="hide text-muted hand">/No)</a></li>
+                    </ul>
+                  </small>
+                </script>
+              </div>
+            </div>
+          </div>
+          <div id="edit_poll_div" class="hide">
+            <h5> Edit Poll </h5>
+            <!-- Create candidate form -->
+            <div class="row">
+              <div class="col-md-12">
+                <form id="poll_form" role="form">
+                  <div class="form-group">
+                    <input class="form-control" name="subject" type="text" placeholder="Title (140 Character Limit)" data-bv-notempty="true" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
+                  </div>
+                  <div class="form-group">
+                    <input type="hidden" name="poll_id" value="">
+                    <textarea id="edit_poll_text" class="form-control" name="poll_text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
+                  </div>
+                  <a class="" role="button" data-toggle="collapse" href="#advanced_options" aria-expanded="false" aria-controls="advanced_options">
+                    <i id='ex1_clear_vote' class="fa fa-fw fa-plus"></i> Advanced Options
+                  </a>
+                  <div class="collapse" id="advanced_options">
+                    <h5> Privacy</h5>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label class="radio-inline">
+                          <input type="radio" name="public_radio" value="public" checked> Public
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="public_radio" value="private"> Private (With Password)
+                        </label>
+                        <div id="private_password" class="form-group hide">
+                          <div class="col-md-4">
+                            <input class="form-control" name="private_password" type="text" placeholder="Password" minlength="4" maxlength="140" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <h5> Sum Type</h5>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label class="radio-inline">
+                          <input type="radio" name="sum_type_radio" value="1"> Average
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="sum_type_radio" value="2"> Median
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="sum_type_radio" value="3"> Normalized
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <button type="submit" class="btn btn-default btn-block">Save Poll</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <h4> Comments</h4>
+          <div id="comments_div">
+            <script id="comments_template" type="x-tmpl-mustache">
+              <div class="row">
+                <div class="col-md-12">
+                  {{#.}}
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <ul class="list-inline">
+                        <li>
+                          <a class="show_expand" role="button" data-toggle="collapse" data-target="#collapse_comment_id_{{id}}" aria-expanded="true" aria-controls="collapse_comment_id_{{id}}">
+                          </a>
+                        </li>
+                        <li>
+                          <a id='comment_{{id}}_vote' class="hand" data-toggle="tooltip" data-placement="auto" title="Vote">
+                            <i class="fa fa-fw fa-thumbs-up"></i>
+                          </a>
+                        </li>
+                        <li><a href="">user#_{{userId}}</a></li>
+                        <li><span id="comment_{{id}}_vote_rank" class="label label-default label-as-badge"> 
+                        {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
+                          </span>
+                        </li>
+                        <li><i> 4 months ago</i>
+                      </ul>
+                    </div>
+                    <div id="collapse_comment_id_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                      <div class="panel-body">
+                        {{text}}
+                        <small>
+                        <ul class="list-inline">
+                          <li><a class="text-muted hand">link</a></li>
+                          <li><a class="text-muted hand">source</a></li>
+                          <li><a class="text-muted hand">edit<a/></li>
+                          <li><a class="text-muted hand">reply<a/></li>
+                        </ul>
+                        </small> {{>recurse}}
+                      </div>
+                    </div>
+                  </div>
+                  {{/.}}
+                </div>
+              </div>
+            </script>
+            <script id="recurse" type="x-tmpl-mustache">
+              {{#embedded}}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <ul class="list-inline">
+                    <li>
+                      <a class="show_expand" role="button" data-toggle="collapse" data-target="#collapse_comment_id_{{id}}" aria-expanded="true" aria-controls="collapse_comment_id_{{id}}">
+                      </a>
+                    </li>
+                    <li>
+                      <a id='comment_{{id}}_vote' class="hand" data-toggle="tooltip" data-placement="auto" title="Vote">
+                        <i class="fa fa-fw fa-thumbs-up"></i>
+                      </a>
+                    </li>
+                    <li><a href="">user#_{{userId}}</a></li>
+                    <li><span id="comment_{{id}}_vote_rank" class="label label-default label-as-badge"> 
+                        {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
+                          </span>
+                    </li>
+                    <li><i> 4 months ago</i>
+                  </ul>
+                </div>
+                <div id="collapse_comment_id_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="panel-body">
+                    {{text}} {{>recurse}}
+                  </div>
+                </div>
+              </div>
+              {{/embedded}}
+            </script>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="vote_tab">
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel-group">
+                <div id="candidates_div">
+                  <script id="candidates_template" type="x-tmpl-mustache">
+                    {{#.}}
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <!-- A sample range vote table -->
+                        <table id="id_{{id}}_range_vote_table" class="range_vote_table hide">
+                          <tr>
+                            <td>
+                              <input id="id_{{id}}" class="range_vote" data-slider-id='id_{{id}}_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <i id='id_{{id}}_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                            </td>
+                          </tr>
+                        </table>
+                        <button id='id_{{id}}_vote' class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="auto" title="Vote">
+                          <i class="fa fa-fw fa-thumbs-up fa-2"></i>
+                          <span id="id_{{id}}_vote_rank" class="label label-default label-as-badge hide"> 32.1
+                          </span>
+                        </button>
+                        <h1 class="panel-title">
+                          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_id_{{id}}" aria-expanded="true" aria-controls="collapse_id_{{id}}">
+                            {{subject}}
+                          </a>
+                        </h1>
+                        <small id="user_candidate_option_list_{{id}}" class="hide user_candidate_options_btns">
+                          <ul class="list-inline">
+                            <li><a id="edit_candidate_btn_{{id}}" class="text-muted hand edit_candidate_btn">Edit</a></li>
+                            <li><a id="delete_candidate_btn_{{id}}" class="text-muted hand delete_candidate_btn">Delete</a></li>
+                            <li><a id="delete_candidate_sure_yes_btn_{{id}}" class="hide text-danger hand delete_candidate_sure_yes_btn">(Yes</a> 
+                            <a id="delete_candidate_sure_no_btn_{{id}}" class="hide text-muted hand delete_candidate_sure_no_btn">/No)</a></li>
+                          </ul>
+                        </small>
+                      </div>
+                      <div id="collapse_id_{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                          {{#m2html}}{{{text}}}{{/m2html}}
+                        </div>
+                      </div>
+                    </div>
+                    {{/.}} {{^.}}
+                    <p> No Candidates</p>
+                    {{/.}}
+                  </script>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              <button id='add_a_candidate' class="btn btn-default btn-block"><i class="fa fa-plus fa-fw fa-2 hand" data-toggle="tooltip" data-placement="right" title="Add a candidate"></i> Add a Candidate</button>
+            </div>
+          </div>
+          <!-- Create Candidate form -->
+          <div class="row">
+            <div class="col-md-12">
+              <form id="candidate_form" role="form" class="hide">
+                <input type="hidden" name="poll_id" value="">
+                <input type="hidden" name="candidate_id" value="">
+                <div class="form-group">
+                  <input id="candidate_subject" class="form-control" name="subject" type="text" data-bv-notempty="true" placeholder="Candidate Title (140 Character Limit)" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
+                </div>
+                <div class="form-group">
+                  <textarea id="edit_candidate_text" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-default btn-block">Save Candidate</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="results_tab">
+          <div class="row">
+            <div class="col-md-12">
+              <h3> Results</h3>
+              <svg class="chart">
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+      ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+    <script src="../bower_components/toastr/toastr.js"></script>
+    <script src="../bower_components/mustache.js/mustache.js"></script>
+    <script src="../bower_components/holderjs/holder.js"></script>
+    <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
+    <script src="../bower_components/highcharts/highcharts.js"></script>
+    <script src="../bower_components/highcharts/modules/exporting.js"></script>
+    <script src="../bower_components/pickadate/lib/picker.js"></script>
+    <script src="../bower_components/pickadate/lib/picker.date.js"></script>
+    <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>
+    <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+    <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
+    <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+    <script src="../bower_components/d3/d3.min.js"></script>
+    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
+    <!-- my scripts -->
+    <script src="../js/tools.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/range_voting.js"></script>
+    <script src="../js/poll.js"></script>
+</body>
+
+</html>

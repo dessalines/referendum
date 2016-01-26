@@ -296,7 +296,6 @@ public class API {
 			try {	
 				Tools.allowAllHeaders(req, res);
 
-
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
 				Tools.dbInit();
@@ -322,6 +321,7 @@ public class API {
 			try {	
 				Tools.allowAllHeaders(req, res);
 
+				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
@@ -329,7 +329,7 @@ public class API {
 
 				Integer discussionId = POLL.findFirst("id = ?", pollId).getInteger("discussion_id");
 				
-				String json = Actions.fetchDiscussionComments(discussionId);
+				String json = Actions.fetchDiscussionComments(uv.getInteger("id"), discussionId);
 				
 				log.info(json);
 

@@ -67,15 +67,16 @@ public class Tables {
 	public static class UserView extends Model {}
 	public static final UserView USER_VIEW = new UserView();
 
-	public static final String COMMENT_VIEW_SQL(Integer parentId, 
-			Integer minPathLength, Integer maxPathLength) {
+	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, 
+			Integer parentId, Integer minPathLength, Integer maxPathLength) {
 		String s = "select \n"+
 				"comment.id,\n"+
 				"comment.discussion_id,\n"+
 				"text,\n"+
 				"comment.user_id,\n"+
 				"-- min(a.path_length,b.path_length),\n"+
-				"AVG(rank) as avg_rank,\n"+
+				"AVG(c.rank) as avg_rank,\n"+
+				"d.rank as user_rank,\n"+
 				"a.parent_id as parent_id,\n"+
 				"GROUP_CONCAT(distinct b.parent_id order by b.path_length desc) AS breadcrumbs,\n"+
 				"max(a.parent_id) as derp_id,\n"+
@@ -84,9 +85,16 @@ public class Tables {
 				"from comment\n"+
 				"JOIN comment_tree a ON (comment.id = a.child_id) \n"+
 				"JOIN comment_tree b ON (b.child_id = a.child_id) \n"+
-				"left join comment_rank\n"+
-				"on comment.id = comment_rank.comment_id\n"+
-				"WHERE a.parent_id = " + parentId + " \n";
+				"left join comment_rank c \n"+
+				"on comment.id = c.comment_id\n"+
+				"left join comment_rank d \n"+
+				"on comment.id = d.comment_id\n" + 
+				"and d.user_id = " + userId + "\n"+
+				"WHERE comment.discussion_id = " + discussionId + "\n";
+		if (parentId != null) {
+			s += "and a.parent_id = " + parentId + " \n";
+		}
+
 
 		if (minPathLength != null) {
 			s += "and a.path_length >= " + minPathLength + " \n";
@@ -100,9 +108,13 @@ public class Tables {
 
 		return s;
 	}
+	
+	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId) {
+		return COMMENT_VIEW_SQL(userId, discussionId, null, null, null);
+	}
 
-	public static final String COMMENT_VIEW_SQL(Integer parentId) {
-		return COMMENT_VIEW_SQL(parentId, null, null);
+	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, Integer parentId) {
+		return COMMENT_VIEW_SQL(userId, discussionId, parentId, null, null);
 	}
 
 
