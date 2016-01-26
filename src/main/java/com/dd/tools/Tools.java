@@ -296,7 +296,7 @@ public class Tools {
 		
 		try {
 			new DB("default").open("com.mysql.jdbc.Driver", 
-					prop.getProperty("dburl") + "?useUnicode=true&characterEncoding=UTF-8", 
+					prop.getProperty("dburl") + "?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull", 
 					prop.getProperty("dbuser"), 
 					prop.getProperty("dbpassword"));
 		} catch (DBException e) {

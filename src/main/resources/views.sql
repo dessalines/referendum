@@ -1,4 +1,4 @@
-drop view if exists candidate_view, ballot_view, user_view, poll_view;
+drop view if exists candidate_view, ballot_view, user_view, poll_view, comment_view;
 
 create view candidate_view as
 select 
@@ -58,3 +58,29 @@ count(*) as votes_count
 from ballot
 group by poll_id,
 candidate_id;
+
+
+
+create view comment_view as 
+select 
+comment.id,
+comment.discussion_id,
+text,
+comment.user_id,
+-- min(a.path_length,b.path_length),
+AVG(rank) as avg_rank,
+a.parent_id as parent_id,
+GROUP_CONCAT(distinct b.parent_id order by b.path_length desc) AS breadcrumbs,
+-- GROUP_CONCAT(b.parent_id where b.path_length =1 1 order by b.path_length desc) AS breadcrumbs2,
+comment.created,
+comment.modified
+from comment
+JOIN comment_tree a ON (comment.id = a.child_id) 
+JOIN comment_tree b ON (b.child_id = a.child_id) 
+left join comment_rank
+on comment.id = comment_rank.comment_id
+-- WHERE a.parent_id = 1 
+-- and a.path_length = 1
+GROUP BY a.child_id;
+-- order by avg_rank desc;
+

@@ -103,9 +103,10 @@ Main page - Discuss, Vote, Results
 
 
 TODO 
-* Editing and deleting candidates. Are you sure delete?
 * Paging for results and candidates, and comments
 * Commenting system
 * Full user setup / modals
 * Use a hashtag based system (easily create new tags, and tag things)
+* poll searching
+* add date stuff to tables
 

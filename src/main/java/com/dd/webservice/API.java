@@ -162,7 +162,7 @@ public class API {
 				String candidateId = vars.get("candidate_id");
 
 				Tools.dbInit();
-
+				
 				String message;
 				if (candidateId == null) {
 					message = Actions.createCandidate(uv.getId().toString(), pollId, subject, text);
