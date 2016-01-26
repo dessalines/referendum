@@ -22,6 +22,7 @@ import spark.Response;
 
 import com.dd.DataSources;
 import com.dd.db.Tables.Ballot;
+import com.dd.db.Tables.CommentView;
 import com.dd.db.Tables.Discussion;
 import com.dd.db.Tables.Poll;
 import com.dd.db.Tables.User;
@@ -288,8 +289,28 @@ public class Actions {
 		
 		return map;
 	}
-
-
+	
+	public static String fetchDiscussionComments(Integer discussionId, Integer parentId) {
+		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(1));
+		return commentObjectsToJson(cvs);
+	}
+	
+	public static String fetchDiscussionComments(Integer discussionId, Integer parentId, 
+			Integer minPathLength, Integer maxPathLength) {
+		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
+				1, minPathLength, maxPathLength));
+		return commentObjectsToJson(cvs);
+	}
+	
+	public static String fetchDiscussionComments(Integer discussionId) {
+		List<CommentView> cvs = COMMENT_VIEW.find("discussion_id = ?", discussionId);
+		return commentObjectsToJson(cvs);
+	}
+	
+	public static String commentObjectsToJson(List<CommentView> cvs) {
+		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));
+	}
+	
 
 
 }
