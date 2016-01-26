@@ -59,7 +59,24 @@ from ballot
 group by poll_id,
 candidate_id;
 
-
+-- create view comment_view as
+-- select 
+-- comment.id,
+-- comment.discussion_id,
+-- text,
+-- comment.user_id,
+-- comment_tree.parent_id,
+-- comment_tree.child_id,
+-- path_length,
+-- AVG(rank) as avg_rank,
+-- comment.created,
+-- comment.modified
+-- from comment
+-- inner join comment_tree
+-- on comment.id = comment_tree.child_id
+-- left join comment_rank
+-- on comment.id = comment_rank.comment_id
+-- group by parent_id;
 
 create view comment_view as 
 select 
@@ -71,7 +88,7 @@ comment.user_id,
 AVG(rank) as avg_rank,
 a.parent_id as parent_id,
 GROUP_CONCAT(distinct b.parent_id order by b.path_length desc) AS breadcrumbs,
--- GROUP_CONCAT(b.parent_id where b.path_length =1 1 order by b.path_length desc) AS breadcrumbs2,
+max(a.parent_id) as derp_id,
 comment.created,
 comment.modified
 from comment
@@ -79,8 +96,8 @@ JOIN comment_tree a ON (comment.id = a.child_id)
 JOIN comment_tree b ON (b.child_id = a.child_id) 
 left join comment_rank
 on comment.id = comment_rank.comment_id
--- WHERE a.parent_id = 1 
+-- WHERE a.parent_id = 3 
+-- where b.id != a.parent_id
 -- and a.path_length = 1
 GROUP BY a.child_id;
--- order by avg_rank desc;
 
