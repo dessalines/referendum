@@ -290,6 +290,7 @@ public class Actions {
 		return map;
 	}
 	
+	
 	public static String fetchDiscussionComments(Integer discussionId, Integer parentId) {
 		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(1));
 		return commentObjectsToJson(cvs);
