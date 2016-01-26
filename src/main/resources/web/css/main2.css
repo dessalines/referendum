@@ -32,6 +32,20 @@
   background: #BABABA;
 }*/
 
+.show_expand[aria-expanded="true"]:before { 
+    content:'[-]';
+}
+.show_expand[aria-expanded="false"]:before { 
+    content:'[+]'; 
+}
+
+
+.list-inline {
+  margin-bottom: 0px;
+}
+
+
+
 .svg-container {
     display: inline-block;
     position: relative;
@@ -117,8 +131,13 @@ i.fa {
   line-height: inherit;
 }
 
+.panel {
+  margin-bottom: 0px;
+}
+
 .panel-heading {
-  line-height: 16px;
+  /*line-height: 16px;*/
+    padding: 2px 10px;
 }
 
 .range_vote_table,

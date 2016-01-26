@@ -74,14 +74,20 @@ function scrollSpy() {
   // });
 }
 
-function fillMustacheWithJson(data, templateHtml, divId) {
+function fillMustacheWithJson(data, templateHtml, divId, partial) {
 
   // $.extend(data, standardDateFormatObj);
 
   $.extend(data, m2htmlObj);
 
   Mustache.parse(templateHtml); // optional, speeds up future uses
-  var rendered = Mustache.render(templateHtml, data);
+  var rendered;
+  if (partial === undefined) {
+    rendered = Mustache.render(templateHtml, data);
+  } else {
+    rendered = Mustache.render(templateHtml, data, partial);
+  }
+
   $(divId).html(rendered);
 
   // console.log(rendered);
@@ -524,11 +530,11 @@ var randomColor = (function() {
 
 
 // Loads correct tab on URL
-$(function(){
+$(function() {
   var hash = window.location.hash;
   hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
-  $('.nav-tabs a').click(function (e) {
+  $('.nav-tabs a').click(function(e) {
     $(this).tab('show');
     var scrollmem = $('body').scrollTop();
     window.location.hash = this.hash;
