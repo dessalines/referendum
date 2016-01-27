@@ -5,6 +5,8 @@ import static spark.Spark.post;
 import static spark.Spark.before;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -40,9 +42,11 @@ public class API {
 		get("get_user", (req, res) -> {
 
 			try {
+
+				Tools.dbInit();
 				
 				UserView uv = Actions.getUserFromCookie(req, res);
-				
+
 				return uv.getId().toString();
 
 			} catch (Exception e) {
@@ -60,12 +64,14 @@ public class API {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
+				
+				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				Tools.dbInit();
+				
 
 				String pollId = Actions.createEmptyPoll(uv.getId().toString());
 
@@ -88,13 +94,16 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
+				
+				Tools.dbInit();
+				
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				Tools.dbInit();
 				
-				
+
+
 
 				String subject = vars.get("subject");
 				String text = vars.get("poll_text");
@@ -102,7 +111,7 @@ public class API {
 				Boolean private_ = vars.get("public_radio").equals("private");
 				String password = (private_) ? vars.get("private_password") : null;
 				String pollSumTypeId = vars.get("sum_type_radio");
-//				log.info(text);
+				//				log.info(text);
 
 				String message = Actions.savePoll(uv.getId().toString(), pollId, 
 						subject, text, password, pollSumTypeId);
@@ -118,16 +127,18 @@ public class API {
 			}
 
 		});
-		
+
 		post("/delete_poll/:pollId", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
+				
+				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
-				Tools.dbInit();
 				
+
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
 				String message = Actions.deletePoll(uv.getId().toString(), pollId);
@@ -152,6 +163,8 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
+				Tools.dbInit();
+				
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
@@ -161,8 +174,8 @@ public class API {
 				String pollId = vars.get("poll_id");
 				String candidateId = vars.get("candidate_id");
 
-				Tools.dbInit();
 				
+
 				String message;
 				if (candidateId == null) {
 					message = Actions.createCandidate(uv.getId().toString(), pollId, subject, text);
@@ -188,7 +201,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
-				
+
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
 				Tools.dbInit();
@@ -209,16 +222,18 @@ public class API {
 
 
 		});		
-		
+
 		post("/delete_candidate/:candidateId", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
+				
+				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
-				Tools.dbInit();
-				
+			
+
 				String candidateId = req.params(":candidateId");
 
 				String message = Actions.deleteCandidate(uv.getId().toString(), candidateId);
@@ -234,9 +249,103 @@ public class API {
 			}
 
 		});
+
+		post("/edit_comment", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+				
+				Tools.dbInit();
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
+
+				String text = vars.get("text");
+				String commentId = vars.get("comment_id");
+
+				
+
+				String message;
+
+				message = Actions.editComment(uv.getId().toString(), commentId, text);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
 		
+		post("/delete_comment/:commentId", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+				
+				Tools.dbInit();
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				String commentId = req.params(":commentId");
+
+				String message;
+
+				message = Actions.deleteComment(uv.getId().toString(), commentId);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
 		
-		
+		post("/create_comment", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+				
+				Tools.dbInit();
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
+
+				String text = vars.get("text");
+				String discussionId = vars.get("discussion_id");
+				List<String> parentBreadCrumbs = Arrays.asList(vars.get("parent_bread_crumbs").split(","));
+				
+				
+
+				String message;
+
+				message = Actions.createComment(uv.getId().toString(), discussionId, 
+						parentBreadCrumbs, text);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+
+
+
+
 		get("/get_poll/:pollId", (req, res) -> {
 
 			try {	
@@ -248,7 +357,7 @@ public class API {
 				Tools.dbInit();
 
 				String json = Tools.replaceNewlines(POLL_VIEW.findFirst("id = ?", pollId).toJson(false));
-				
+
 				log.info(json);
 
 				return json;
@@ -262,19 +371,21 @@ public class API {
 
 
 		});
-		
-		
-		
+
+
+
 		get("/get_user_poll_votes/:pollId", (req, res) -> {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				
+				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
-				Tools.dbInit();
+				
 
 				String json = BALLOT_VIEW.find("poll_id = ? and user_id = ?",
 						pollId, uv.getId().toString()).toJson(false);
@@ -290,7 +401,7 @@ public class API {
 
 
 		});
-		
+
 		get("/get_poll_results/:pollId", (req, res) -> {
 
 			try {	
@@ -301,7 +412,7 @@ public class API {
 				Tools.dbInit();
 
 				String json = Actions.rangePollResults(pollId);
-				
+
 				log.info(json);
 
 				return json;
@@ -315,22 +426,24 @@ public class API {
 
 
 		});
-		
+
 		get("/get_comments/:pollId", (req, res) -> {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				
+				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
-				Tools.dbInit();
+				
 
 				Integer discussionId = POLL.findFirst("id = ?", pollId).getInteger("discussion_id");
-				
+
 				String json = Actions.fetchDiscussionComments(uv.getInteger("id"), discussionId);
-				
+
 				log.info(json);
 
 				return json;
@@ -350,6 +463,9 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
+				
+				Tools.dbInit();
+				
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
@@ -359,7 +475,7 @@ public class API {
 					rank = null;
 				}
 
-				Tools.dbInit();
+				
 
 				String message = Actions.saveBallot(uv.getId().toString(), pollId, candidateId, rank);
 
@@ -376,13 +492,16 @@ public class API {
 			}
 
 		});
-		
-		
+
+
 		post("/save_comment_vote/:commentId/:rank", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
+				
+				Tools.dbInit();
+				
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String commentId = req.params(":commentId");
@@ -391,7 +510,7 @@ public class API {
 					rank = null;
 				}
 
-				Tools.dbInit();
+				
 
 				String message = Actions.saveCommentVote(uv.getId().toString(), commentId, rank);
 
@@ -409,7 +528,7 @@ public class API {
 
 		});
 
-		
+
 
 
 

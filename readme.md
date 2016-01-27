@@ -112,3 +112,6 @@ TODO
 * poll searching, based on hashtags or 
 * add date stuff to tables
 
+* Vote links, editing, replying, not voting on own comments
+* On all saves, do a yes or cancel
+

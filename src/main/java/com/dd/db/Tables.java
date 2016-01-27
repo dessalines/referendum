@@ -78,6 +78,7 @@ public class Tables {
 				"comment.discussion_id,\n"+
 				"text,\n"+
 				"comment.user_id,\n"+
+				"comment.deleted,\n"+
 				"-- min(a.path_length,b.path_length),\n"+
 				"AVG(c.rank) as avg_rank,\n"+
 				"d.rank as user_rank,\n"+

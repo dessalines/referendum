@@ -32,6 +32,10 @@
   background: #BABABA;
 }*/
 
+.not-allowed {
+  cursor: not-allowed;
+}
+
 .show_expand[aria-expanded="true"]:before { 
     content:'[-]';
 }

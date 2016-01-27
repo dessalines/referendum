@@ -87,9 +87,8 @@ comment.user_id,
 -- min(a.path_length,b.path_length),
 AVG(c.rank) as avg_rank,
 d.rank as user_rank,
-a.parent_id as parent_id,
 GROUP_CONCAT(distinct b.parent_id order by b.path_length desc) AS breadcrumbs,
-max(a.parent_id) as derp_id,
+comment.deleted,
 comment.created,
 comment.modified
 from comment

@@ -6,6 +6,7 @@ import static com.dd.tools.Tools.ALPHA_ID;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class Actions {
 
 
 	}
-	
+
 	public static String deletePoll(String userId, String pollId) {
 
 		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
@@ -84,19 +85,19 @@ public class Actions {
 		if (p == null) {
 			throw new NoSuchElementException("Wrong User");
 		}
-		
+
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
 		d.delete();
-		
+
 		p.delete();
-		
+
 
 
 		return "Poll Deleted";
 
 
 	}
-	
+
 	public static String deleteCandidate(String userId, String candidateId) {
 
 		Candidate c = CANDIDATE.findFirst("id = ? and user_id = ?", candidateId, userId);
@@ -104,12 +105,12 @@ public class Actions {
 		if (c == null) {
 			throw new NoSuchElementException("Wrong User");
 		}
-		
+
 		Discussion d = DISCUSSION.findFirst("id = ?", c.getString("discussion_id"));
 		d.delete();
-		
+
 		c.delete();
-		
+
 		return "Candidate Deleted";
 
 
@@ -128,26 +129,97 @@ public class Actions {
 		return "Candidate created";
 
 	}
-	
+
 	public static String saveCandidate(String userId, String candidateId, String subject, String text) {
 
 		// find the candidate
 		Candidate c = CANDIDATE.findFirst("id = ? and user_id = ?", candidateId, userId);
-		
+
 		if (c == null) {
 			throw new NoSuchElementException("Wrong User");
 		}
-		
+
 		// Update the discussion
 		Discussion d = DISCUSSION.findFirst("id = ?", c.getInteger("discussion_id"));
-				
+
 		d.set("subject", subject,
 				"text", text).saveIt();
-		
+
 
 		return "Candidate updated";
 
 	}
+
+	public static String editComment(String userId, String commentId, String text) {
+
+		// find the candidate
+		Comment c = COMMENT.findFirst("id = ? and user_id = ?", commentId, userId);
+
+		if (c == null) {
+			throw new NoSuchElementException("Wrong User");
+		}
+
+		c.set("text", text).saveIt();
+
+
+		return "Comment updated";
+
+	}
+	
+	public static String deleteComment(String userId, String commentId) {
+
+		// find the candidate
+		Comment c = COMMENT.findFirst("id = ? and user_id = ?", commentId, userId);
+
+		if (c == null) {
+			throw new NoSuchElementException("Wrong User");
+		}
+
+		c.set("deleted", true).saveIt();
+
+
+		return "Comment deleted";
+
+	}
+
+	public static String createComment(String userId, String discussionId, 
+			List<String> parentBreadCrumbs, String text) {
+
+		List<String> pbs = new ArrayList<String>(parentBreadCrumbs);
+
+		log.info("pb = " + pbs.get(0));
+		// find the candidate
+		Comment c = COMMENT.createIt("discussion_id", discussionId, 
+				"text", text,
+				"user_id", userId);
+
+		String childId = c.getId().toString();
+
+		// This is necessary, because of the 0 path length to itself one
+		pbs.add(childId);
+
+		Collections.reverse(pbs);
+
+
+		// Create the comment_tree
+		for (int i = 0; i < pbs.size(); i++) {
+
+			String parentId = pbs.get(i);
+			log.info("pid = " + parentId);
+
+			// i is the path length
+			COMMENT_TREE.createIt("parent_id", parentId,
+					"child_id", childId,
+					"path_length", i);
+		}
+
+
+
+		return "Comment created";
+
+	}
+
+	
 
 	public static String saveBallot(String userId, String pollId, String candidateId,
 			String rank) {
@@ -185,7 +257,7 @@ public class Actions {
 		return message;
 
 	}
-	
+
 	public static String saveCommentVote(String userId, String commentId, String rank) {
 
 		String message = null;
@@ -253,7 +325,6 @@ public class Actions {
 		UserView uv = null;
 		BigInteger id = null;
 
-		Tools.dbInit();
 		// If no cookie, fetch user by ip address
 		if (uid == null) {
 			uv = USER_VIEW.findFirst("ip_address = ?", req.ip());
@@ -274,7 +345,6 @@ public class Actions {
 			uv = USER_VIEW.findFirst("id = ?", user.getId());
 			Actions.setCookiesForLogin(uv, res);
 		}
-		Tools.dbClose();
 
 		return uv;
 	}
@@ -299,39 +369,39 @@ public class Actions {
 		List<Ballot> dbBallots = BALLOT.find("poll_id = ?", pollId);
 
 		List<RangeBallot> ballots = convertDBBallots(dbBallots);
-		
+
 		Poll p = POLL.findFirst("id = ?", pollId);
-		
-		
+
+
 		RangeElection re = new RangeElection(Integer.valueOf(pollId),
 				sumIdToRangeVotingSystemType().get(p.getInteger("poll_sum_type_id")), 
 				ballots);
-		
-		
+
+
 		return Tools.nodeToJson(Transformations.rangeResultsJson(re));
 
 	}
-	
-	
-	
+
+
+
 	public static Map<Integer, RangeVotingSystemType> sumIdToRangeVotingSystemType() {
 		Map<Integer, RangeVotingSystemType> map = new HashMap<>();
-		
+
 		map.put(1, RangeVotingSystemType.AVERAGE);
 		map.put(2, RangeVotingSystemType.MEDIAN);
 		map.put(3, RangeVotingSystemType.NORMALIZED);
-		
+
 		return map;
 	}
-	
-	
+
+
 	public static String fetchDiscussionComments(Integer userId, 
 			Integer discussionId, Integer parentId) {
 		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
 				userId, discussionId, parentId));
 		return commentObjectsToJson(cvs);
 	}
-	
+
 	public static String fetchDiscussionComments(Integer userId, 
 			Integer discussionId, Integer parentId, 
 			Integer minPathLength, Integer maxPathLength) {
@@ -339,17 +409,17 @@ public class Actions {
 				userId, discussionId, parentId, minPathLength, maxPathLength));
 		return commentObjectsToJson(cvs);
 	}
-	
+
 	public static String fetchDiscussionComments(Integer userId, Integer discussionId) {
 		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
 				userId, discussionId));
 		return commentObjectsToJson(cvs);
 	}
-	
+
 	public static String commentObjectsToJson(List<CommentView> cvs) {
 		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));
 	}
-	
+
 
 
 }

@@ -54,6 +54,132 @@ function setupCommentVote(commentId) {
   setupCommentAverages(commentId);
   setupCommentClearVote(commentId);
   setupCommentThumbs(commentId);
+  setupCommentEdit(commentId);
+  setupCommentDelete(commentId);
+  setupCommentReply(commentId);
+
+}
+
+function setupCommentDelete(commentId) {
+  var uid = getCookie('uid');
+
+  var commentDeleteBtn = $('#comment_delete_btn_' + commentId);
+  var userId = commentDeleteBtn.attr('user-id');
+
+  if (uid == userId) {
+    commentDeleteBtn.parent().removeClass('hide');
+  }
+
+  commentDeleteBtn.click(function() {
+
+    simplePost('delete_comment/' + commentId, null, null,
+      function() {
+        $('#comment_panel_' + commentId).remove();
+      }, null, null, null);
+  });
+
+}
+
+function setupCommentEdit(commentId) {
+  var uid = getCookie('uid');
+
+  var commentEditForm = $('#comment_edit_form_' + commentId);
+  var commentEditBtn = $('#comment_edit_btn_' + commentId);
+  var commentText = $('#comment_text_' + commentId);
+  var commentEditTextArea = $('#comment_edit_text_' + commentId);
+  var editText = commentEditTextArea.text();
+  console.log(editText);
+  commentEditTextArea.markdown({
+    onShow: function(e) {
+      e.setContent(editText);
+    }
+  });
+
+
+  // commentEditTextArea.data('markdown').setContent(editText);
+  var userId = commentEditBtn.attr('user-id');
+
+  console.log(userId);
+  if (uid == userId) {
+    commentEditBtn.parent().removeClass('hide');
+  }
+
+  commentEditBtn.click(function() {
+    commentText.addClass('hide');
+    commentEditForm.removeClass('hide');
+    updateTextAreaHeight();
+  });
+
+
+  commentEditForm.bootstrapValidator({
+      message: 'This value is not valid',
+      excluded: [':disabled'],
+      submitButtons: 'button[type="submit"]'
+    })
+    .on('success.form.bv', function(event) {
+      event.preventDefault();
+      standardFormPost('edit_comment', commentEditForm, null, null, function() {
+
+        // Change the text
+        var md = commentEditTextArea.data('markdown').getContent().replace(/(\r\n|\n|\r)/gm, "--lb--");
+        var text = markdown.toHTML(replaceNewlines(md, true, true));
+        console.log(md);
+        console.log(text);
+        commentText.html(text);
+
+        commentEditForm.addClass('hide');
+        commentText.removeClass('hide');
+
+      }, null, null);
+    });
+
+
+}
+
+function setupCommentReply(commentId) {
+
+  var commentReplyForm = $('#comment_reply_form_' + commentId);
+  var commentReplyBtn = $('#comment_reply_btn_' + commentId);
+  var commentText = $('#comment_reply_text_' + commentId);
+  var commentReplyTextArea = $('#comment_reply_edit_text_' + commentId);
+  var editText = commentReplyTextArea.text();
+  console.log(editText);
+  commentReplyTextArea.markdown({});
+
+
+  // commentEditTextArea.data('markdown').setContent(editText);
+
+
+  commentReplyBtn.click(function() {
+    commentReplyForm.removeClass('hide');
+  });
+
+
+  commentReplyForm.bootstrapValidator({
+      message: 'This value is not valid',
+      excluded: [':disabled'],
+      submitButtons: 'button[type="submit"]'
+    })
+    .on('success.form.bv', function(event) {
+      event.preventDefault();
+      standardFormPost('create_comment', commentReplyForm, null, null, function() {
+
+        // Need to refetch the comment, for stuff like permalinks, and correct threading.
+        setupComments();
+
+        // // Change the text
+        // var md = commentEditTextArea.data('markdown').getContent().replace(/(\r\n|\n|\r)/gm, "--lb--");
+        // var text = markdown.toHTML(replaceNewlines(md, true, true));
+        // console.log(md);
+        // console.log(text);
+        // commentText.html(text);
+
+        // commentReplyForm.addClass('hide');
+        // commentText.removeClass('hide');
+
+      }, null, null);
+    });
+
 
 }
 
@@ -136,19 +262,31 @@ function setupCommentThumbs(commentId) {
   // Hide slider and clear by default
   var commentVoteObj = $('#comment_vote_' + commentId);
 
-  // Unhide slider and clear
-  commentVoteObj.click(function() {
-    var commentVoteTableObj = $('#comment_vote_table_' + commentId);
-    commentVoteTableObj.toggleClass('hide');
-    $('[data-toggle="tooltip"]').tooltip('hide');
 
-    // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
-    commentVoteObj.addClass('hide');
+  // Only allow voting on comments that aren't your own
+  var uid = getCookie('uid');
+  var userId = commentVoteObj.attr('user-id');
 
-    addOverlay();
-    // $('.panel').foggy();
-    // $('.tooltip').tooltip('destroy');
-  });
+
+  if (uid != userId) {
+    // Unhide slider and clear
+    commentVoteObj.click(function() {
+      var commentVoteTableObj = $('#comment_vote_table_' + commentId);
+      commentVoteTableObj.toggleClass('hide');
+      $('[data-toggle="tooltip"]').tooltip('hide');
+
+      // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
+      commentVoteObj.addClass('hide');
+
+      addOverlay();
+      // $('.panel').foggy();
+      // $('.tooltip').tooltip('destroy');
+    });
+  } else {
+    commentVoteObj.removeClass('hand');
+    commentVoteObj.addClass('not-allowed');
+    commentVoteObj.attr('title', 'Can\'t vote on your own comments').tooltip('fixTitle');
+  }
 }
 
 function initializeCommentSlider(commentId) {

@@ -76,8 +76,7 @@ function scrollSpy() {
 
 function fillMustacheWithJson(data, templateHtml, divId, partial) {
 
-  // $.extend(data, standardDateFormatObj);
-
+  $.extend(data, standardDateFormatObj);
   $.extend(data, m2htmlObj);
 
   Mustache.parse(templateHtml); // optional, speeds up future uses
@@ -398,10 +397,10 @@ var standardDateFormatObj = {
   "dateformat": function() {
     return function(text, render) {
       var t = render(text);
-      var date = new Date(parseInt(t) * 1000);
-      // console.log(t);
-      // return date.customFormat("#YYYY#/#MM#/#DD# #hh#:#mm# #AMPM#")
-      return date.customFormat("#YYYY#/#MM#/#DD#")
+      var date = new Date(t);
+      
+      return moment(date).fromNow();
+      // return date.customFormat("#YYYY#/#MM#/#DD#")
     }
   }
 };
@@ -482,8 +481,9 @@ var delay = (function() {
   };
 })();
 
-function replaceNewlines(e, single) {
+function replaceNewlines(e, single, two) {
   var r = (single === undefined) ? "\\n" : "\n";
+  var r = (two === undefined) ? r : "\n\n";
   return e.replace(/--lb--/g, r);
 }
 
