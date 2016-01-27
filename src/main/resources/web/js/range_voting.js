@@ -115,7 +115,7 @@ function slideStopActions(obj, cleared) {
        setupResults();
     }, null, null, null);
 
-
+  removeOverlay();
   // recalculate the poll results
  
 }
@@ -131,6 +131,7 @@ function setupThumbs(obj) {
     
     // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
     $(obj + '_vote').addClass('hide');
+    addOverlay();
     // $('.panel').foggy();
     // $('.tooltip').tooltip('destroy');
   });

@@ -541,3 +541,26 @@ $(function() {
     $('html,body').scrollTop(scrollmem);
   });
 });
+
+
+function addOverlay() {
+  $('<div id="overlay">').css({
+    "width": "100%",
+    "height": "100%",
+    "background": "#000",
+    "position": "fixed",
+    "top": "0",
+    "left": "0",
+    "zIndex": "50",
+    "MsFilter": "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)",
+    "filter": "alpha(opacity=60)",
+    "MozOpacity": 0.6,
+    "KhtmlOpacity": 0.6,
+    "opacity": 0.6
+
+  }).appendTo(document.body);
+}
+
+function removeOverlay() {
+  $('#overlay').remove();
+}

@@ -126,7 +126,7 @@ function commentSlideStopActions(commentId, cleared) {
       // TODO reload comments?
     }, null, null, null);
 
-
+  removeOverlay();
   // recalculate the poll results
 
 }
@@ -144,6 +144,8 @@ function setupCommentThumbs(commentId) {
 
     // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
     commentVoteObj.addClass('hide');
+
+    addOverlay();
     // $('.panel').foggy();
     // $('.tooltip').tooltip('destroy');
   });

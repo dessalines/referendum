@@ -108,7 +108,7 @@
 .range_vote_table , .comment_vote_table {
   position: fixed;
   /*background-color:#FFF;*/
-  z-index: 2;
+  z-index: 51;
   top: 30%;
   left: 50%;
   margin-top: -50px;
