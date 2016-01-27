@@ -8,21 +8,14 @@ $(document).ready(function() {
 });
 
 
-function initializeAllRangeVotes() {
+function initializeAllCommentVotes(data) {
 
-  getJson('get_user_poll_votes/' + pollId).done(function(e) {
-    var data = JSON.parse(e);
-
-    console.log(data);
-
-    var votesToCandidateMap = votesArrayToMap(data);
-
-    $('.range_vote').each(function() {
-      var candidateId = this.id.split("_")[1];
-      var cId = '#' + this.id;
-      setupRangeVote(cId, votesToCandidateMap[candidateId]);
-    });
+  $('.comment_vote').each(function() {
+    var commentId = this.id.split("_").slice(-1)[0];
+    console.log(commentId);
+    setupCommentVote(commentId);
   });
+
 
   setupToolTips();
 }
@@ -41,142 +34,165 @@ function votesArrayToMap(arr) {
 }
 
 
-function setupRangeVote(obj, vote) {
+function setupCommentVote(commentId) {
+
+  var commentSliderObj = $('#comment_slider_' + commentId);
 
   // With JQuery
-  var slider = $(obj).bootstrapSlider({
+  var slider = commentSliderObj.bootstrapSlider({
       reversed: true,
       tooltip: 'show'
     })
     .on('slide', function() {
-      RGBChange(obj);
+      commentRGBChange(commentId);
     })
     .on('slideStop', function() {
-      slideStopActions(obj);
-
+      commentSlideStopActions(commentId);
     });
 
-  initializeSlider(obj, vote);
-  setupClearVote(obj);
-  setupThumbs(obj);
+  initializeCommentSlider(commentId);
+  setupCommentAverages(commentId);
+  setupCommentClearVote(commentId);
+  setupCommentThumbs(commentId);
 
 }
 
-function slideStopActions(obj, cleared) {
+function setupCommentAverages(commentId) {
+  var commentRankObj = $('#comment_vote_rank_' + commentId);
+
+  // format and divide by 10
+  var voteText = commentRankObj.text().trim();
+
+  console.log(voteText);
+  if (voteText != '-1') {
+    var avgRank = parseFloat(commentRankObj.text()) / 10;
+    var adjRank = avgRank.toFixed(1);
+
+    commentRankObj.text(adjRank);
+
+    var color = colorChange(adjRank);
+    commentRankObj.css('background-color', color);
+  } else {
+    commentRankObj.text("?");
+  }
+
+}
+
+function commentSlideStopActions(commentId, cleared) {
 
   cleared = (typeof cleared === "undefined") ? false : cleared;
 
-  console.log('done voting');
-  $(obj).attr('vote', true);
-  $(obj + '_vote').removeClass('hide');
+  var commentSliderObj = $('#comment_slider_' + commentId);
 
-  
+  console.log('done voting');
+  commentSliderObj.attr('vote', true);
+
+  var commentVoteObj = $('#comment_vote_' + commentId);
+  commentVoteObj.removeClass('hide');
+
+  var commentVoteRankObj = $('#comment_vote_rank_' + commentId);
+
 
   // set the color and tooltip
   var rank = null;
   if (!cleared) {
-    rank = $(obj).bootstrapSlider('getValue');
-    var color = RGBChange(obj);
-    $(obj + '_vote').css('color', color);
-    $(obj + '_vote_rank').css('background-color', color);
-    $(obj + '_vote').attr('title', 'Vote: ' + rank).tooltip('fixTitle');
+    rank = commentSliderObj.bootstrapSlider('getValue');
+    var color = commentRGBChange(commentId);
+    commentVoteObj.css('color', color);
+
+    commentVoteObj.attr('title', 'Vote: ' + rank).tooltip('fixTitle');
   } else {
     rank = null;
-    $(obj + '_vote').css('color', '#888');
-    $(obj + '_vote_rank').css('background-color', '#888');
-    $(obj + '_vote').attr('title', 'Vote').tooltip('fixTitle');
+    commentVoteObj.css('color', '#888');
+    commentVoteObj.attr('title', 'Vote').tooltip('fixTitle');
   }
 
   // $(obj + '_slider,' + obj + '_clear_vote').addClass('hide');
-  $(obj + '_range_vote_table').addClass('hide');
+  $('#comment_vote_table_' + commentId).addClass('hide');
   // $('.panel').foggy(false);
   // $('.tooltip').tooltip('destroy');
-
-  var candidateId = obj.split("_")[1];
-  console.log('candidate id = ' + candidateId);
-
-
 
 
   console.log('rank = ' + rank);
 
   // Always save to 10
   if (rank != null) {
-    $(obj + '_vote_rank').removeClass('hide');
-    $(obj + '_vote_rank').text(rank);
     rank = rank * 10;
-  } else {
-    $(obj + '_vote_rank').addClass('hide');
   }
 
-  simplePost('save_ballot/' + pollId + '/' + candidateId + '/' + rank, null, null,
+  simplePost('save_comment_vote/' + commentId + '/' + rank, null, null,
     function() {
       // alert('ballot saved');
-       setupResults();
+      // TODO reload comments?
     }, null, null, null);
 
 
   // recalculate the poll results
- 
+
 }
 
-function setupThumbs(obj) {
+function setupCommentThumbs(commentId) {
 
   // Hide slider and clear by default
+  var commentVoteObj = $('#comment_vote_' + commentId);
 
   // Unhide slider and clear
-  $(obj + '_vote').click(function() {
-    $(obj + '_range_vote_table').toggleClass('hide');
+  commentVoteObj.click(function() {
+    var commentVoteTableObj = $('#comment_vote_table_' + commentId);
+    commentVoteTableObj.toggleClass('hide');
     $('[data-toggle="tooltip"]').tooltip('hide');
-    
+
     // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
-    $(obj + '_vote').addClass('hide');
+    commentVoteObj.addClass('hide');
     // $('.panel').foggy();
     // $('.tooltip').tooltip('destroy');
   });
 }
 
-function initializeSlider(obj, vote) {
+function initializeCommentSlider(commentId) {
 
-
+  var commentSliderObj = $('#comment_slider_' + commentId);
+  var vote = commentSliderObj.attr('user-rank');
   // console.log(vote);
-  if (vote != null) {
-    var voteNum = parseFloat(vote['rank']) / 10;
+  if (vote -= '-1') {
+    var voteNum = parseFloat(vote) / 10;
 
     // Fill the data
-    $(obj).bootstrapSlider('setValue', voteNum);
-    var color = RGBChange(obj);
-    $(obj + '_vote').css('color', color);
-    $(obj + '_vote_rank').css('background-color', color);
-    $(obj + '_vote').attr('title', 'Vote: ' + voteNum).tooltip('fixTitle');
-    $(obj + '_vote_rank').removeClass('hide');
-    $(obj + '_vote_rank').text(voteNum);
+    commentSliderObj.bootstrapSlider('setValue', voteNum);
+
+    var commentVoteObj = $('#comment_vote_' + commentId);
+    var color = commentRGBChange(commentId);
+    commentVoteObj.css('color', color);
+    commentVoteObj.attr('title', 'Vote: ' + voteNum).tooltip('fixTitle');
 
   } else {
-    $(obj).attr('vote', false);
+    commentSliderObj.attr('vote', false);
   }
 
-  $(obj + 'Slider .slider-track-high').css('background', '#BABABA');
+  $('#comment_slider_special' + commentId).find('.slider-track-high').css('background', '#BABABA');
 
 
 }
 
-function RGBChange(obj) {
+function commentRGBChange(commentId) {
 
   // convert the value to 0-255
 
-  var val = $(obj).bootstrapSlider('getValue');
+  var commentSliderObj = $('#comment_slider_' + commentId);
+  var commentSliderSpecialObj = $('#comment_slider_special_' + commentId);
+
+  var val = commentSliderObj.bootstrapSlider('getValue');
   // $(obj).bootstrapSlider('setAttribute','tooltip','show');
   // console.log($(obj).bootstrapSlider('getAttribute','tooltip'));
 
-  var correctId = obj + '_slider';
+  // var correctId = '#comment_slider_' + commentId + '_slider';
 
   var calc = Math.floor(val * 255 / 10);
   var redVal = 255 - calc;
   var greenVal = calc;
 
   // console.log(redVal);
-  var selector = $(correctId).find('.slider-track-high');
+  var selector = commentSliderSpecialObj.find('.slider-track-high');
   // console.log(selector);
   var color = 'rgb(' + redVal + ',' + greenVal + ',' + 0 + ')';
   $(selector).css('background', color);
@@ -184,16 +200,36 @@ function RGBChange(obj) {
   return color;
 };
 
+function colorChange(val) {
+  // $(obj).bootstrapSlider('setAttribute','tooltip','show');
+  // console.log($(obj).bootstrapSlider('getAttribute','tooltip'));
+
+  // var correctId = '#comment_slider_' + commentId + '_slider';
+
+  var calc = Math.floor(val * 255 / 10);
+  var redVal = 255 - calc;
+  var greenVal = calc;
+
+  var color = 'rgb(' + redVal + ',' + greenVal + ',' + 0 + ')';
+
+  return color;
+
+}
 
 
-function setupClearVote(obj) {
-  $(obj + '_clear_vote').click(function() {
-    console.log(obj);
-    $(obj).bootstrapSlider('setValue', 5);
-    $(obj + '_slider .slider-track-high').css('background', '#BABABA');
-    $(obj).attr('vote', false);
 
-    slideStopActions(obj, true);
+function setupCommentClearVote(commentId) {
+
+  var commentClearVoteObj = $('#comment_clear_vote_' + commentId);
+
+  commentClearVoteObj.click(function() {
+    var commentSliderObj = $('#comment_slider_' + commentId);
+    console.log(commentSliderObj);
+    commentSliderObj.bootstrapSlider('setValue', 5);
+    $('#comment_slider_special_' + commentId + ' .slider-track-high').css('background', '#BABABA');
+    commentSliderObj.attr('vote', false);
+
+    commentSlideStopActions(commentId, true);
 
   });
 

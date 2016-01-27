@@ -376,6 +376,38 @@ public class API {
 			}
 
 		});
+		
+		
+		post("/save_comment_vote/:commentId/:rank", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				String commentId = req.params(":commentId");
+				String rank = req.params(":rank");
+				if (rank.equals("null")) {
+					rank = null;
+				}
+
+				Tools.dbInit();
+
+				String message = Actions.saveCommentVote(uv.getId().toString(), commentId, rank);
+
+
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
 
 		
 

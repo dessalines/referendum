@@ -58,6 +58,10 @@ public class Tables {
 	@Table("comment_tree")
 	public static class CommentTree extends Model {}
 	public static final CommentTree COMMENT_TREE = new CommentTree();
+	
+	@Table("comment_rank")
+	public static class CommentRank extends Model {}
+	public static final CommentRank COMMENT_RANK = new CommentRank();
 
 	@Table("user")
 	public static class User extends Model {}

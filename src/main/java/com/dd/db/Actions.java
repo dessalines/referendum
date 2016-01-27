@@ -185,6 +185,40 @@ public class Actions {
 		return message;
 
 	}
+	
+	public static String saveCommentVote(String userId, String commentId, String rank) {
+
+		String message = null;
+		// fetch the vote if it exists
+		CommentRank c = COMMENT_RANK.findFirst("user_id = ? and comment_id = ?", 
+				userId, commentId);
+
+
+		if (c == null) {
+			if (rank != null) {
+				c = COMMENT_RANK.createIt(
+						"comment_id", commentId,
+						"user_id", userId,
+						"rank", rank);
+				message = "Comment Vote Created";
+			} else {
+				message = "Comment Vote not created";
+			}
+		} else {
+			if (rank != null) {
+				c.set("rank", rank).saveIt();
+				message = "Comment Vote updated";
+			}
+			// If the rank is null, then delete the ballot
+			else {
+				c.delete();
+				message = "Comment Vote deleted";
+			}
+		}
+
+		return message;
+
+	}
 
 
 

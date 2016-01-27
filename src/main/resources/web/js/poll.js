@@ -30,6 +30,8 @@ function setupComments() {
     fillMustacheWithJson(data, commentsTemplate, '#comments_div', {
       "recurse": recurse
     });
+
+    initializeAllCommentVotes(data);
   });
 }
 
@@ -81,8 +83,6 @@ function setupCandidateBtns(data) {
 
   $('.user_candidate_options_btns').each(function(i, obj) {
     var candidateId = obj.id.split('_').slice(-1)[0];
-
-    console.log(candidateId);
 
     if (getCookie('uid') == cMap[candidateId]['user_id']) {
 

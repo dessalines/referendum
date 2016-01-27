@@ -570,7 +570,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			if (this.options.orientation === 'vertical') {
 				this._addClass(this.sliderElem, 'slider-vertical');
 				this.stylePos = 'top';
-				this.mousePos = 'pageY';
+				this.mousePos = 'clientY';
 				this.sizePos = 'offsetHeight';
 			} else {
 				this._addClass(this.sliderElem, 'slider-horizontal');
@@ -1486,7 +1486,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			_offsetTop: function _offsetTop(obj) {
 				var offsetTop = obj.offsetTop;
 				while ((obj = obj.offsetParent) && !isNaN(obj.offsetTop)) {
-					offsetTop += obj.offsetTop;
+					offsetTop += obj.offsetTop - obj.scrollTop;
 				}
 				return offsetTop;
 			},

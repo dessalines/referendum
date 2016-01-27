@@ -105,7 +105,7 @@
   background: #000 !important;
 }
 
-.range_vote_table {
+.range_vote_table , .comment_vote_table {
   position: fixed;
   /*background-color:#FFF;*/
   z-index: 2;
@@ -141,7 +141,7 @@ i.fa {
     padding: 2px 10px;
 }
 
-.range_vote_table,
+.range_vote_table, .comment_vote_table
 .panel-title {
   display: inline;
 }

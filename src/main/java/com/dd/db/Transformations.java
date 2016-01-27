@@ -120,6 +120,13 @@ public class Transformations {
 			this.userId = userId;
 			this.avgRank = avgRank;
 			this.userRank = userRank;
+			if (this.userRank == null) {
+				this.userRank = -1;
+			}
+			if (this.avgRank == null) {
+				this.avgRank = -1.0D;
+			}
+			
 			this.text = text;
 			this.created = created;
 			this.modified = modified;
