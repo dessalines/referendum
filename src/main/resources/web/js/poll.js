@@ -368,10 +368,6 @@ function setupPollForm() {
         $('#edit_poll_div').addClass('hide');
         $('#poll_div').removeClass('hide');
       }, null, null);
-
-
-
-
     });
 
   $(pollForm + ' input').on('change', function() {
