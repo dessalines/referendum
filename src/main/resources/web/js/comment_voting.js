@@ -57,6 +57,48 @@ function setupCommentVote(commentId) {
   setupCommentEdit(commentId);
   setupCommentDelete(commentId);
   setupCommentReply(commentId);
+  setupCommentSource(commentId);
+
+}
+
+function setupCommentSource(commentId) {
+
+  // Basically, just swap the comment edit source and comment text,
+  // and change the name of the button
+  var commentSourceBtn = $('#comment_source_btn_' + commentId);
+
+
+  commentSourceBtn.click(function() {
+
+
+    var commentText = $('#comment_text_' + commentId);
+    var commentEditText = $('#comment_edit_text_' + commentId);
+    var temp = commentText.html();
+
+    console.log(commentEditText.html());
+    console.log(commentEditText.text());
+    console.log(temp);
+
+    if (commentSourceBtn.text() == 'source') {
+
+      console.log(commentText.html());
+
+      commentText.html(commentEditText.text().replace(/\n/g,"<br>"));
+      commentEditText.html(temp);
+      commentSourceBtn.text('text');
+
+    } else {
+
+      console.log(commentText.html());
+
+      commentText.html(commentEditText.text());
+      commentEditText.html(temp);
+
+      commentSourceBtn.text('source');
+    }
+  });
+
+
 
 }
 
