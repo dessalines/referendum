@@ -173,6 +173,8 @@ function setupEditCandidateBtn(data) {
     $("#edit_candidate_text").get(0).scrollIntoView();
     updateTextAreaHeight();
   });
+
+
 }
 
 function fillCandidateForm(obj) {
@@ -196,6 +198,11 @@ function setupEditPollBtn() {
 function setupAddCandidateBtn() {
   $('#add_a_candidate').click(function() {
     $(this).addClass('hide');
+
+    // Resets the edit one if necessary
+    $('input[name="candidate_id"]').val('');
+    $('#candidate_subject').val('');
+    $('#edit_candidate_text').data('markdown').setContent('');
     $('#candidate_form').removeClass('hide');
     updateTextAreaHeight();
   });
@@ -225,6 +232,13 @@ function setupAddCandidateForm() {
 
       }, null, null);
     });
+
+  $('.candidate_save_cancel_btn').click(function() {
+    $('#candidate_form').addClass('hide');
+    $('#add_a_candidate').removeClass('hide');
+  });
+
+
 }
 
 
@@ -378,6 +392,11 @@ function setupPollForm() {
     } else {
       $('#private_password').addClass('hide');
     }
+  });
+
+  $('.poll_save_cancel_btn').click(function() {
+    $('#edit_poll_div').addClass('hide');
+    $('#poll_div').removeClass('hide');
   });
 
 }

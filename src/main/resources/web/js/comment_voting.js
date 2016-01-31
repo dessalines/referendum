@@ -12,7 +12,7 @@ function initializeAllCommentVotes(data) {
 
   $('.comment_vote').each(function() {
     var commentId = this.id.split("_").slice(-1)[0];
-    console.log(commentId);
+    // console.log(commentId);
     setupCommentVote(commentId);
   });
 
@@ -83,7 +83,7 @@ function setupCommentSource(commentId) {
 
       console.log(commentText.html());
 
-      commentText.html(commentEditText.text().replace(/\n/g,"<br>"));
+      commentText.html(commentEditText.text().replace(/\n/g, "<br>"));
       commentEditText.html(temp);
       commentSourceBtn.text('text');
 
@@ -106,6 +106,9 @@ function setupCommentDelete(commentId) {
   var uid = getCookie('uid');
 
   var commentDeleteBtn = $('#comment_delete_btn_' + commentId);
+  var commentDeleteSureNoBtn = $('#comment_delete_sure_no_btn_' + commentId);
+  var commentDeleteSureYesBtn = $('#comment_delete_sure_yes_btn_' + commentId);
+
   var userId = commentDeleteBtn.attr('user-id');
 
   if (uid == userId) {
@@ -113,7 +116,16 @@ function setupCommentDelete(commentId) {
   }
 
   commentDeleteBtn.click(function() {
+    commentDeleteBtn.text('Are you sure?');
+    commentDeleteSureYesBtn.parent().removeClass('hide');
+  });
 
+  commentDeleteSureNoBtn.click(function() {
+    commentDeleteBtn.text('delete');
+    commentDeleteSureYesBtn.parent().addClass('hide');
+  });
+
+  commentDeleteSureYesBtn.click(function() {
     simplePost('delete_comment/' + commentId, null, null,
       function() {
         $('#comment_panel_' + commentId).remove();
@@ -127,10 +139,11 @@ function setupCommentEdit(commentId) {
 
   var commentEditForm = $('#comment_edit_form_' + commentId);
   var commentEditBtn = $('#comment_edit_btn_' + commentId);
+  var commentCancelSaveBtn = $('#comment_cancel_save_btn_' + commentId);
   var commentText = $('#comment_text_' + commentId);
   var commentEditTextArea = $('#comment_edit_text_' + commentId);
   var editText = commentEditTextArea.text();
-  console.log(editText);
+  // console.log(editText);
   commentEditTextArea.markdown({
     onShow: function(e) {
       e.setContent(editText);
@@ -141,7 +154,7 @@ function setupCommentEdit(commentId) {
   // commentEditTextArea.data('markdown').setContent(editText);
   var userId = commentEditBtn.attr('user-id');
 
-  console.log(userId);
+  // console.log(userId);
   if (uid == userId) {
     commentEditBtn.parent().removeClass('hide');
   }
@@ -150,6 +163,11 @@ function setupCommentEdit(commentId) {
     commentText.addClass('hide');
     commentEditForm.removeClass('hide');
     updateTextAreaHeight();
+  });
+
+  commentCancelSaveBtn.click(function() {
+    commentText.removeClass('hide');
+    commentEditForm.addClass('hide');
   });
 
 
@@ -168,9 +186,14 @@ function setupCommentEdit(commentId) {
         console.log(md);
         console.log(text);
         commentText.html(text);
+        commentEditTextArea.html(replaceNewlines(md, true));
 
         commentEditForm.addClass('hide');
         commentText.removeClass('hide');
+
+
+
+        // setupCommentSource(commentId);
 
       }, null, null);
     });
@@ -185,7 +208,7 @@ function setupCommentReply(commentId) {
   var commentText = $('#comment_reply_text_' + commentId);
   var commentReplyTextArea = $('#comment_reply_edit_text_' + commentId);
   var editText = commentReplyTextArea.text();
-  console.log(editText);
+  // console.log(editText);
   commentReplyTextArea.markdown({});
 
 
@@ -231,7 +254,7 @@ function setupCommentAverages(commentId) {
   // format and divide by 10
   var voteText = commentRankObj.text().trim();
 
-  console.log(voteText);
+  // console.log(voteText);
   if (voteText != '-1') {
     var avgRank = parseFloat(commentRankObj.text()) / 10;
     var adjRank = avgRank.toFixed(1);
