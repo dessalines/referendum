@@ -2,6 +2,7 @@ package com.dd.test;
 
 import static com.dd.db.Tables.*;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -34,7 +35,7 @@ public class DerpTests extends TestCase {
 		Tools.dbClose();
 	}
 
-	public void testCommentView() {
+	public void commentView() {
 		Tools.dbInit();
 
 
@@ -50,6 +51,9 @@ public class DerpTests extends TestCase {
 		Tools.dbClose();
 	}
 
+	public void testAlphaTest() {
+		System.out.println(Tools.ALPHA_ID.encode(new BigInteger("10")));
+	}
 	
 
 

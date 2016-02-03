@@ -396,7 +396,7 @@ function simplePost(shortUrl, postData, reload, successFunctions, noToast, exter
 var standardDateFormatObj = {
   "dateformat": function() {
     return function(text, render) {
-      var t = render(text);
+      var t = parseInt(render(text));
       var date = new Date(t);
       
       return moment(date).fromNow();

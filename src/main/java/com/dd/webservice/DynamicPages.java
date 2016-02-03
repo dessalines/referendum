@@ -25,5 +25,11 @@ public class DynamicPages {
 			
 			return Tools.readFile(DataSources.PAGES("poll"));
 		});
+		
+		get("comment/:commentId", (req, res) -> {
+			Tools.allowAllHeaders(req, res);
+			
+			return Tools.readFile(DataSources.PAGES("comment"));
+		});
 	}
 }

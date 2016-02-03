@@ -415,9 +415,22 @@ public class Actions {
 				userId, discussionId));
 		return commentObjectsToJson(cvs);
 	}
+	
+	public static String fetchComments(Integer userId, Integer commentId) {
+		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
+				userId, null, commentId));
+		return commentObjectsToJson(cvs);
+	}
 
 	public static String commentObjectsToJson(List<CommentView> cvs) {
-		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));
+//		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));
+		try {
+			return Tools.MAPPER.writeValueAsString(Transformations.convertCommentsToEmbeddedObjects(cvs));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 

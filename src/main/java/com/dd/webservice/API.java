@@ -457,6 +457,33 @@ public class API {
 
 
 		});
+		
+		get("/get_comment/:commentId", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+				
+				Tools.dbInit();
+
+				UserView uv = Actions.getUserFromCookie(req, res);
+
+				Integer commentId = ALPHA_ID.decode(req.params(":commentId")).intValue();
+
+				String json = Actions.fetchComments(uv.getInteger("id"), commentId);
+
+				log.info(json);
+
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
 
 		post("/save_ballot/:pollId/:candidateId/:rank", (req, res) -> {
 			try {

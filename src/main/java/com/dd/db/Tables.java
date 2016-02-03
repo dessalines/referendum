@@ -58,7 +58,7 @@ public class Tables {
 	@Table("comment_tree")
 	public static class CommentTree extends Model {}
 	public static final CommentTree COMMENT_TREE = new CommentTree();
-	
+
 	@Table("comment_rank")
 	public static class CommentRank extends Model {}
 	public static final CommentRank COMMENT_RANK = new CommentRank();
@@ -73,7 +73,7 @@ public class Tables {
 
 	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, 
 			Integer parentId, Integer minPathLength, Integer maxPathLength) {
-		String s = "select \n"+
+		StringBuilder s = new StringBuilder("select \n"+
 				"comment.id,\n"+
 				"comment.discussion_id,\n"+
 				"text,\n"+
@@ -94,26 +94,34 @@ public class Tables {
 				"on comment.id = c.comment_id\n"+
 				"left join comment_rank d \n"+
 				"on comment.id = d.comment_id\n" + 
-				"and d.user_id = " + userId + "\n"+
-				"WHERE comment.discussion_id = " + discussionId + "\n";
-		if (parentId != null) {
-			s += "and a.parent_id = " + parentId + " \n";
+				"and d.user_id = " + userId + "\n");
+
+		if (discussionId != null) {
+			s.append("WHERE comment.discussion_id = " + discussionId + "\n");
+		} else {
+			s.append("WHERE comment.discussion_id >= 0\n");
 		}
 
+		if (parentId != null) {
+			s.append("and a.parent_id = " + parentId + " \n");
+			s.append("and b.parent_id >= " + parentId + "\n"); //HRM?
+		}
 
 		if (minPathLength != null) {
-			s += "and a.path_length >= " + minPathLength + " \n";
+			s.append("and a.path_length >= " + minPathLength + " \n");
 		}
 		if (maxPathLength != null) {
-			s += "and a.path_length <= " + maxPathLength + " \n";
+			s.append("and a.path_length <= " + maxPathLength + " \n");
 		}
 
 
-		s+="GROUP BY a.child_id;";
+		s.append("GROUP BY a.child_id;");
+		
+//		System.out.println(s.toString());
 
-		return s;
+		return s.toString();
 	}
-	
+
 	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId) {
 		return COMMENT_VIEW_SQL(userId, discussionId, null, null, null);
 	}
