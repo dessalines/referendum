@@ -137,14 +137,7 @@ public class Transformations {
 			if (this.avgRank == null) {
 				this.avgRank = -1.0D;
 			}
-			
-//			if (created == null) {
-//				created = "";
-//			}
-//			if (modified == null) {
-//				modified = "";
-//			}
-			
+
 			
 			
 			this.text = text;

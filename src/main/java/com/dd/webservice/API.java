@@ -44,7 +44,7 @@ public class API {
 			try {
 
 				Tools.dbInit();
-				
+
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				return uv.getId().toString();
@@ -64,14 +64,14 @@ public class API {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				
+
 
 				String pollId = Actions.createEmptyPoll(uv.getId().toString());
 
@@ -94,14 +94,14 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
-				
+
 				Tools.dbInit();
-				
+
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				
+
 
 
 
@@ -132,12 +132,12 @@ public class API {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
-				
+
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
@@ -164,7 +164,7 @@ public class API {
 				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
-				
+
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
@@ -174,7 +174,7 @@ public class API {
 				String pollId = vars.get("poll_id");
 				String candidateId = vars.get("candidate_id");
 
-				
+
 
 				String message;
 				if (candidateId == null) {
@@ -227,12 +227,12 @@ public class API {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
-			
+
 
 				String candidateId = req.params(":candidateId");
 
@@ -254,7 +254,7 @@ public class API {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
@@ -264,7 +264,7 @@ public class API {
 				String text = vars.get("text");
 				String commentId = vars.get("comment_id");
 
-				
+
 
 				String message;
 
@@ -281,12 +281,12 @@ public class API {
 			}
 
 		});
-		
+
 		post("/delete_comment/:commentId", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
@@ -308,12 +308,12 @@ public class API {
 			}
 
 		});
-		
+
 		post("/create_comment", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
@@ -322,9 +322,11 @@ public class API {
 
 				String text = vars.get("text");
 				String discussionId = vars.get("discussion_id");
-				List<String> parentBreadCrumbs = Arrays.asList(vars.get("parent_bread_crumbs").split(","));
-				
-				
+				String parentCommentId = vars.get("parent_comment_id");
+
+				// Fetch the parent breadCrumbs from scratch(required for comment pages)
+				List<String> parentBreadCrumbs = Arrays.asList(COMMENT_VIEW.findFirst("id = ?", parentCommentId)
+						.getString("breadcrumbs").split(","));
 
 				String message;
 
@@ -378,14 +380,14 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
-				
+
 
 				String json = BALLOT_VIEW.find("poll_id = ? and user_id = ?",
 						pollId, uv.getId().toString()).toJson(false);
@@ -431,14 +433,14 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
-				
+
 
 				Integer discussionId = POLL.findFirst("id = ?", pollId).getInteger("discussion_id");
 
@@ -457,12 +459,12 @@ public class API {
 
 
 		});
-		
+
 		get("/get_comment/:commentId", (req, res) -> {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
-				
+
 				Tools.dbInit();
 
 				UserView uv = Actions.getUserFromCookie(req, res);
@@ -490,9 +492,9 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
-				
+
 				Tools.dbInit();
-				
+
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
@@ -502,7 +504,7 @@ public class API {
 					rank = null;
 				}
 
-				
+
 
 				String message = Actions.saveBallot(uv.getId().toString(), pollId, candidateId, rank);
 
@@ -526,9 +528,9 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
-				
+
 				Tools.dbInit();
-				
+
 				UserView uv = Actions.getUserFromCookie(req, res);
 
 				String commentId = req.params(":commentId");
@@ -537,7 +539,7 @@ public class API {
 					rank = null;
 				}
 
-				
+
 
 				String message = Actions.saveCommentVote(uv.getId().toString(), commentId, rank);
 
