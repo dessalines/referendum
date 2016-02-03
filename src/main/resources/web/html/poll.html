@@ -200,7 +200,7 @@
               <div class="row">
                 <div class="col-md-12">
                   {{#.}}
-                  <div class="panel panel-default">
+                  <div id="comment_panel_{{id}}" class="panel panel-default">
                     <div class="panel-heading">
                       <ul class="list-inline">
                         <li>
@@ -220,7 +220,7 @@
                               </td>
                             </tr>
                           </table>
-                          <a id='comment_vote_{{id}}' class="text-muted hand" data-toggle="tooltip" data-placement="auto" title="Vote">
+                          <a id='comment_vote_{{id}}' user-id="{{userId}}" class="text-muted hand" data-toggle="tooltip" data-placement="auto" title="Vote">
                             <i class="fa fa-fw fa-thumbs-up"></i>
                           </a>
                         </li>
@@ -229,20 +229,42 @@
                         {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
                           </span>
                         </li>
-                        <li><i> 4 months ago</i>
+                        {{^modified}}
+                        <li><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
+                        {{/modified}} {{#modified}}
+                        <li><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
+                        {{/modified}}
                       </ul>
                     </div>
                     <div id="comment_collapse_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                       <div class="panel-body">
-                        {{text}}
+                        {{^deleted}}
+                        <span id="comment_text_{{id}}">{{#m2html}}{{{text}}}{{/m2html}}</span>
+                        <form id="comment_edit_form_{{id}}" role="form" class="hide">
+                          <input type="hidden" name="comment_id" value="{{id}}">
+                          <textarea id="comment_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="">{{text}}</textarea>
+                          <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                          <a id="comment_cancel_save_btn_{{id}}" class="btn btn-danger btn-block">Cancel</a>
+                        </form>
+                        <span class="hide" id="comment_reply_text_{{id}}"></span>
+                        <form id="comment_reply_form_{{id}}" role="form" class="hide">
+                          <input type="hidden" name="discussion_id" value="{{discussionId}}">
+                          <input type="hidden" name="parent_bread_crumbs" value="{{breadCrumbsList}}">
+                          <textarea id="comment_reply_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
+                          <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                        </form>
                         <small>
                         <ul class="list-inline">
-                          <li><a class="text-muted hand">link</a></li>
-                          <li><a class="text-muted hand">source</a></li>
-                          <li><a class="text-muted hand">edit<a/></li>
-                          <li><a class="text-muted hand">reply<a/></li>
+                          <li><a href="/comment/{{alphaId}}" class="text-muted">link</a></li>
+                          <li><a id="comment_source_btn_{{id}}" class="text-muted hand">source</a></li>
+                          <li class="hide"><a id="comment_edit_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">edit<a/></li>
+                          <li class="hide"><a id="comment_delete_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">delete<a/></li>
+                          <li class="hide"><a id="comment_delete_sure_yes_btn_{{id}}" class="text-danger hand">(Yes</a> 
+                            <a id="comment_delete_sure_no_btn_{{id}}" class="text-muted hand">/No)</a></li>
+                          <li><a id="comment_reply_btn_{{id}}" class="text-muted hand">reply<a/></li>
                         </ul>
-                        </small> {{>recurse}}
+                        </small> {{/deleted}}{{#deleted}}
+                        <i>deleted</i> {{/deleted}}{{>recurse}}
                       </div>
                     </div>
                   </div>
