@@ -82,12 +82,14 @@ create view comment_view as
 select 
 comment.id,
 comment.discussion_id,
+poll.id as poll_id,
 text,
 comment.user_id,
 -- min(a.path_length,b.path_length),
 AVG(c.rank) as avg_rank,
 d.rank as user_rank,
 GROUP_CONCAT(distinct b.parent_id order by b.path_length desc) AS breadcrumbs,
+count(distinct b.parent_id) as derp,
 comment.deleted,
 comment.created,
 comment.modified
@@ -98,11 +100,17 @@ left join comment_rank c
 on comment.id = c.comment_id
 left join comment_rank d
 on comment.id = d.comment_id 
--- and d.user_id = ?
--- where comment.discussion_id = ?
+-- and d.user_id = 1
+left join poll on
+comment.discussion_id = poll.discussion_id
+-- where comment.discussion_id >= 0
 -- and a.parent_id = 3 
--- where b.id != a.parent_id
+-- and b.parent_id >= 10
+
+
 -- and a.path_length = 1
 -- where d.user_id = 2
 GROUP BY a.child_id;
+
+
 

@@ -72,6 +72,7 @@ public class Transformations {
 			// Create the comment object
 			CommentObj co = new CommentObj(id, 
 					cv.getInteger("discussion_id"), 
+					cv.getInteger("poll_id"), 
 					cv.getInteger("user_id"), 
 					cv.getBoolean("deleted"),
 					cv.getDouble("avg_rank"),
@@ -113,7 +114,7 @@ public class Transformations {
 	}
 
 	public static class CommentObj {
-		private Integer id, discussionId, userId, userRank, parentId, topParentId;
+		private Integer id, discussionId, pollId, userId, userRank, parentId, topParentId;
 		private Double avgRank;
 		private String text, alphaId;
 		private Timestamp created, modified;
@@ -122,11 +123,12 @@ public class Transformations {
 
 		private List<Integer> breadCrumbsList;
 
-		public CommentObj(Integer id, Integer discussionId, Integer userId, Boolean deleted,
+		public CommentObj(Integer id, Integer discussionId, Integer pollId, Integer userId, Boolean deleted,
 				Double avgRank, Integer userRank, String text, String breadCrumbs,
 				Timestamp created, Timestamp modified) {
 			this.id = id;
 			this.discussionId = discussionId;
+			this.pollId = pollId;
 			this.userId = userId;
 			this.deleted = deleted;
 			this.avgRank = avgRank;
@@ -210,6 +212,10 @@ public class Transformations {
 
 		public Integer getDiscussionId() {
 			return discussionId;
+		}
+		
+		public Integer getPollId() {
+			return pollId;
 		}
 
 		public Integer getUserId() {

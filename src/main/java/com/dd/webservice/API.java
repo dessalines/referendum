@@ -487,6 +487,40 @@ public class API {
 
 		});
 
+		get("/get_comment_parent/:commentId", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+				Tools.dbInit();
+
+				Integer commentId = ALPHA_ID.decode(req.params(":commentId")).intValue();
+
+				// Fetch the parent breadCrumbs from scratch(required for comment pages)
+				List<String> parentBreadCrumbs = Arrays.asList(COMMENT_VIEW.findFirst("id = ?", commentId)
+						.getString("breadcrumbs").split(","));
+
+
+				String parentAid = "-1";
+				if (parentBreadCrumbs.size() > 1) {
+					String parentId = parentBreadCrumbs.get(parentBreadCrumbs.size() - 2);
+					parentAid = ALPHA_ID.encode(new BigInteger(parentId));
+				}
+
+				log.info(parentAid);
+
+				return parentAid;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+
 		post("/save_ballot/:pollId/:candidateId/:rank", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);

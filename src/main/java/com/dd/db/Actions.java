@@ -205,15 +205,12 @@ public class Actions {
 		for (int i = 0; i < pbs.size(); i++) {
 
 			String parentId = pbs.get(i);
-			log.info("pid = " + parentId);
 
 			// i is the path length
 			COMMENT_TREE.createIt("parent_id", parentId,
 					"child_id", childId,
 					"path_length", i);
 		}
-
-
 
 		return "Comment created";
 

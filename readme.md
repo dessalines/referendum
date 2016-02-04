@@ -104,15 +104,14 @@ Main page - Discuss, Vote, Results
 
 TODO 
 * Paging for results and candidates, and comments(Pretty tough)
-* Commenting system
-* Comment Voting
 * User pages w/ captchas
 * Full user setup / modals
 * Passwords on private pages
 * Use a hashtag based system (easily create new tags, and tag things)
 * poll searching, based on hashtags or
-* add date stuff to tables
 
-* Vote links, editing, replying, not voting on own comments
-* On all saves, do a yes or cancel
+* Poll searching, Poll passwords
+* Comment/poll sorting
+* Poll paging
+* Results limit?
 

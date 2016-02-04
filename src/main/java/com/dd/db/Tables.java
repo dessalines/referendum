@@ -76,6 +76,7 @@ public class Tables {
 		StringBuilder s = new StringBuilder("select \n"+
 				"comment.id,\n"+
 				"comment.discussion_id,\n"+
+				"poll.id as poll_id,\n"+
 				"text,\n"+
 				"comment.user_id,\n"+
 				"comment.deleted,\n"+
@@ -94,7 +95,9 @@ public class Tables {
 				"on comment.id = c.comment_id\n"+
 				"left join comment_rank d \n"+
 				"on comment.id = d.comment_id\n" + 
-				"and d.user_id = " + userId + "\n");
+				"and d.user_id = " + userId + "\n"+
+				"left join poll on \n"+
+				"comment.discussion_id = poll.discussion_id \n");
 
 		if (discussionId != null) {
 			s.append("WHERE comment.discussion_id = " + discussionId + "\n");
