@@ -224,7 +224,7 @@
                         <i class="fa fa-fw fa-thumbs-up"></i>
                       </a>
                     </li>
-                    <li><a href="">user#_{{userId}}</a></li>
+                    <li><a href="/user/{{userId}}">{{userName}}</a></li>
                     <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
                         {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
                           </span>
@@ -298,7 +298,7 @@
                         <i class="fa fa-fw fa-thumbs-up"></i>
                       </a>
                     </li>
-                    <li><a href="">user#_{{userId}}</a></li>
+                    <li><a href="/user/{{userId}}">{{userName}}</a></li>
                     <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
                         {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
                           </span>
@@ -395,7 +395,7 @@
                       </div>
                     </div>
                     {{/.}} {{^.}}
-                    <p> No Candidates</p>
+                    <p> No Options</p>
                     {{/.}}
                   </script>
                 </div>
@@ -405,7 +405,7 @@
           <br>
           <div class="row">
             <div class="col-md-12">
-              <button id='add_a_candidate' class="btn btn-default btn-block"><i class="fa fa-plus fa-fw fa-2 hand" data-toggle="tooltip" data-placement="right" title="Add a candidate"></i> Add a Candidate</button>
+              <button id='add_a_candidate' class="btn btn-default btn-block"><i class="fa fa-plus fa-fw fa-2 hand" data-toggle="tooltip" data-placement="right" title="Add an option"></i> Add an Option</button>
             </div>
           </div>
           <!-- Create Candidate form -->
@@ -415,12 +415,12 @@
                 <input type="hidden" name="poll_id" value="">
                 <input type="hidden" name="candidate_id" value="">
                 <div class="form-group">
-                  <input id="candidate_subject" class="form-control" name="subject" type="text" data-bv-notempty="true" placeholder="Candidate Title (140 Character Limit)" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
+                  <input id="candidate_subject" class="form-control" name="subject" type="text" data-bv-notempty="true" placeholder="Option Title (140 Character Limit)" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
                 </div>
                 <div class="form-group">
                   <textarea id="edit_candidate_text" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-default btn-block">Save Candidate</button>
+                <button type="submit" class="btn btn-default btn-block">Save Option</button>
                 <a class="candidate_save_cancel_btn btn btn-danger btn-block">Cancel</a>
               </form>
             </div>

@@ -66,10 +66,18 @@ public class Tables {
 	@Table("user")
 	public static class User extends Model {}
 	public static final User USER = new User();
+	
+	@Table("full_user")
+	public static class FullUser extends Model {}
+	public static final FullUser FULL_USER = new FullUser();
 
-	@Table("user_view")
-	public static class UserView extends Model {}
-	public static final UserView USER_VIEW = new UserView();
+	@Table("user_login_view")
+	public static class UserLoginView extends Model {}
+	public static final UserLoginView USER_LOGIN_VIEW = new UserLoginView();
+	
+	@Table("login")
+	public static class Login extends Model {}
+	public static final Login LOGIN = new Login();
 
 	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, 
 			Integer parentId, Integer minPathLength, Integer maxPathLength) {
@@ -79,6 +87,7 @@ public class Tables {
 				"poll.id as poll_id,\n"+
 				"text,\n"+
 				"comment.user_id,\n"+
+				"coalesce(full_user.name, concat('user_',comment.user_id)) as user_name,\n"+
 				"comment.deleted,\n"+
 				"-- min(a.path_length,b.path_length),\n"+
 				"AVG(c.rank) as avg_rank,\n"+
@@ -97,7 +106,9 @@ public class Tables {
 				"on comment.id = d.comment_id\n" + 
 				"and d.user_id = " + userId + "\n"+
 				"left join poll on \n"+
-				"comment.discussion_id = poll.discussion_id \n");
+				"comment.discussion_id = poll.discussion_id \n"+
+				"left join full_user \n"+
+				"on comment.user_id = full_user.user_id \n");
 
 		if (discussionId != null) {
 			s.append("WHERE comment.discussion_id = " + discussionId + "\n");

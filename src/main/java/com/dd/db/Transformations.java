@@ -74,6 +74,7 @@ public class Transformations {
 					cv.getInteger("discussion_id"), 
 					cv.getInteger("poll_id"), 
 					cv.getInteger("user_id"), 
+					cv.getString("user_name"),
 					cv.getBoolean("deleted"),
 					cv.getDouble("avg_rank"),
 					cv.getInteger("user_rank"), 
@@ -116,20 +117,22 @@ public class Transformations {
 	public static class CommentObj {
 		private Integer id, discussionId, pollId, userId, userRank, parentId, topParentId;
 		private Double avgRank;
-		private String text, alphaId;
+		private String text, alphaId, userName;
 		private Timestamp created, modified;
 		private List<CommentObj> embedded;
 		private Boolean deleted;
 
 		private List<Integer> breadCrumbsList;
 
-		public CommentObj(Integer id, Integer discussionId, Integer pollId, Integer userId, Boolean deleted,
+		public CommentObj(Integer id, Integer discussionId, Integer pollId, Integer userId, 
+				String userName, Boolean deleted,
 				Double avgRank, Integer userRank, String text, String breadCrumbs,
 				Timestamp created, Timestamp modified) {
 			this.id = id;
 			this.discussionId = discussionId;
 			this.pollId = pollId;
 			this.userId = userId;
+			this.userName = userName;
 			this.deleted = deleted;
 			this.avgRank = avgRank;
 			this.userRank = userRank;
@@ -220,6 +223,10 @@ public class Transformations {
 
 		public Integer getUserId() {
 			return userId;
+		}
+		
+		public String getUserName() {
+			return userName;
 		}
 
 		public Integer getParentId() {

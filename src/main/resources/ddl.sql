@@ -193,6 +193,7 @@ CREATE TABLE `full_user` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `user_id` INTEGER NULL DEFAULT NULL,
   `name` VARCHAR(255) NULL DEFAULT NULL,
+  `email` VARCHAR(255) NULL DEFAULT NULL,
   `password_encrypted` VARCHAR(512) NULL DEFAULT NULL,
   `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -232,6 +233,24 @@ CREATE TABLE `comment_rank` (
   PRIMARY KEY (`id`),
   UNIQUE KEY (`comment_id`, `user_id`)
 );
+
+-- ---
+-- Table 'login'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `login`;
+    
+CREATE TABLE `login` (
+  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `user_id` INTEGER NULL DEFAULT NULL,
+  `auth` VARCHAR(255) NOT NULL DEFAULT 'NULL',
+  `expire_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+);
+
 -- ---
 -- Foreign Keys 
 -- ---
@@ -263,6 +282,7 @@ ALTER TABLE `ballot` ADD FOREIGN KEY (candidate_id) REFERENCES `candidate` (`id`
 ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `comment_rank` ADD FOREIGN KEY (comment_id) REFERENCES `comment` (`id`);
 ALTER TABLE `comment_rank` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
+ALTER TABLE `login` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 
 -- ---
 -- Table Properties

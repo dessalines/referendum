@@ -3,7 +3,9 @@ INSERT INTO `poll_type` (id, name)
 INSERT INTO `poll_sum_type` (id, name)
 	VALUES (1,'Average'),(2,'Median'),(3,'Normalized');
 INSERT INTO `user` (id, ip_address) 
-	VALUES (1,'127.0.0.1'),(2,'test'),(3,'test3');
+	VALUES (1,'test1'),(2,'test'),(3,'test3');
+INSERT INTO `full_user` (id, user_id, name, email, password_encrypted) 
+	VALUES (1,2, 'DerpyMcFish', 'asdf@gmail.com', 'testPass');
 INSERT INTO `discussion` (`id`,`subject`,`text`)
 	VALUES (1,'test 123','**deaaard**\r\n\r\n### fdasdf\r\n\r\n'),(2,'fgagsfsdf','gagsdf'),(3,'asdfasdf','czxvxzvxz'),(4,'ffasdf','asdf'),(5,'this is a candidate','kl\r\n### asdflkjadlsf\r\n\r\naf\r\n\r\n\r\nasdf');
 INSERT INTO `poll` (id, poll_type_id,poll_sum_type_id,discussion_id,user_id,private_password)

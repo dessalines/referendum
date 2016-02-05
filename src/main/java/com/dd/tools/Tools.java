@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -17,10 +18,13 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +41,7 @@ import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
 import org.slf4j.Logger;
@@ -70,6 +75,10 @@ public class Tools {
 			new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
 	
 	public static final BaseX ALPHA_ID = new BaseX();
+	
+	private static final SecureRandom RANDOM = new SecureRandom();
+	
+	public static final StrongPasswordEncryptor PASS_ENCRYPT = new StrongPasswordEncryptor();
 
 
 	public static void allowOnlyLocalHeaders(Request req, Response res) {
@@ -511,6 +520,18 @@ public class Tools {
 	
 	public static String replaceNewlines(String text) {
 		return text.replace("\r", "").replace("\n", "--lb--").replace("\\", "");
+	}
+	
+	public static String generateSecureRandom() {
+		return new BigInteger(256, RANDOM).toString(32);
+	}
+	
+	public static Timestamp newExpireTimestamp() {
+		return new Timestamp(new Date().getTime() + 1000 * DataSources.EXPIRE_SECONDS);
+	}
+	
+	public static Timestamp newCurrentTimestamp() {
+		return new Timestamp(new Date().getTime());
 	}
 
 }

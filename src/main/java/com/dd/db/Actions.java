@@ -5,8 +5,10 @@ import static com.dd.tools.Tools.ALPHA_ID;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +29,6 @@ import com.dd.db.Tables.CommentView;
 import com.dd.db.Tables.Discussion;
 import com.dd.db.Tables.Poll;
 import com.dd.db.Tables.User;
-import com.dd.db.Tables.UserView;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RangeBallot;
 import com.dd.voting.candidate.RangeCandidate;
@@ -165,7 +166,7 @@ public class Actions {
 		return "Comment updated";
 
 	}
-	
+
 	public static String deleteComment(String userId, String commentId) {
 
 		// find the candidate
@@ -216,7 +217,7 @@ public class Actions {
 
 	}
 
-	
+
 
 	public static String saveBallot(String userId, String pollId, String candidateId,
 			String rank) {
@@ -290,57 +291,79 @@ public class Actions {
 	}
 
 
-
-
-	public static String setCookiesForLogin(UserView uv, Response res) {
-
-		Integer expireSeconds = DataSources.EXPIRE_SECONDS;
-
-		//		long now = new Date().getTime();
-
-		//		long expireTime = now + expireSeconds*1000;
-
-		//		Timestamp expireTS = new Timestamp(expireTime);
-
-
-		// Not sure if this is necessary yet
+	public static String setCookiesForLogin(FullUser fu, String auth, Response res) {
 		Boolean secure = false;
-
-		// Set some cookies for that users login
-		//		res.cookie("auth", auth, expireSeconds, secure);
-		res.cookie("uid", uv.getId().toString(), expireSeconds, secure);
-		//		res.cookie("user_name", client.getString("name"), expireSeconds, secure);
+		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
+		res.cookie("uid", fu.getString("user_id"), DataSources.EXPIRE_SECONDS, secure);
+		res.cookie("username", fu.getString("name"), DataSources.EXPIRE_SECONDS, secure);
 
 		return "Logged in";
+	}
+	
+	public static String setCookiesForLogin(User user, String auth, Response res) {
+		Boolean secure = false;
+		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
+		res.cookie("uid", user.getId().toString(), DataSources.EXPIRE_SECONDS, secure);
 
+		return "Logged in";
 	}
 
-	public static UserView getUserFromCookie(Request req, Response res) {
+	public static UserLoginView getUserFromCookie(Request req, Response res) {
 
-		String uid = req.cookie("uid");
+		String auth = req.cookie("auth");
 
-		UserView uv = null;
-		BigInteger id = null;
+		UserLoginView uv = null;
 
 		// If no cookie, fetch user by ip address
-		if (uid == null) {
-			uv = USER_VIEW.findFirst("ip_address = ?", req.ip());
+		if (auth == null) {
 
-			if (uv != null) {
-				Actions.setCookiesForLogin(uv, res);
+			User user = USER.findFirst("ip_address = ?", req.ip());
+
+			// It found a user row
+			if (user != null) {
+
+				// See if you have a login that hasn't expired yet
+				Login login = LOGIN.findFirst("user_id = ? and expire_time > ?", user.getId(),
+						Tools.newCurrentTimestamp());
+//				log.info(Tools.newCurrentTimestamp().toString());
+//				log.info(login.toJson(false));
+
+				// It found a login item for that user row, so the cookie, like u shoulda
+				if (login != null) {
+					auth = login.getString("auth");
+					Actions.setCookiesForLogin(user, auth, res);
+				} 
+				// Need to login for that user and set the cookie
+				else {
+					auth = Tools.generateSecureRandom();
+					login = LOGIN.createIt("user_id", user.getId(), 
+							"auth", auth,
+							"expire_time", Tools.newExpireTimestamp());
+
+					Actions.setCookiesForLogin(user, auth, res);
+				}
+
+				// The login is either there or created now, so find it and return out
+				uv = USER_LOGIN_VIEW.findFirst("auth = ?" , auth);
 				return uv;
 			}
 
-		} else {
-			id = ALPHA_ID.decode(uid);
-			uv = USER_VIEW.findFirst("id = ?" , id);
-
+		} 
+		// The auth cookie is there, so find the user from the login
+		else {
+			uv = USER_LOGIN_VIEW.findFirst("auth = ?" , auth);
 		}
 
+		// The user doesn't exist, so you need to create the user and login
 		if (uv == null) {
 			User user = USER.createIt("ip_address", req.ip());
-			uv = USER_VIEW.findFirst("id = ?", user.getId());
-			Actions.setCookiesForLogin(uv, res);
+			auth = Tools.generateSecureRandom();
+			LOGIN.createIt("user_id", user.getId(), 
+					"auth", auth,
+					"expire_time", Tools.newExpireTimestamp());
+
+			uv = USER_LOGIN_VIEW.findFirst("auth = ?" , auth);
+			Actions.setCookiesForLogin(user, auth, res);
 		}
 
 		return uv;
@@ -412,7 +435,7 @@ public class Actions {
 				userId, discussionId));
 		return commentObjectsToJson(cvs);
 	}
-	
+
 	public static String fetchComments(Integer userId, Integer commentId) {
 		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
 				userId, null, commentId));
@@ -420,14 +443,77 @@ public class Actions {
 	}
 
 	public static String commentObjectsToJson(List<CommentView> cvs) {
-//		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));
+		//		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));
 		try {
 			return Tools.MAPPER.writeValueAsString(Transformations.convertCommentsToEmbeddedObjects(cvs));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static String login(String userOrEmail, String password, Response res) {
+
+		// Find the user, then create a login for them
+
+		FullUser fu = FULL_USER.findFirst("name = ? or email = ?", userOrEmail, userOrEmail);
+
+		if (fu == null) {
+			throw new NoSuchElementException("Incorrect user/email");
+		} else {
+			String encryptedPassword = fu.getString("password_encrypted");
+
+			Boolean correctPass = Tools.PASS_ENCRYPT.checkPassword(password, encryptedPassword);
+
+			if (correctPass) {
+
+				String auth = Tools.generateSecureRandom();
+				LOGIN.createIt("user_id", fu.getInteger("user_id"), 
+						"auth", auth,
+						"expire_time", Tools.newExpireTimestamp());
+
+				return Actions.setCookiesForLogin(fu, auth, res);
+
+			} else {
+				throw new NoSuchElementException("Incorrect Password");
+			}
+		}
+
+	}
+
+	public static String signup(String userName, String password, String email, Request req, Response res) {
+
+		// Find the user, then create a login for them
+
+		FullUser fu = FULL_USER.findFirst("name = ? or email = ?", userName, userName);
+		
+
+		if (fu == null) {
+			
+			// Create the user and full user
+			User user = USER.createIt("ip_address", req.ip());
+			
+			String encryptedPassword = Tools.PASS_ENCRYPT.encryptPassword(password);
+			fu = FULL_USER.createIt("user_id", user.getId(),
+					"name", userName,
+					"email", email,
+					"password_encrypted", encryptedPassword);
+			
+			// now login that user
+			String auth = Tools.generateSecureRandom();
+			LOGIN.createIt("user_id", user.getId(), 
+					"auth", auth,
+					"expire_time", Tools.newExpireTimestamp());
+
+			Actions.setCookiesForLogin(fu, auth, res);
+			
+			return "Logged in";
+			
+			
+		} else {
+			throw new NoSuchElementException("Username/Password already exists");
+		}
+
 	}
 
 

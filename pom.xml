@@ -67,6 +67,13 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.jasypt</groupId>
+			<artifactId>jasypt</artifactId>
+			<version>1.9.2</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>2.2.2</version>

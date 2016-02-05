@@ -114,4 +114,5 @@ TODO
 * Comment/poll sorting
 * Poll paging
 * Results limit?
+* A user page : your comments, poll candidates, and votes
 

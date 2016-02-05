@@ -19,7 +19,7 @@ import spark.Response;
 import com.dd.db.Actions;
 import com.dd.db.Tables.Poll;
 import com.dd.db.Tables.User;
-import com.dd.db.Tables.UserView;
+import com.dd.db.Tables.UserLoginView;
 import com.dd.tools.SampleData;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RankedBallot;
@@ -45,9 +45,9 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
-				return uv.getId().toString();
+				return uv.toJson(false);
 
 			} catch (Exception e) {
 				res.status(666);
@@ -67,7 +67,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
@@ -97,7 +97,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
@@ -135,7 +135,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 
 
@@ -165,7 +165,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
@@ -230,7 +230,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 
 
@@ -257,7 +257,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
@@ -289,7 +289,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String commentId = req.params(":commentId");
 
@@ -316,7 +316,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
@@ -383,7 +383,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
@@ -436,7 +436,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
@@ -467,7 +467,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				Integer commentId = ALPHA_ID.decode(req.params(":commentId")).intValue();
 
@@ -529,7 +529,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 				String candidateId = req.params(":candidateId");
@@ -565,7 +565,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String commentId = req.params(":commentId");
 				String rank = req.params(":rank");
@@ -579,6 +579,59 @@ public class API {
 
 
 
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
+		post("/login", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				Tools.dbInit();
+
+				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
+
+				String userOrEmail = vars.get("user_or_email");
+				String password = vars.get("password");
+				
+				String message = Actions.login(userOrEmail, password, res);
+				
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
+		post("/signup", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				Tools.dbInit();
+
+				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
+
+				String userName = vars.get("username");
+				String password = vars.get("password");
+				String email = vars.get("email");
+								
+				String message = Actions.signup(userName, password, email, req, res);
+				
 				return message;
 
 			} catch (Exception e) {

@@ -1,27 +1,72 @@
 $(document).ready(function() {
 
-  getUser();
+  getAuth();
   setupCreateEmptyPoll();
+  setupLoginForm();
 });
 
 
-function getUser() {
-  if (getCookie('uid') == null) {
+function getAuth() {
+  if (getCookie('auth') == null) {
+
+    deleteCookie('auth');
+    deleteCookie('uid');
+    deleteCookie('username');
     console.log('cookie was undefined');
     getJson('get_user').done(function() {
-      setUserInfo();
+      // setUserInfo();
+
     });
   } else {
-    setUserInfo();
+
+    if (getCookie('username') != null) {
+      showLoggedIn();
+    }
+    
   }
 
 
 }
 
-function setUserInfo() {
-  var ui = 'User ' + getCookie('uid') + ' <span class="caret"></span>';
-  $('#user_dropdown').html(ui);
+function showLoggedIn() {
+  $('#login_modal').modal('hide');
+  $('.logged-out').addClass('hide');
+  $('.logged-in').removeClass('hide');
+  $('#user_dropdown').html(getCookie('username') + ' <span class="caret"></span>');
 }
+
+function setupLoginForm() {
+
+  var loginForm = '#login_form';
+  $(loginForm).bootstrapValidator({
+      message: 'This value is not valid',
+      excluded: [':disabled'],
+      submitButtons: 'button[type="submit"]'
+    })
+    .on('success.form.bv', function(event) {
+      event.preventDefault();
+      standardFormPost('login', loginForm, null, null, function() {
+
+        showLoggedIn();
+      }, null, null);
+    });
+
+  var signupForm = '#signup_form';
+  $(signupForm).bootstrapValidator({
+      message: 'This value is not valid',
+      excluded: [':disabled'],
+      submitButtons: 'button[type="submit"]'
+    })
+    .on('success.form.bv', function(event) {
+      event.preventDefault();
+      standardFormPost('signup', signupForm, null, null, function() {
+        $('#login_modal').modal('hide');
+        showLoggedIn();
+      }, null, null);
+    });
+
+}
+
 
 function setupCreateEmptyPoll() {
   $('.create_empty_poll').click(function() {

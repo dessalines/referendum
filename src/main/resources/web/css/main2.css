@@ -32,6 +32,10 @@
   background: #BABABA;
 }*/
 
+.vertical-line-right {
+  border-right: 1px solid #888888;
+}
+
 .not-allowed {
   cursor: not-allowed;
 }
