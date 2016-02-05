@@ -187,6 +187,8 @@ public class Actions {
 			List<String> parentBreadCrumbs, String text) {
 
 		List<String> pbs = new ArrayList<String>(parentBreadCrumbs);
+		
+		
 
 		log.info("pb = " + pbs.get(0));
 		// find the candidate

@@ -324,9 +324,12 @@ public class API {
 				String discussionId = vars.get("discussion_id");
 				String parentCommentId = vars.get("parent_comment_id");
 
-				// Fetch the parent breadCrumbs from scratch(required for comment pages)
-				List<String> parentBreadCrumbs = Arrays.asList(COMMENT_VIEW.findFirst("id = ?", parentCommentId)
-						.getString("breadcrumbs").split(","));
+				List<String> parentBreadCrumbs = null;
+				if (parentCommentId != null) {
+					// Fetch the parent breadCrumbs from scratch(required for comment pages)
+					parentBreadCrumbs = Arrays.asList(COMMENT_VIEW.findFirst("id = ?", parentCommentId)
+							.getString("breadcrumbs").split(","));
+				}
 
 				String message;
 
@@ -590,7 +593,7 @@ public class API {
 			}
 
 		});
-		
+
 		post("/login", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
@@ -602,9 +605,9 @@ public class API {
 
 				String userOrEmail = vars.get("user_or_email");
 				String password = vars.get("password");
-				
+
 				String message = Actions.login(userOrEmail, password, res);
-				
+
 				return message;
 
 			} catch (Exception e) {
@@ -616,7 +619,7 @@ public class API {
 			}
 
 		});
-		
+
 		post("/signup", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
@@ -629,9 +632,9 @@ public class API {
 				String userName = vars.get("username");
 				String password = vars.get("password");
 				String email = vars.get("email");
-								
+
 				String message = Actions.signup(userName, password, email, req, res);
-				
+
 				return message;
 
 			} catch (Exception e) {

@@ -61,6 +61,7 @@ function setupPoll() {
     var data = JSON.parse(replaceNewlines(e));
     console.log(data);
     fillMustacheWithJson(data, pollTemplate, '#poll_div');
+    $('#comment_top_form input[name=discussion_id]').attr('value', data['discussion_id']);
 
     // Setup the edit button, if its the right user
     if (getCookie('uid') == data['user_id']) {

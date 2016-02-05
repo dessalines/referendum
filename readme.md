@@ -108,11 +108,13 @@ TODO
 * Full user setup / modals
 * Passwords on private pages
 * Use a hashtag based system (easily create new tags, and tag things)
-* poll searching, based on hashtags or
+* poll searching, based on hashtags or poll names
 
 * Poll searching, Poll passwords
 * Comment/poll sorting
 * Poll paging
 * Results limit?
 * A user page : your comments, poll candidates, and votes
+
+
 

@@ -12,10 +12,11 @@ function initializeAllCommentVotes(data) {
 
   $('.comment_vote').each(function() {
     var commentId = this.id.split("_").slice(-1)[0];
-    // console.log(commentId);
     setupCommentVote(commentId);
   });
 
+
+  setupCommentTop();
 
   setupToolTips();
 }
@@ -30,6 +31,55 @@ function votesArrayToMap(arr) {
   // console.log(a);
 
   return a;
+
+}
+
+function setupCommentTop() {
+
+
+  var commentReplyForm = $('#comment_top_form');
+  var commentReplyBtn = $('#comment_top_btn');
+  var commentText = $('#comment_top_text');
+  var commentReplyTextArea = $('#comment_top_edit_text');
+  var editText = commentReplyTextArea.text();
+  // console.log(editText);
+  commentReplyTextArea.markdown({});
+
+
+  // commentEditTextArea.data('markdown').setContent(editText);
+
+
+  commentReplyBtn.click(function() {
+    commentReplyForm.removeClass('hide');
+  });
+
+
+  commentReplyForm.bootstrapValidator({
+      message: 'This value is not valid',
+      excluded: [':disabled'],
+      submitButtons: 'button[type="submit"]'
+    })
+    .on('success.form.bv', function(event) {
+      event.preventDefault();
+      standardFormPost('create_comment', commentReplyForm, null, null, function() {
+
+        // Need to refetch the comment, for stuff like permalinks, and correct threading.
+        setupComments();
+
+        // // Change the text
+        // var md = commentEditTextArea.data('markdown').getContent().replace(/(\r\n|\n|\r)/gm, "--lb--");
+        // var text = markdown.toHTML(replaceNewlines(md, true, true));
+        // console.log(md);
+        // console.log(text);
+        // commentText.html(text);
+
+        // commentReplyForm.addClass('hide');
+        // commentText.removeClass('hide');
+
+      }, null, null);
+    });
+
+
 
 }
 
