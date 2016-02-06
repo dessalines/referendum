@@ -58,7 +58,7 @@ public class Actions {
 
 	public static String savePoll(String userId, String pollId, 
 			String subject, String text, String password,
-			String pollSumTypeId) {
+			String pollSumTypeId, Response res) {
 
 		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
 
@@ -73,8 +73,28 @@ public class Actions {
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
 		d.set("subject", subject,
 				"text", text).saveIt();
+		
+		if (password != null) {
+			res.cookie("poll_password_" + pollId, password);
+		}
 
 		return "Poll Saved";
+
+
+	}
+	
+	public static String unlockPoll(String pollId, String password, Response res) {
+
+		Poll p = POLL.findFirst("id = ? ", pollId);
+
+		
+		if (password.equals(p.getString("private_password"))) {
+			res.cookie("poll_password_" + pollId, password);
+		} else {
+			throw new NoSuchElementException("Incorrect password");
+		}
+
+		return "Poll Unlocked";
 
 
 	}
@@ -186,11 +206,10 @@ public class Actions {
 	public static String createComment(String userId, String discussionId, 
 			List<String> parentBreadCrumbs, String text) {
 
-		List<String> pbs = new ArrayList<String>(parentBreadCrumbs);
-		
-		
+		List<String> pbs = (parentBreadCrumbs != null) ? new ArrayList<String>(parentBreadCrumbs) : 
+			new ArrayList<String>();
 
-		log.info("pb = " + pbs.get(0));
+
 		// find the candidate
 		Comment c = COMMENT.createIt("discussion_id", discussionId, 
 				"text", text,
@@ -301,7 +320,7 @@ public class Actions {
 
 		return "Logged in";
 	}
-	
+
 	public static String setCookiesForLogin(User user, String auth, Response res) {
 		Boolean secure = false;
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
@@ -327,8 +346,8 @@ public class Actions {
 				// See if you have a login that hasn't expired yet
 				Login login = LOGIN.findFirst("user_id = ? and expire_time > ?", user.getId(),
 						Tools.newCurrentTimestamp());
-//				log.info(Tools.newCurrentTimestamp().toString());
-//				log.info(login.toJson(false));
+				//				log.info(Tools.newCurrentTimestamp().toString());
+				//				log.info(login.toJson(false));
 
 				// It found a login item for that user row, so the cookie, like u shoulda
 				if (login != null) {
@@ -488,19 +507,19 @@ public class Actions {
 		// Find the user, then create a login for them
 
 		FullUser fu = FULL_USER.findFirst("name = ? or email = ?", userName, userName);
-		
+
 
 		if (fu == null) {
-			
+
 			// Create the user and full user
 			User user = USER.createIt("ip_address", req.ip());
-			
+
 			String encryptedPassword = Tools.PASS_ENCRYPT.encryptPassword(password);
 			fu = FULL_USER.createIt("user_id", user.getId(),
 					"name", userName,
 					"email", email,
 					"password_encrypted", encryptedPassword);
-			
+
 			// now login that user
 			String auth = Tools.generateSecureRandom();
 			LOGIN.createIt("user_id", user.getId(), 
@@ -508,10 +527,10 @@ public class Actions {
 					"expire_time", Tools.newExpireTimestamp());
 
 			Actions.setCookiesForLogin(fu, auth, res);
-			
+
 			return "Logged in";
-			
-			
+
+
 		} else {
 			throw new NoSuchElementException("Username/Password already exists");
 		}

@@ -60,6 +60,14 @@ function setupPoll() {
 
     var data = JSON.parse(replaceNewlines(e));
     console.log(data);
+
+    // If it's a passworded poll, and that password is in the cookie
+    if (data['private_password'] != null && 
+      data['private_password'] != getCookie('poll_password_' + pollId)) {
+      console.log('redirected');
+      window.location = '/private_poll/' + pollId;
+    }
+
     fillMustacheWithJson(data, pollTemplate, '#poll_div');
     $('#comment_top_form input[name=discussion_id]').attr('value', data['discussion_id']);
 

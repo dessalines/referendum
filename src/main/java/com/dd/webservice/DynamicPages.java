@@ -14,16 +14,16 @@ public class DynamicPages {
 
 	public static void setup() {
 		
-		get("edit_poll/:pollId", (req, res) -> {
-			Tools.allowAllHeaders(req, res);
-			
-			return Tools.readFile(DataSources.PAGES("edit_poll"));
-		});
-		
 		get("poll/:pollId", (req, res) -> {
 			Tools.allowAllHeaders(req, res);
 			
 			return Tools.readFile(DataSources.PAGES("poll"));
+		});
+		
+		get("private_poll/:pollId", (req, res) -> {
+			Tools.allowAllHeaders(req, res);
+			
+			return Tools.readFile(DataSources.PAGES("private_poll"));
 		});
 		
 		get("comment/:commentId", (req, res) -> {

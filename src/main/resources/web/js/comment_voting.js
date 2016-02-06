@@ -39,18 +39,18 @@ function setupCommentTop() {
 
   var commentReplyForm = $('#comment_top_form');
   var commentReplyBtn = $('#comment_top_btn');
-  var commentText = $('#comment_top_text');
   var commentReplyTextArea = $('#comment_top_edit_text');
   var editText = commentReplyTextArea.text();
   // console.log(editText);
   commentReplyTextArea.markdown({});
 
 
-  // commentEditTextArea.data('markdown').setContent(editText);
+  commentReplyTextArea.data('markdown').setContent('');
 
 
   commentReplyBtn.click(function() {
     commentReplyForm.removeClass('hide');
+    commentReplyBtn.addClass('hide');
   });
 
 
@@ -65,7 +65,9 @@ function setupCommentTop() {
 
         // Need to refetch the comment, for stuff like permalinks, and correct threading.
         setupComments();
-
+        commentReplyBtn.removeClass('hide');
+        commentReplyForm.addClass('hide');
+        commentReplyTextArea.data('markdown').setContent('');
         // // Change the text
         // var md = commentEditTextArea.data('markdown').getContent().replace(/(\r\n|\n|\r)/gm, "--lb--");
         // var text = markdown.toHTML(replaceNewlines(md, true, true));

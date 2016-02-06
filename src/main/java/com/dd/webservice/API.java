@@ -114,7 +114,34 @@ public class API {
 				//				log.info(text);
 
 				String message = Actions.savePoll(uv.getId().toString(), pollId, 
-						subject, text, password, pollSumTypeId);
+						subject, text, password, pollSumTypeId, res);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
+		post("/unlock_poll", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+
+				Tools.dbInit();
+
+				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
+
+				String password = vars.get("password");
+				String pollId = vars.get("poll_id");
+
+				String message = Actions.unlockPoll(pollId, password, res);
 
 				return message;
 

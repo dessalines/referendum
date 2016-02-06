@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import com.dd.db.Tables.Poll;
 import com.dd.tools.Tools;
 import com.dd.voting.ballot.RangeBallot;
 import com.dd.voting.candidate.RangeCandidateResult;
+import com.dd.voting.candidate.RankedCandidate;
 import com.dd.voting.election.RangeElection;
 
 public class Transformations {
@@ -107,9 +110,15 @@ public class Transformations {
 				
 				// Add this commentobj to the embedded comments of its parent
 				parentObj.getEmbedded().add(co);
+				
+				Collections.sort(parentObj.getEmbedded(), new CommentObj.CommentObjComparator());
 			}
+			
+			
 
 		}
+		
+		Collections.sort(cos, new CommentObj.CommentObjComparator());
 
 		return cos;
 	}
@@ -211,6 +220,15 @@ public class Transformations {
 
 		public Integer getId() {
 			return id;
+		}
+		
+		public static class CommentObjComparator implements Comparator<CommentObj> {
+
+			@Override
+			public int compare(CommentObj o1, CommentObj o2) {
+				return o2.getAvgRank().compareTo(o1.getAvgRank());
+			}
+
 		}
 
 		public Integer getDiscussionId() {
