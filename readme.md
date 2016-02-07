@@ -99,22 +99,23 @@ Slider instead:
 https://github.com/seiyria/bootstrap-slider
 http://seiyria.com/bootstrap-slider/
 
+Infinite scroll pagination:
+http://code.tutsplus.com/tutorials/how-to-create-infinite-scroll-pagination--wp-24873
+http://jscroll.com/
+http://stackoverflow.com/questions/20584065/reinitializing-jscroll-after-ajax-call-still-loading-old-href-after-ajax-load
+
 Main page - Discuss, Vote, Results
 
 
 TODO 
 * Paging for results and candidates, and comments(Pretty tough)
-* User pages w/ captchas
-* Passwords on private pages
+* User pages w/ captchas?
 * Use a hashtag based system (easily create new tags, and tag things)
 * poll searching, based on hashtags or poll names
 
 
-* Poll searching, Poll passwords
+* Poll searching
 * Comment/poll sorting
 * Poll paging
 * Results limit?
 * A user page : your comments, poll candidates, and votes
-
-
-
