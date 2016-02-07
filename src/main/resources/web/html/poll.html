@@ -136,130 +136,150 @@
                   </small>
                 </script>
               </div>
+              <div id="tag_div">
+                <script id="tag_template" type="x-tmpl-mustache">
+                  <form id="tag_form" class="" role="search">
+                    <input id='search_id' type='hidden' name='id' />
+                    <div class="input-group">
+                      <div id="search_box" class="form-group">
+                        <input name="search_input" type="text" class="form-control typeahead rounded-left" placeholder="{{strings.search_empty}}">
+                      </div>
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default rounded-right"><i class="fa fa-search"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+                  <ul class="list-inline">
+                    <li><span class="badge"> testone </span></li>
+                    <li><span class="label label-default"> testtwo</span></li>
+                    <li><span class="label label-default label-as-badge"> testthree</span></li>
+                  </ul>
+                </script>
+              </div>
             </div>
-          </div>
-          <div id="edit_poll_div" class="hide">
-            <h5> Edit Poll </h5>
-            <!-- Create candidate form -->
-            <div class="row">
-              <div class="col-md-12">
-                <form id="poll_form" role="form">
-                  <div class="form-group">
-                    <input class="form-control" name="subject" type="text" placeholder="Title (140 Character Limit)" data-bv-notempty="true" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
-                  </div>
-                  <div class="form-group">
-                    <input type="hidden" name="poll_id" value="">
-                    <textarea id="edit_poll_text" class="form-control" name="poll_text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
-                  </div>
-                  <a class="" role="button" data-toggle="collapse" href="#advanced_options" aria-expanded="false" aria-controls="advanced_options">
-                    <i id='ex1_clear_vote' class="fa fa-fw fa-plus"></i> Advanced Options
-                  </a>
-                  <div class="collapse" id="advanced_options">
-                    <h5> Privacy</h5>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <label class="radio-inline">
-                          <input type="radio" name="public_radio" value="public" checked> Public
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio" name="public_radio" value="private"> Private (With Password)
-                        </label>
-                        <div id="private_password" class="form-group hide">
-                          <div class="col-md-4">
-                            <input class="form-control" name="private_password" type="text" placeholder="Password" minlength="4" maxlength="140" />
+            <div id="edit_poll_div" class="hide">
+              <h5> Edit Poll </h5>
+              <!-- Create candidate form -->
+              <div class="row">
+                <div class="col-md-12">
+                  <form id="poll_form" role="form">
+                    <div class="form-group">
+                      <input class="form-control" name="subject" type="text" placeholder="Title (140 Character Limit)" data-bv-notempty="true" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
+                    </div>
+                    <div class="form-group">
+                      <input type="hidden" name="poll_id" value="">
+                      <textarea id="edit_poll_text" class="form-control" name="poll_text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
+                    </div>
+                    <a class="" role="button" data-toggle="collapse" href="#advanced_options" aria-expanded="false" aria-controls="advanced_options">
+                      <i id='ex1_clear_vote' class="fa fa-fw fa-plus"></i> Advanced Options
+                    </a>
+                    <div class="collapse" id="advanced_options">
+                      <h5> Privacy</h5>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label class="radio-inline">
+                            <input type="radio" name="public_radio" value="public" checked> Public
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="public_radio" value="private"> Private (With Password)
+                          </label>
+                          <div id="private_password" class="form-group hide">
+                            <div class="col-md-4">
+                              <input class="form-control" name="private_password" type="text" placeholder="Password" minlength="4" maxlength="140" />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <h5> Sum Type</h5>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <label class="radio-inline">
-                          <input type="radio" name="sum_type_radio" value="1"> Average
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio" name="sum_type_radio" value="2"> Median
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio" name="sum_type_radio" value="3"> Normalized
-                        </label>
+                      <h5> Sum Type</h5>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label class="radio-inline">
+                            <input type="radio" name="sum_type_radio" value="1"> Average
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="sum_type_radio" value="2"> Median
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="sum_type_radio" value="3"> Normalized
+                          </label>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <br>
-                  <button type="submit" class="btn btn-default btn-block">Save Poll</button>
-                  <a class="poll_save_cancel_btn btn btn-danger btn-block">Cancel</a>
-                </form>
+                    <br>
+                    <button type="submit" class="btn btn-default btn-block">Save Poll</button>
+                    <a class="poll_save_cancel_btn btn btn-danger btn-block">Cancel</a>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-          <hr>
-          <h4> Comments</h4>
-          <small><a id="comment_top_btn" class="text-muted hand"> reply</a></small>
-          <form id="comment_top_form" role="form" class="hide">
-            <input type="hidden" name="discussion_id" value="">
-            <textarea id="comment_top_edit_text" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
-            <button type="submit" class="btn btn-default btn-block">Save Comment</button>
-          </form>
-          <div id="comments_div">
-            <script id="comments_template" type="x-tmpl-mustache">
-              <div class="row">
-                <div class="col-md-12">
-                  {{#.}}
-                  <div id="comment_panel_{{id}}" class="panel panel-default">
-                    <div class="panel-heading">
-                      <ul class="list-inline">
-                        <li>
-                          <a class="show_expand" role="button" data-toggle="collapse" data-target="#comment_collapse_{{id}}" aria-expanded="true" aria-controls="comment_collapse_{{id}}">
-                          </a>
-                        </li>
-                        <li>
-                          <table id="comment_vote_table_{{id}}" class="comment_vote_table hide">
-                            <tr>
-                              <td>
-                                <input id="comment_slider_{{id}}" class="comment_vote" data-slider-id='comment_slider_special_{{id}}' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" user-rank="{{userRank}}" data-slider-orientation="vertical" />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <i id='comment_clear_vote_{{id}}' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
-                              </td>
-                            </tr>
-                          </table>
-                          <a id='comment_vote_{{id}}' user-id="{{userId}}" class="text-muted hand" data-toggle="tooltip" data-placement="auto" title="Vote">
-                            <i class="fa fa-fw fa-thumbs-up"></i>
-                          </a>
-                        </li>
-                        <li><a href="/user/{{userId}}">{{userName}}</a></li>
-                        <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
+            <hr>
+            <h4> Comments</h4>
+            <small><a id="comment_top_btn" class="text-muted hand"> reply</a></small>
+            <form id="comment_top_form" role="form" class="hide">
+              <input type="hidden" name="discussion_id" value="">
+              <textarea id="comment_top_edit_text" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
+              <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+            </form>
+            <div id="comments_div">
+              <script id="comments_template" type="x-tmpl-mustache">
+                <div class="row">
+                  <div class="col-md-12">
+                    {{#.}}
+                    <div id="comment_panel_{{id}}" class="panel panel-default">
+                      <div class="panel-heading">
+                        <ul class="list-inline">
+                          <li>
+                            <a class="show_expand" role="button" data-toggle="collapse" data-target="#comment_collapse_{{id}}" aria-expanded="true" aria-controls="comment_collapse_{{id}}">
+                            </a>
+                          </li>
+                          <li>
+                            <table id="comment_vote_table_{{id}}" class="comment_vote_table hide">
+                              <tr>
+                                <td>
+                                  <input id="comment_slider_{{id}}" class="comment_vote" data-slider-id='comment_slider_special_{{id}}' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" user-rank="{{userRank}}" data-slider-orientation="vertical" />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <i id='comment_clear_vote_{{id}}' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                                </td>
+                              </tr>
+                            </table>
+                            <a id='comment_vote_{{id}}' user-id="{{userId}}" class="text-muted hand" data-toggle="tooltip" data-placement="auto" title="Vote">
+                              <i class="fa fa-fw fa-thumbs-up"></i>
+                            </a>
+                          </li>
+                          <li><a href="/user/{{userId}}">{{userName}}</a></li>
+                          <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
                         {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
                           </span>
-                        </li>
-                        {{^modified}}
-                        <li><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
-                        {{/modified}} {{#modified}}
-                        <li><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
-                        {{/modified}}
-                      </ul>
-                    </div>
-                    <div id="comment_collapse_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                      <div class="panel-body">
-                        {{^deleted}}
-                        <span id="comment_text_{{id}}">{{#m2html}}{{{text}}}{{/m2html}}</span>
-                        <form id="comment_edit_form_{{id}}" role="form" class="hide">
-                          <input type="hidden" name="comment_id" value="{{id}}">
-                          <textarea id="comment_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="">{{text}}</textarea>
-                          <button type="submit" class="btn btn-default btn-block">Save Comment</button>
-                          <a id="comment_cancel_save_btn_{{id}}" class="btn btn-danger btn-block">Cancel</a>
-                        </form>
-                        <span class="hide" id="comment_reply_text_{{id}}"></span>
-                        <form id="comment_reply_form_{{id}}" role="form" class="hide">
-                          <input type="hidden" name="discussion_id" value="{{discussionId}}">
-                          <input type="hidden" name="parent_comment_id" value="{{id}}">
-                          <textarea id="comment_reply_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
-                          <button type="submit" class="btn btn-default btn-block">Save Comment</button>
-                        </form>
-                        <small>
+                          </li>
+                          {{^modified}}
+                          <li><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
+                          {{/modified}} {{#modified}}
+                          <li><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
+                          {{/modified}}
+                        </ul>
+                      </div>
+                      <div id="comment_collapse_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                          {{^deleted}}
+                          <span id="comment_text_{{id}}">{{#m2html}}{{{text}}}{{/m2html}}</span>
+                          <form id="comment_edit_form_{{id}}" role="form" class="hide">
+                            <input type="hidden" name="comment_id" value="{{id}}">
+                            <textarea id="comment_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="">{{text}}</textarea>
+                            <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                            <a id="comment_cancel_save_btn_{{id}}" class="btn btn-danger btn-block">Cancel</a>
+                          </form>
+                          <span class="hide" id="comment_reply_text_{{id}}"></span>
+                          <form id="comment_reply_form_{{id}}" role="form" class="hide">
+                            <input type="hidden" name="discussion_id" value="{{discussionId}}">
+                            <input type="hidden" name="parent_comment_id" value="{{id}}">
+                            <textarea id="comment_reply_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
+                            <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                          </form>
+                          <small>
                         <ul class="list-inline">
                           <li><a href="/comment/{{alphaId}}" class="text-muted">link</a></li>
                           <li><a id="comment_source_btn_{{id}}" class="text-muted hand">source</a></li>
@@ -270,124 +290,124 @@
                           <li><a id="comment_reply_btn_{{id}}" class="text-muted hand">reply<a/></li>
                         </ul>
                         </small> {{/deleted}}{{#deleted}}
-                        <i>deleted</i> {{/deleted}}{{>recurse}}
+                          <i>deleted</i> {{/deleted}}{{>recurse}}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  {{/.}} {{^.}}
-                  <p> No Comments</p>
-                  {{/.}}
-                </div>
-              </div>
-            </script>
-            <script id="recurse" type="x-tmpl-mustache">
-              {{#embedded}}
-              <div id="comment_panel_{{id}}" class="panel panel-default">
-                <div class="panel-heading">
-                  <ul class="list-inline">
-                    <li>
-                      <a class="show_expand" role="button" data-toggle="collapse" data-target="#comment_collapse_{{id}}" aria-expanded="true" aria-controls="comment_collapse_{{id}}">
-                      </a>
-                    </li>
-                    <li>
-                      <table id="comment_vote_table_{{id}}" class="comment_vote_table hide">
-                        <tr>
-                          <td>
-                            <input id="comment_slider_{{id}}" class="comment_vote" data-slider-id='comment_slider_special_{{id}}' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" user-rank="{{userRank}}" data-slider-orientation="vertical" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <i id='comment_clear_vote_{{id}}' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
-                          </td>
-                        </tr>
-                      </table>
-                      <a id='comment_vote_{{id}}' user-id="{{userId}}" class="text-muted hand" data-toggle="tooltip" data-placement="auto" title="Vote">
-                        <i class="fa fa-fw fa-thumbs-up"></i>
-                      </a>
-                    </li>
-                    <li><a href="/user/{{userId}}">{{userName}}</a></li>
-                    <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
-                        {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
-                          </span>
-                    </li>
-                    {{^modified}}
-                    <li><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
-                    {{/modified}} {{#modified}}
-                    <li><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
-                    {{/modified}}
-                  </ul>
-                </div>
-                <div id="comment_collapse_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="panel-body">
-                    {{^deleted}}
-                    <span id="comment_text_{{id}}">{{#m2html}}{{{text}}}{{/m2html}}</span>
-                    <form id="comment_edit_form_{{id}}" role="form" class="hide">
-                      <input type="hidden" name="comment_id" value="{{id}}">
-                      <textarea id="comment_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="">{{text}}</textarea>
-                      <button type="submit" class="btn btn-default btn-block">Save Comment</button>
-                      <a id="comment_cancel_save_btn_{{id}}" class="btn btn-danger btn-block">Cancel</a>
-                    </form>
-                    <span class="hide" id="comment_reply_text_{{id}}"></span>
-                    <form id="comment_reply_form_{{id}}" role="form" class="hide">
-                      <input type="hidden" name="discussion_id" value="{{discussionId}}">
-                      <input type="hidden" name="parent_comment_id" value="{{id}}">
-                      <textarea id="comment_reply_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
-                      <button type="submit" class="btn btn-default btn-block">Save Comment</button>
-                    </form>
-                    <small>
-                        <ul class="list-inline">
-                          <li><a href="/comment/{{alphaId}}" class="text-muted">link</a></li>
-                          <li><a id="comment_source_btn_{{id}}" class="text-muted hand">source</a></li>
-                          <li class="hide"><a id="comment_edit_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">edit<a/></li>
-                          <li class="hide"><a id="comment_delete_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">delete<a/></li>
-                          <li class="hide"><a id="comment_delete_sure_yes_btn_{{id}}" class="text-danger hand">(Yes</a> 
-                            <a id="comment_delete_sure_no_btn_{{id}}" class="text-muted hand">/No)</a></li>
-                          <li><a id="comment_reply_btn_{{id}}" class="text-muted hand">reply<a/></li>
-                        </ul>
-                        </small> {{/deleted}}{{#deleted}}
-                    <i>deleted</i> {{/deleted}}{{>recurse}}
+                    {{/.}} {{^.}}
+                    <p> No Comments</p>
+                    {{/.}}
                   </div>
                 </div>
-              </div>
-              {{/embedded}}
-            </script>
-          </div>
-        </div>
-        <div role="tabpanel" class="tab-pane fade" id="vote_tab">
-          <br>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="panel-group">
-                <div id="candidates_div">
-                  <script id="candidates_template" type="x-tmpl-mustache">
-                    {{#.}}
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <!-- A sample range vote table -->
-                        <table id="id_{{id}}_range_vote_table" class="range_vote_table hide">
+              </script>
+              <script id="recurse" type="x-tmpl-mustache">
+                {{#embedded}}
+                <div id="comment_panel_{{id}}" class="panel panel-default">
+                  <div class="panel-heading">
+                    <ul class="list-inline">
+                      <li>
+                        <a class="show_expand" role="button" data-toggle="collapse" data-target="#comment_collapse_{{id}}" aria-expanded="true" aria-controls="comment_collapse_{{id}}">
+                        </a>
+                      </li>
+                      <li>
+                        <table id="comment_vote_table_{{id}}" class="comment_vote_table hide">
                           <tr>
                             <td>
-                              <input id="id_{{id}}" class="range_vote" data-slider-id='id_{{id}}_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+                              <input id="comment_slider_{{id}}" class="comment_vote" data-slider-id='comment_slider_special_{{id}}' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" user-rank="{{userRank}}" data-slider-orientation="vertical" />
                             </td>
                           </tr>
                           <tr>
                             <td>
-                              <i id='id_{{id}}_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                              <i id='comment_clear_vote_{{id}}' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
                             </td>
                           </tr>
                         </table>
-                        <button id='id_{{id}}_vote' class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="auto" title="Vote">
-                          <i class="fa fa-fw fa-thumbs-up fa-2"></i>
-                          <span id="id_{{id}}_vote_rank" class="label label-default label-as-badge hide"> 32.1
+                        <a id='comment_vote_{{id}}' user-id="{{userId}}" class="text-muted hand" data-toggle="tooltip" data-placement="auto" title="Vote">
+                          <i class="fa fa-fw fa-thumbs-up"></i>
+                        </a>
+                      </li>
+                      <li><a href="/user/{{userId}}">{{userName}}</a></li>
+                      <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
+                        {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
                           </span>
-                        </button>
-                        <h1 class="panel-title">
+                      </li>
+                      {{^modified}}
+                      <li><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
+                      {{/modified}} {{#modified}}
+                      <li><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
+                      {{/modified}}
+                    </ul>
+                  </div>
+                  <div id="comment_collapse_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                      {{^deleted}}
+                      <span id="comment_text_{{id}}">{{#m2html}}{{{text}}}{{/m2html}}</span>
+                      <form id="comment_edit_form_{{id}}" role="form" class="hide">
+                        <input type="hidden" name="comment_id" value="{{id}}">
+                        <textarea id="comment_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="">{{text}}</textarea>
+                        <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                        <a id="comment_cancel_save_btn_{{id}}" class="btn btn-danger btn-block">Cancel</a>
+                      </form>
+                      <span class="hide" id="comment_reply_text_{{id}}"></span>
+                      <form id="comment_reply_form_{{id}}" role="form" class="hide">
+                        <input type="hidden" name="discussion_id" value="{{discussionId}}">
+                        <input type="hidden" name="parent_comment_id" value="{{id}}">
+                        <textarea id="comment_reply_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
+                        <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                      </form>
+                      <small>
+                        <ul class="list-inline">
+                          <li><a href="/comment/{{alphaId}}" class="text-muted">link</a></li>
+                          <li><a id="comment_source_btn_{{id}}" class="text-muted hand">source</a></li>
+                          <li class="hide"><a id="comment_edit_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">edit<a/></li>
+                          <li class="hide"><a id="comment_delete_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">delete<a/></li>
+                          <li class="hide"><a id="comment_delete_sure_yes_btn_{{id}}" class="text-danger hand">(Yes</a> 
+                            <a id="comment_delete_sure_no_btn_{{id}}" class="text-muted hand">/No)</a></li>
+                          <li><a id="comment_reply_btn_{{id}}" class="text-muted hand">reply<a/></li>
+                        </ul>
+                        </small> {{/deleted}}{{#deleted}}
+                      <i>deleted</i> {{/deleted}}{{>recurse}}
+                    </div>
+                  </div>
+                </div>
+                {{/embedded}}
+              </script>
+            </div>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="vote_tab">
+            <br>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel-group">
+                  <div id="candidates_div">
+                    <script id="candidates_template" type="x-tmpl-mustache">
+                      {{#.}}
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <!-- A sample range vote table -->
+                          <table id="id_{{id}}_range_vote_table" class="range_vote_table hide">
+                            <tr>
+                              <td>
+                                <input id="id_{{id}}" class="range_vote" data-slider-id='id_{{id}}_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <i id='id_{{id}}_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                              </td>
+                            </tr>
+                          </table>
+                          <button id='id_{{id}}_vote' class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="auto" title="Vote">
+                            <i class="fa fa-fw fa-thumbs-up fa-2"></i>
+                            <span id="id_{{id}}_vote_rank" class="label label-default label-as-badge hide"> 32.1
+                          </span>
+                          </button>
+                          <h1 class="panel-title">
                           <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_id_{{id}}" aria-expanded="true" aria-controls="collapse_id_{{id}}">
                             {{subject}}
                           </a>
                         </h1>
-                        <small id="user_candidate_option_list_{{id}}" class="hide user_candidate_options_btns">
+                          <small id="user_candidate_option_list_{{id}}" class="hide user_candidate_options_btns">
                           <ul class="list-inline">
                             <li><a id="edit_candidate_btn_{{id}}" class="text-muted hand edit_candidate_btn">Edit</a></li>
                             <li><a id="delete_candidate_btn_{{id}}" class="text-muted hand delete_candidate_btn">Delete</a></li>
@@ -395,86 +415,86 @@
                             <a id="delete_candidate_sure_no_btn_{{id}}" class="hide text-muted hand delete_candidate_sure_no_btn">/No)</a></li>
                           </ul>
                         </small>
-                      </div>
-                      <div id="collapse_id_{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                          {{#m2html}}{{{text}}}{{/m2html}}
+                        </div>
+                        <div id="collapse_id_{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            {{#m2html}}{{{text}}}{{/m2html}}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {{/.}} {{^.}}
-                    <p> No Options</p>
-                    {{/.}}
-                  </script>
+                      {{/.}} {{^.}}
+                      <p> No Options</p>
+                      {{/.}}
+                    </script>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-md-12">
-              <button id='add_a_candidate' class="btn btn-default btn-block"><i class="fa fa-plus fa-fw fa-2 hand" data-toggle="tooltip" data-placement="right" title="Add an option"></i> Add an Option</button>
+            <br>
+            <div class="row">
+              <div class="col-md-12">
+                <button id='add_a_candidate' class="btn btn-default btn-block"><i class="fa fa-plus fa-fw fa-2 hand" data-toggle="tooltip" data-placement="right" title="Add an option"></i> Add an Option</button>
+              </div>
+            </div>
+            <!-- Create Candidate form -->
+            <div class="row">
+              <div class="col-md-12">
+                <form id="candidate_form" role="form" class="hide">
+                  <input type="hidden" name="poll_id" value="">
+                  <input type="hidden" name="candidate_id" value="">
+                  <div class="form-group">
+                    <input id="candidate_subject" class="form-control" name="subject" type="text" data-bv-notempty="true" placeholder="Option Title (140 Character Limit)" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
+                  </div>
+                  <div class="form-group">
+                    <textarea id="edit_candidate_text" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-default btn-block">Save Option</button>
+                  <a class="candidate_save_cancel_btn btn btn-danger btn-block">Cancel</a>
+                </form>
+              </div>
             </div>
           </div>
-          <!-- Create Candidate form -->
-          <div class="row">
-            <div class="col-md-12">
-              <form id="candidate_form" role="form" class="hide">
-                <input type="hidden" name="poll_id" value="">
-                <input type="hidden" name="candidate_id" value="">
-                <div class="form-group">
-                  <input id="candidate_subject" class="form-control" name="subject" type="text" data-bv-notempty="true" placeholder="Option Title (140 Character Limit)" minlength="10" maxlength="140" data-bv-notempty-message="A Subject is required" />
-                </div>
-                <div class="form-group">
-                  <textarea id="edit_candidate_text" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-default btn-block">Save Option</button>
-                <a class="candidate_save_cancel_btn btn btn-danger btn-block">Cancel</a>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div role="tabpanel" class="tab-pane fade" id="results_tab">
-          <div class="row">
-            <div class="col-md-12">
-              <h3> Results</h3>
-              <svg class="chart">
-              </svg>
+          <div role="tabpanel" class="tab-pane fade" id="results_tab">
+            <div class="row">
+              <div class="col-md-12">
+                <h3> Results</h3>
+                <svg class="chart">
+                </svg>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Bootstrap core JavaScript
+      <!-- Bootstrap core JavaScript
       ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
-    <script src="../bower_components/toastr/toastr.js"></script>
-    <script src="../bower_components/mustache.js/mustache.js"></script>
-    <script src="../bower_components/holderjs/holder.js"></script>
-    <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
-    <script src="../bower_components/highcharts/highcharts.js"></script>
-    <script src="../bower_components/highcharts/modules/exporting.js"></script>
-    <script src="../bower_components/pickadate/lib/picker.js"></script>
-    <script src="../bower_components/pickadate/lib/picker.date.js"></script>
-    <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>
-    <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
-    <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
-    <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
-    <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
-    <script src="../bower_components/d3/d3.min.js"></script>
-    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
-    <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
-    <script src="../bower_components/moment/min/moment.min.js"></script>
-    <!-- my scripts -->
-    <script src="../js/tools.js"></script>
-    <script src="../js/common.js"></script>
-    <script src="../js/range_voting.js"></script>
-    <script src="../js/comment_voting.js"></script>
-    <script src="../js/poll.js"></script>
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+      <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+      <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+      <script src="../bower_components/toastr/toastr.js"></script>
+      <script src="../bower_components/mustache.js/mustache.js"></script>
+      <script src="../bower_components/holderjs/holder.js"></script>
+      <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
+      <script src="../bower_components/highcharts/highcharts.js"></script>
+      <script src="../bower_components/highcharts/modules/exporting.js"></script>
+      <script src="../bower_components/pickadate/lib/picker.js"></script>
+      <script src="../bower_components/pickadate/lib/picker.date.js"></script>
+      <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>
+      <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+      <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
+      <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
+      <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+      <script src="../bower_components/d3/d3.min.js"></script>
+      <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
+      <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
+      <script src="../bower_components/moment/min/moment.min.js"></script>
+      <!-- my scripts -->
+      <script src="../js/tools.js"></script>
+      <script src="../js/common.js"></script>
+      <script src="../js/range_voting.js"></script>
+      <script src="../js/comment_voting.js"></script>
+      <script src="../js/poll.js"></script>
 </body>
 
 </html>

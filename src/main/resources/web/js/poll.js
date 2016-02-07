@@ -64,7 +64,6 @@ function setupPoll() {
     // If it's a passworded poll, and that password is in the cookie
     if (data['private_password'] != null && 
       data['private_password'] != getCookie('poll_password_' + pollId)) {
-      console.log('redirected');
       window.location = '/private_poll/' + pollId;
     }
 
