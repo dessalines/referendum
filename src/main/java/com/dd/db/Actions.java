@@ -536,7 +536,17 @@ public class Actions {
 		}
 
 	}
+	
+	public static void addPollVisit(String userId, String pollId) {
+		POLL_VISIT.createIt("user_id", userId, 
+				"poll_id", pollId);
+	}
+	
+	public static void addTagVisit(String userId, String tagId) {
+		TAG_VISIT.createIt("user_id", userId, 
+				"tag_id", tagId);
+	}
 
-
+	
 
 }

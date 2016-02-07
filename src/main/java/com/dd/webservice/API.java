@@ -383,14 +383,17 @@ public class API {
 			try {	
 				Tools.allowAllHeaders(req, res);
 
-
+				
+				
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
 				Tools.dbInit();
 
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
+				
 				String json = Tools.replaceNewlines(POLL_VIEW.findFirst("id = ?", pollId).toJson(false));
-
-				log.info(json);
+				
+				Actions.addPollVisit(uv.getId().toString(), pollId);
 
 				return json;
 			} catch (Exception e) {

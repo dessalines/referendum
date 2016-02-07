@@ -14,7 +14,8 @@ INSERT INTO `candidate` (`id`,`poll_id`,`discussion_id`,`user_id`)
 	VALUES (1,1,2,1),(2,1,3,1),(3,1,4,2),(4,1,5,3);
 INSERT INTO `ballot` (`id`,`poll_id`,`user_id`,`candidate_id`,`rank`)
 	VALUES (1,1,1,1,82),(5,1,1,2,20),(8,1,1,4,32),(9,1,2,2,38),(10,1,3,2,67);
-
+INSERT INTO `tag` (`id`, `user_id`, `name`) 
+	VALUES (1,1,'Galaxy Trek'),(2,2,'Beans and Rice'),(3,3,'Garpfishing');
 
 INSERT INTO `comment` (id,discussion_id, text, user_id)
 	VALUES (1,1,'Level 1',1),(2,1,'Level 2',2),(3,1,'Level 2',3),(4,1,'Level 3',2),(5,1,'Level 4',1),

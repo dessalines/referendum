@@ -70,7 +70,7 @@
 <part>discussion_id</part>
 </key>
 </table>
-<table x="465" y="412" name="candidate">
+<table x="463" y="428" name="candidate">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -192,10 +192,14 @@
 <part>name</part>
 </key>
 </table>
-<table x="58" y="216" name="tag">
+<table x="57" y="215" name="tag">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="user_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="user" row="id" />
+</row>
 <row name="name" null="1" autoincrement="0">
 <datatype>VARCHAR(50)</datatype>
 <default>NULL</default></row>
@@ -238,7 +242,7 @@
 <part>tag_id</part>
 </key>
 </table>
-<table x="471" y="204" name="ballot">
+<table x="471" y="221" name="ballot">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -289,7 +293,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="368" y="27" name="full_user">
+<table x="389" y="7" name="full_user">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -298,6 +302,9 @@
 <default>NULL</default><relation table="user" row="id" />
 </row>
 <row name="name" null="1" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<default>NULL</default></row>
+<row name="email" null="1" autoincrement="0">
 <datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
 <row name="password_encrypted" null="1" autoincrement="0">
@@ -311,6 +318,12 @@
 </row>
 <key type="PRIMARY" name="">
 <part>id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>name</part>
+</key>
+<key type="UNIQUE" name="">
+<part>email</part>
 </key>
 </table>
 <table x="35" y="632" name="poll_sum_type">
@@ -360,6 +373,68 @@
 <key type="UNIQUE" name="">
 <part>comment_id</part>
 <part>user_id</part>
+</key>
+</table>
+<table x="618" y="6" name="login">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="user_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="user" row="id" />
+</row>
+<row name="auth" null="0" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<default>'NULL'</default></row>
+<row name="expire_time" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+<default>CURRENT_TIMESTAMP</default></row>
+<row name="created" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+<default>CURRENT_TIMESTAMP</default></row>
+<row name="modified" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="704" y="222" name="poll_visit">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="user_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="user" row="id" />
+</row>
+<row name="poll_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="poll" row="id" />
+</row>
+<row name="created" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+<default>CURRENT_TIMESTAMP</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="702" y="389" name="tag_visit">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="user_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="user" row="id" />
+</row>
+<row name="tag_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="tag" row="id" />
+</row>
+<row name="created" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+<default>CURRENT_TIMESTAMP</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
 </key>
 </table>
 </sql>

@@ -22,10 +22,18 @@ public class Tables {
 	@Table("poll_tag")
 	public static class PollTag extends Model {}
 	public static final PollTag POLL_TAG = new PollTag();
+	
+	@Table("poll_visit")
+	public static class PollVisit extends Model {}
+	public static final PollVisit POLL_VISIT = new PollVisit();
 
 	@Table("tag")
 	public static class Tag extends Model {}
 	public static final Tag TAG = new Tag();
+	
+	@Table("tag_visit")
+	public static class TagVisit extends Model {}
+	public static final TagVisit TAG_VISIT = new TagVisit();
 
 	@Table("candidate")
 	public static class Candidate extends Model {}

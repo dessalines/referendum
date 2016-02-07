@@ -104,6 +104,10 @@ http://code.tutsplus.com/tutorials/how-to-create-infinite-scroll-pagination--wp-
 http://jscroll.com/
 http://stackoverflow.com/questions/20584065/reinitializing-jscroll-after-ajax-call-still-loading-old-href-after-ajax-load
 
+Trend with sql query:
+http://stackoverflow.com/questions/20883195/identifying-trend-with-sql-query
+
+
 Main page - Discuss, Vote, Results
 
 
@@ -119,3 +123,7 @@ TODO
 * Poll paging
 * Results limit?
 * A user page : your comments, poll candidates, and votes
+
+* Trending categories
+* Trending polls
+* Use viewcounts as a way to 

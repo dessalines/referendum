@@ -124,6 +124,7 @@ DROP TABLE IF EXISTS `tag`;
     
 CREATE TABLE `tag` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `user_id` INTEGER NULL DEFAULT NULL,
   `name` VARCHAR(50) NULL DEFAULT NULL,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -251,6 +252,39 @@ CREATE TABLE `login` (
   PRIMARY KEY (`id`)
 );
 
+
+-- ---
+-- Table 'poll_visit'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `poll_visit`;
+    
+CREATE TABLE `poll_visit` (
+  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `user_id` INTEGER NULL DEFAULT NULL,
+  `poll_id` INTEGER NULL DEFAULT NULL,
+  `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'tag_visit'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `tag_visit`;
+    
+CREATE TABLE `tag_visit` (
+  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `user_id` INTEGER NULL DEFAULT NULL,
+  `tag_id` INTEGER NULL DEFAULT NULL,
+  `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+);
+
+
+
 -- ---
 -- Foreign Keys 
 -- ---
@@ -274,6 +308,7 @@ ALTER TABLE `comment` ADD FOREIGN KEY (discussion_id) REFERENCES `discussion` (`
 ALTER TABLE `comment` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `comment_tree` ADD FOREIGN KEY (parent_id) REFERENCES `comment` (`id`);
 ALTER TABLE `comment_tree` ADD FOREIGN KEY (child_id) REFERENCES `comment` (`id`);
+ALTER TABLE `tag` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `poll_tag` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
 ALTER TABLE `poll_tag` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
 ALTER TABLE `ballot` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
@@ -283,7 +318,10 @@ ALTER TABLE `full_user` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `comment_rank` ADD FOREIGN KEY (comment_id) REFERENCES `comment` (`id`);
 ALTER TABLE `comment_rank` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `login` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
-
+ALTER TABLE `poll_visit` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
+ALTER TABLE `poll_visit` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `tag_visit` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
+ALTER TABLE `tag_visit` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
 -- ---
 -- Table Properties
 -- ---
