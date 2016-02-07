@@ -158,7 +158,7 @@ public class Tools {
 			}
 		}
 
-		log.debug(GSON2.toJson(postMap));
+		log.info(GSON2.toJson(postMap));
 
 		return postMap;
 

@@ -23,6 +23,10 @@ public class Tables {
 	public static class PollTag extends Model {}
 	public static final PollTag POLL_TAG = new PollTag();
 	
+	@Table("poll_tag_view")
+	public static class PollTagView extends Model {}
+	public static final PollTagView POLL_TAG_VIEW = new PollTagView();
+	
 	@Table("poll_visit")
 	public static class PollVisit extends Model {}
 	public static final PollVisit POLL_VISIT = new PollVisit();

@@ -222,7 +222,8 @@ function getLastUrlPath() {
 
 }
 
-function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, noToast, clearForm) {
+function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, noToast, clearForm,
+  errorFunctions) {
   // !!!!!!They must have names unfortunately
   // An optional arg
   modalId = (typeof modalId === "undefined") ? "defaultValue" : modalId;
@@ -237,7 +238,7 @@ function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, n
 
   // serializes the form's elements.
   var formData = $(formId).serializeArray();
-  // console.log(formData);
+  console.log(formData);
 
   var btn = $("[type=submit]", formId);
 
@@ -292,6 +293,11 @@ function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, n
         toastr.error("Couldn't find endpoint " + url);
 
       }
+
+      if (errorFunctions != null) {
+        errorFunctions();
+      }
+
       btn.button('reset');
     }
   });
@@ -397,7 +403,7 @@ var standardDateFormatObj = {
     return function(text, render) {
       var t = parseInt(render(text));
       var date = new Date(t);
-      
+
       return moment(date).fromNow();
       // return date.customFormat("#YYYY#/#MM#/#DD#")
     }
@@ -562,4 +568,16 @@ function addOverlay() {
 
 function removeOverlay() {
   $('#overlay').remove();
+}
+
+
+function hideKeyboard(element) {
+  element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
+  element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
+  setTimeout(function() {
+    element.blur(); //actually close the keyboard
+    // Remove readonly attribute after keyboard is hidden.
+    element.removeAttr('readonly');
+    element.removeAttr('disabled');
+  }, 100);
 }

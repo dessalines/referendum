@@ -107,6 +107,9 @@ http://stackoverflow.com/questions/20584065/reinitializing-jscroll-after-ajax-ca
 Trend with sql query:
 http://stackoverflow.com/questions/20883195/identifying-trend-with-sql-query
 
+nesting forms:
+http://stackoverflow.com/a/21900324/1655478
+
 
 Main page - Discuss, Vote, Results
 

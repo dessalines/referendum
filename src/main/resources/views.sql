@@ -1,4 +1,5 @@
-drop view if exists candidate_view, ballot_view, user_login_view, poll_view, comment_view;
+drop view if exists candidate_view, ballot_view, user_login_view, poll_view, comment_view,
+poll_tag_view;
 
 create view candidate_view as
 select 
@@ -21,6 +22,15 @@ ballot.user_id,
 ballot.candidate_id,
 ballot.rank
 from ballot;
+
+create view poll_tag_view as 
+select poll_tag.id,
+poll_tag.poll_id,
+poll_tag.tag_id,
+tag.name
+from poll_tag
+left join tag
+on tag.id = poll_tag.tag_id;
 
 
 
@@ -62,13 +72,13 @@ left join full_user
 on poll.user_id = full_user.user_id;
 
 
-select poll_id,
-candidate_id,
-avg(rank) as avg,
-count(*) as votes_count
-from ballot
-group by poll_id,
-candidate_id;
+-- select poll_id,
+-- candidate_id,
+-- avg(rank) as avg,
+-- count(*) as votes_count
+-- from ballot
+-- group by poll_id,
+-- candidate_id;
 
 -- create view comment_view as
 -- select 

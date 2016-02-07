@@ -1,4 +1,5 @@
 var pollTemplate = $('#poll_template').html();
+var tagTemplate = $('#tag_template').html();
 var candidatesTemplate = $('#candidates_template').html();
 var commentsTemplate = $('#comments_template').html();
 var recurse = $("#recurse").html();
@@ -21,7 +22,120 @@ $(document).ready(function() {
 
   setupComments();
 
+  setupPollTags();
+
+  setupTagSearch();
+
+  setupClearPollTags();
+
 });
+
+function setupClearPollTags() {
+
+  $('#clear_poll_tags').click(function() {
+    simplePost('clear_tags/' + pollId, null, null,
+      function() {
+        setupPollTags();
+      }, null, null, null);
+  });
+
+}
+
+function setupTagSearch() {
+
+  $('input[name=tag_id]').val('');
+
+  var tagUrl = sparkService + 'tag_search/%QUERY';
+  var tagList = new Bloodhound({
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.whitespace,
+    // prefetch: '../data/films/post_1960.json',
+    remote: {
+      url: tagUrl,
+      wildcard: '%QUERY'
+    }
+  });
+
+  tagList.initialize();
+
+  var typeAhead = $('#search_box .typeahead').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 3,
+  }, {
+    name: 'tag_list',
+    // displayKey: 'search_tag',
+    source: tagList,
+    display: 'name'
+  }).bind('typeahead:selected', function(e, data, name) {
+    // console.log(e);
+    console.log(data);
+    // console.log(name);
+
+    // console.log(searchId);
+    // $('#search_id').val(searchId);
+
+    $('input[name=tag_id]').val(data['id']);
+
+    $('#tag_form').submit();
+  }).bind('typeahead:render', function(e) {
+
+    // Don't select the first one by default
+    // $('#tag_form').parent().find('.tt-selectable:first').addClass('tt-cursor');
+
+  });
+
+  // $('[name=search_input]').focus();
+
+  // $('.tt-input').focus();
+  setTimeout("$('[name=search_input]').focus();", 0);
+
+  $("#tag_form").submit(function(event) {
+    var formData = $("#tag_form").serializeArray();
+
+    hideKeyboard($('[name=search_input]'));
+
+    // var classList = document.getElementsByName('creators_list').className.split(/\s+/);
+    // console.log(classList);
+    console.log(formData);
+
+    // Save it into a different input field for some reason
+    $('input[name=tag_name]').val(formData[3].value);
+
+
+    // This removes the left tab considered active, so that it can be reshown with 
+    // updated data
+    $('li.active a[data-toggle="tab"]').parent().removeClass('active');
+
+
+    // Save the poll tag
+    standardFormPost('save_poll_tag', '#tag_form', null, null, function() {
+
+      // refetch the poll tags
+      setupPollTags();
+      $('input[name=tag_id]').val('');
+
+      tagList.initialize();
+
+    }, null, null, function() {
+      $('input[name=tag_id]').val('');
+    });
+
+    // console.log(searchString);
+
+
+    event.preventDefault();
+  });
+}
+
+
+function setupPollTags() {
+  getJson('get_poll_tags/' + pollId).done(function(e) {
+    var data = JSON.parse(e);
+    console.log(data);
+    fillMustacheWithJson(data, tagTemplate, '#tag_div');
+  });
+}
 
 function setupComments() {
   getJson('get_comments/' + pollId).done(function(e) {
@@ -62,7 +176,7 @@ function setupPoll() {
     console.log(data);
 
     // If it's a passworded poll, and that password is in the cookie
-    if (data['private_password'] != null && 
+    if (data['private_password'] != null &&
       data['private_password'] != getCookie('poll_password_' + pollId)) {
       window.location = '/private_poll/' + pollId;
     }

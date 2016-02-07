@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ import com.dd.voting.candidate.RangeCandidateResult;
 import com.dd.voting.election.RangeElection;
 import com.dd.voting.voting_system.choice_type.RangeVotingSystem;
 import com.dd.voting.voting_system.choice_type.RangeVotingSystem.RangeVotingSystemType;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 // http://ondras.zarovi.cz/sql/demo/?keyword=dd_tyhou
 
@@ -73,7 +75,7 @@ public class Actions {
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
 		d.set("subject", subject,
 				"text", text).saveIt();
-		
+
 		if (password != null) {
 			res.cookie("poll_password_" + pollId, password);
 		}
@@ -82,12 +84,12 @@ public class Actions {
 
 
 	}
-	
+
 	public static String unlockPoll(String pollId, String password, Response res) {
 
 		Poll p = POLL.findFirst("id = ? ", pollId);
 
-		
+
 		if (password.equals(p.getString("private_password"))) {
 			res.cookie("poll_password_" + pollId, password);
 		} else {
@@ -536,17 +538,65 @@ public class Actions {
 		}
 
 	}
-	
+
 	public static void addPollVisit(String userId, String pollId) {
 		POLL_VISIT.createIt("user_id", userId, 
 				"poll_id", pollId);
 	}
-	
+
 	public static void addTagVisit(String userId, String tagId) {
 		TAG_VISIT.createIt("user_id", userId, 
 				"tag_id", tagId);
 	}
 
+	public static String savePollTag(String userId, String pollId, String tagId, String newTagName) {
+
+		String message = null;
+
+		// If the tag isn't there, then add it
+		if (tagId == null) {
+
+			// Fetch to see if the tag exists first
+			Tag tag = TAG.findFirst("name = ?", newTagName);
+
+			if (tag == null) {
+				tag = TAG.createIt("user_id", userId,
+						"name", newTagName);
+				message = "New tag added";
+			}
+			
+			tagId = tag.getId().toString();
+			
+		} else {
+			message = "Tag added";
+		}
+
+
+		try {
+			POLL_TAG.createIt("poll_id", pollId,
+					"tag_id", tagId);
+		} catch (DBException e) {
+			throw new NoSuchElementException("Tag already added");
+		}
+
+		return message;
+	}
 	
+	public static String clearTags(String userId, String pollId) {
+		
+		// Make sure its the correct user
+		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
+		
+		if (p == null) {
+			throw new NoSuchElementException("Wrong user");
+		}
+		
+		
+		POLL_TAG.delete("poll_id = ?", pollId);
+		
+		return "Tags deleted";
+	}
+
+
 
 }

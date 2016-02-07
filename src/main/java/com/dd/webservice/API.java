@@ -4,6 +4,7 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.before;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,7 +140,8 @@ public class API {
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
 				String password = vars.get("password");
-				String pollId = vars.get("poll_id");
+				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
+
 
 				String message = Actions.unlockPoll(pollId, password, res);
 
@@ -198,7 +200,7 @@ public class API {
 
 				String subject = vars.get("subject");
 				String text = vars.get("text");
-				String pollId = vars.get("poll_id");
+				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
 				String candidateId = vars.get("candidate_id");
 
 
@@ -553,6 +555,29 @@ public class API {
 
 
 		});
+		
+		get("/get_poll_tags/:pollId", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+				Tools.dbInit();
+
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+				
+				String json = POLL_TAG_VIEW.find("poll_id = ?", pollId).toJson(false);
+				
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
 
 		post("/save_ballot/:pollId/:candidateId/:rank", (req, res) -> {
 			try {
@@ -623,6 +648,93 @@ public class API {
 			}
 
 		});
+		
+		get("/tag_search/:query", (req, res) -> {
+
+			try {
+
+				Tools.allowAllHeaders(req, res);
+				Tools.set15MinuteCache(req, res);
+				Tools.dbInit();
+
+				String query = req.params(":query");
+
+				String json = null;
+
+				String queryStr = constructQueryString(query, "name");
+				log.info(queryStr);
+
+				json = TAG.find(queryStr.toString()).limit(5).toJson(false);
+
+				log.info(json);
+
+				return json;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+		
+		post("/save_poll_tag", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				Tools.dbInit();
+				
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
+
+				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
+
+				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
+				String tagId = vars.get("tag_id");
+				String tagName = vars.get("tag_name");
+
+				String message = Actions.savePollTag(uv.getId().toString(), pollId, tagId, tagName);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
+		post("/clear_tags/:pollId", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				Tools.dbInit();
+				
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
+				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+
+				String message = Actions.clearTags(uv.getId().toString(), pollId);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
+		
 
 		post("/login", (req, res) -> {
 			try {
@@ -685,6 +797,34 @@ public class API {
 
 
 
+
+	}
+	
+	public static String constructQueryString(String query, String columnName) {
+
+		try {
+			query = java.net.URLDecoder.decode(query, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		String[] splitWords = query.split(" ");
+		StringBuilder queryStr = new StringBuilder();
+
+		for(int i = 0;;) {
+			String word = splitWords[i++].replaceAll("'", "_");
+
+			String likeQuery = columnName + " like '%" + word + "%'";
+
+			queryStr.append(likeQuery);
+
+			if (i < splitWords.length) {
+				queryStr.append(" and ");
+			} else {
+				break;
+			}
+		}
+
+		return queryStr.toString();
 
 	}
 
