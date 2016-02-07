@@ -24,6 +24,9 @@ public class Main {
 	@Option(name="-maintenance", usage="Redirects to the maintenance page")
 	private boolean maintenanceRedirect;
 
+	@Option(name="-local", usage="Use the local webservice")
+	private boolean local;
+
 	public void doMain(String[] args) {
 
 		parseArguments(args);
@@ -47,7 +50,7 @@ public class Main {
 
 		Tools.copyResourcesToHomeDir(true);
 
-		Tools.addExternalWebServiceVarToTools();
+		Tools.addExternalWebServiceVarToTools(local);
 
 		// Startup the web service
 		WebService.start();

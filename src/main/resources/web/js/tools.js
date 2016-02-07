@@ -7,7 +7,6 @@ var localSparkService = "http://127.0.0.1:4567/"
 
 
 
-var sparkService = localSparkService;
 
 function getJson(shortUrl) {
   var url = sparkService + shortUrl; // the script where you handle the form input.

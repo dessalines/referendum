@@ -431,7 +431,7 @@ public class Tools {
 		}
 	}
 
-	public static void addExternalWebServiceVarToTools() {
+	public static void addExternalWebServiceVarToTools(Boolean local) {
 
 		log.info("tools.js = " + DataSources.TOOLS_JS());
 		try {
@@ -446,9 +446,13 @@ public class Tools {
 			String externalServiceLine = "var externalSparkService ='" + 
 					DataSources.EXTERNAL_URL + "';";
 
-			lines.set(0, interalServiceLine);
+      String sparkServiceLine = (local) ? "var sparkService = '" +  DataSources.WEB_SERVICE_URL + "';" : 
+        "var sparkService = '" +  DataSources.EXTERNAL_URL + "';";
+			
+      lines.set(0, interalServiceLine);
 			lines.set(1, ddServiceLine);
 			lines.set(2, externalServiceLine);
+			lines.set(3, sparkServiceLine);
 
 			java.nio.file.Files.write(Paths.get(DataSources.TOOLS_JS()), lines);
 			Files.touch(new File(DataSources.TOOLS_JS()));
