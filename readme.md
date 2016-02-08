@@ -129,4 +129,5 @@ TODO
 
 * Trending categories
 * Trending polls
-* Use viewcounts as a way to 
+* Use viewcounts as a way to do trendings/filter spam
+* Tag pages w/trending polls on them
