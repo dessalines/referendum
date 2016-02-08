@@ -152,6 +152,7 @@
                       <a class="" role="button" data-toggle="collapse" href="#advanced_options" aria-expanded="false" aria-controls="advanced_options">
                         <i id='ex1_clear_vote' class="fa fa-fw fa-plus"></i> Advanced Options
                       </a>
+                      <br>
                       <div class="collapse" id="advanced_options">
                         <h5> Privacy</h5>
                         <div class="row">
@@ -201,12 +202,17 @@
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <a id="clear_poll_tags" class="btn btn-danger text-muted hand">Clear tags</a>
+                          <a id="clear_poll_tags" class="btn btn-danger form-btn text-muted hand">Clear tags</a>
                         </div>
                       </div>
-                      <div class="btn-group">
-                        <button type="submit" class="btn btn-default">Save Poll</button>
-                        <a class="poll_save_cancel_btn btn btn-danger">Cancel</a>
+                      <br>
+                      <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                          <button type="submit" class="btn btn-default">Save Poll</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                          <a class="poll_save_cancel_btn btn btn-danger">Cancel</a>
+                        </div>
                       </div>
                     </form>
                     <form id="tag_form" class="" role="search" class="form-inline">
@@ -460,8 +466,14 @@
                 <div class="form-group">
                   <textarea id="edit_candidate_text" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="Description..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-default btn-block">Save Option</button>
-                <a class="candidate_save_cancel_btn btn btn-danger btn-block">Cancel</a>
+                <div class="btn-group btn-group-justified" role="group">
+                  <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-default">Save Option</button>
+                  </div>
+                  <div class="btn-group" role="group">
+                    <a class="candidate_save_cancel_btn btn btn-danger">Cancel</a>
+                  </div>
+                </div>
               </form>
             </div>
           </div>

@@ -31,6 +31,11 @@
 /*.slider-track-high {
   background: #BABABA;
 }*/
+
+.form-btn {
+  margin-top: 0px !important;
+}
+
 .tt-hint {
   color: #aaa
 }
@@ -79,7 +84,7 @@
 }
 
 .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group {
-  /*margin-top: -0.5px;*/
+  margin-top: 0px;
   height: 38px;
 }
 

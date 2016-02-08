@@ -422,8 +422,6 @@ public class API {
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
-
-
 				String json = BALLOT_VIEW.find("poll_id = ? and user_id = ?",
 						pollId, uv.getId().toString()).toJson(false);
 
@@ -664,7 +662,7 @@ public class API {
 				String queryStr = constructQueryString(query, "name");
 				log.info(queryStr);
 
-				json = TAG.find(queryStr.toString()).limit(5).toJson(false);
+				json = TAG.find(queryStr.toString()).limit(5).orderBy("name asc").toJson(false);
 
 				log.info(json);
 

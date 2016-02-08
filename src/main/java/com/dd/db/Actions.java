@@ -77,6 +77,7 @@ public class Actions {
 				"text", text).saveIt();
 
 		if (password != null) {
+			res.removeCookie("poll_password_" + pollId);
 			res.cookie("poll_password_" + pollId, password);
 		}
 
@@ -91,6 +92,7 @@ public class Actions {
 
 
 		if (password.equals(p.getString("private_password"))) {
+			res.removeCookie("poll_password_" + pollId);
 			res.cookie("poll_password_" + pollId, password);
 		} else {
 			throw new NoSuchElementException("Incorrect password");
@@ -316,6 +318,9 @@ public class Actions {
 
 	public static String setCookiesForLogin(FullUser fu, String auth, Response res) {
 		Boolean secure = false;
+		res.removeCookie("auth");
+		res.removeCookie("uid");
+		res.removeCookie("username");
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uid", fu.getString("user_id"), DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("username", fu.getString("name"), DataSources.EXPIRE_SECONDS, secure);
@@ -325,6 +330,8 @@ public class Actions {
 
 	public static String setCookiesForLogin(User user, String auth, Response res) {
 		Boolean secure = false;
+		res.removeCookie("auth");
+		res.removeCookie("uid");
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uid", user.getId().toString(), DataSources.EXPIRE_SECONDS, secure);
 
