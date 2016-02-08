@@ -138,3 +138,82 @@ GROUP BY a.child_id;
 
 
 
+-- A z-score example
+select * from (
+select
+    t.id,
+    t.created,
+    abs((t.created - tt.created_avg) / tt.created_stdev) as z_score
+from poll_visit as t 
+cross join (
+	select 
+     avg(tt.created) as created_avg,
+     stddev(tt.created) as created_stdev
+     from poll_visit as tt
+   ) as tt
+) a
+order by a.z_score asc;
+
+
+-- hits per last hour
+select
+poll_id,
+count(id) as hits
+from poll_visit
+where created > DATE_SUB(NOW(), INTERVAL 1 HOUR)
+group by poll_id;
+
+-- historic hits per last hour
+select poll_id,
+date_format(created - interval 1 hour, '%Y-%m-%d-%H') AS hour_grouped,
+count(created) as hits
+from poll_visit
+group by poll_id, hour_grouped;
+
+-- average historic hits per hour
+select poll_id,
+avg(a.hits) as avg_hits,
+stddev(a.hits) as std_hits
+from (
+select poll_id,
+date_format(created - interval 1 hour, '%Y-%m-%d-%H') AS hour_grouped,
+count(created) as hits
+from poll_visit
+group by poll_id, hour_grouped
+) as a
+group by poll_id;
+
+-- average historic hits along with the last hit, the Z-FUCKING SCORE
+select * from (
+	select *,
+	abs((b.hits - tt.avg_hits) / tt.std_hits) as z_score
+	from (
+		select
+		poll_id,
+		count(*) as hits
+		from poll_visit
+		where created > DATE_SUB(NOW(), INTERVAL 1 HOUR)
+		group by poll_id) as b
+	cross join (
+		select poll_id,
+		avg(a.hits) as avg_hits,
+		stddev(a.hits) as std_hits
+		from (
+			select
+			date_format(created - interval 1 hour, '%Y-%m-%d-%H') AS hour_grouped,
+			count(created) as hits
+			from poll_visit
+			group by poll_id, hour_grouped
+		) as a
+		group by poll_id
+	) as tt
+	on b.poll_id = tt.poll_id
+	) as c
+order by c.z_score asc;
+
+
+
+
+
+
+
