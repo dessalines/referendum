@@ -1,5 +1,5 @@
 drop view if exists candidate_view, ballot_view, user_login_view, poll_view, comment_view,
-poll_tag_view;
+poll_tag_view, tag_view, poll_ungrouped_view;
 
 create view candidate_view as
 select 
@@ -32,6 +32,35 @@ from poll_tag
 left join tag
 on tag.id = poll_tag.tag_id;
 
+create view tag_view as 
+select id,
+user_id,
+name,
+tag_visit_trending_hour.hits as hour_hits,
+tag_visit_trending_hour.z_score as hour_score,
+tag_visit_trending_day.hits as day_hits,
+tag_visit_trending_day.z_score as day_score,
+tag_visit_trending_week.hits as week_hits,
+tag_visit_trending_week.z_score as week_score,
+tag_visit_trending_month.hits as month_hits,
+tag_visit_trending_month.z_score as month_score,
+tag_visit_trending_year.hits as year_hits,
+tag_visit_trending_year.z_score as year_score,
+created,
+modified
+from tag
+left join tag_visit_trending_hour
+on tag_visit_trending_hour.tag_id = tag.id
+left join tag_visit_trending_day
+on tag_visit_trending_day.tag_id = tag.id
+left join tag_visit_trending_week
+on tag_visit_trending_week.tag_id = tag.id
+left join tag_visit_trending_month
+on tag_visit_trending_month.tag_id = tag.id
+left join tag_visit_trending_year
+on tag_visit_trending_year.tag_id = tag.id
+group by tag.id;
+
 
 
 
@@ -56,11 +85,26 @@ poll_type.name as poll_type_name,
 poll_sum_type_id,
 poll_sum_type.name as poll_sum_type_name,
 private_password,
-discussion_id,
+poll.discussion_id,
 poll.user_id,
 coalesce(full_user.name, concat('user_',poll.user_id)) as user_name,
 subject,
-text
+discussion.text,
+count(comment.id) as number_of_comments,
+tag.id as tag_id,
+tag.name as tag_name,
+poll_visit_trending_hour.hits as hour_hits,
+poll_visit_trending_hour.z_score as hour_score,
+poll_visit_trending_day.hits as day_hits,
+poll_visit_trending_day.z_score as day_score,
+poll_visit_trending_week.hits as week_hits,
+poll_visit_trending_week.z_score as week_score,
+poll_visit_trending_month.hits as month_hits,
+poll_visit_trending_month.z_score as month_score,
+poll_visit_trending_year.hits as year_hits,
+poll_visit_trending_year.z_score as year_score,
+poll.created,
+poll.modified
 from poll
 inner join discussion
 on discussion.id = poll.discussion_id
@@ -69,7 +113,80 @@ on poll_type.id = poll.poll_type_id
 inner join poll_sum_type
 on poll_sum_type.id = poll.poll_sum_type_id
 left join full_user
-on poll.user_id = full_user.user_id;
+on poll.user_id = full_user.user_id
+left join comment 
+on comment.discussion_id = poll.discussion_id
+left join poll_tag
+on poll_tag.poll_id = poll.id
+left join tag 
+on tag.id = poll_tag.tag_id
+left join poll_visit_trending_hour
+on poll_visit_trending_hour.poll_id = poll.id
+left join poll_visit_trending_day
+on poll_visit_trending_day.poll_id = poll.id
+left join poll_visit_trending_week
+on poll_visit_trending_week.poll_id = poll.id
+left join poll_visit_trending_month
+on poll_visit_trending_month.poll_id = poll.id
+left join poll_visit_trending_year
+on poll_visit_trending_year.poll_id = poll.id
+group by poll.id;
+
+create view poll_ungrouped_view as 
+select poll.id,
+poll_type_id,
+poll_type.name as poll_type_name,
+poll_sum_type_id,
+poll_sum_type.name as poll_sum_type_name,
+private_password,
+poll.discussion_id,
+poll.user_id,
+coalesce(full_user.name, concat('user_',poll.user_id)) as user_name,
+subject,
+discussion.text,
+count(comment.id) as number_of_comments,
+tag.id as tag_id,
+tag.name as tag_name,
+poll_visit_trending_hour.hits as hour_hits,
+poll_visit_trending_hour.z_score as hour_score,
+poll_visit_trending_day.hits as day_hits,
+poll_visit_trending_day.z_score as day_score,
+poll_visit_trending_week.hits as week_hits,
+poll_visit_trending_week.z_score as week_score,
+poll_visit_trending_month.hits as month_hits,
+poll_visit_trending_month.z_score as month_score,
+poll_visit_trending_year.hits as year_hits,
+poll_visit_trending_year.z_score as year_score,
+poll.created,
+poll.modified
+from poll
+inner join discussion
+on discussion.id = poll.discussion_id
+inner join poll_type 
+on poll_type.id = poll.poll_type_id
+inner join poll_sum_type
+on poll_sum_type.id = poll.poll_sum_type_id
+left join full_user
+on poll.user_id = full_user.user_id
+left join comment 
+on comment.discussion_id = poll.discussion_id
+left join poll_tag
+on poll_tag.poll_id = poll.id
+left join tag 
+on tag.id = poll_tag.tag_id
+left join poll_visit_trending_hour
+on poll_visit_trending_hour.poll_id = poll.id
+left join poll_visit_trending_day
+on poll_visit_trending_day.poll_id = poll.id
+left join poll_visit_trending_week
+on poll_visit_trending_week.poll_id = poll.id
+left join poll_visit_trending_month
+on poll_visit_trending_month.poll_id = poll.id
+left join poll_visit_trending_year
+on poll_visit_trending_year.poll_id = poll.id
+group by poll.id, poll_tag.id;
+
+
 
 
 -- select poll_id,
@@ -176,17 +293,24 @@ avg(a.hits) as avg_hits,
 stddev(a.hits) as std_hits
 from (
 select poll_id,
-date_format(created - interval 1 hour, '%Y-%m-%d-%H') AS hour_grouped,
+date_format(created - interval 1 hour, '%Y-%m') AS month_grouped,
 count(created) as hits
 from poll_visit
-group by poll_id, hour_grouped
+group by poll_id, month_grouped
 ) as a
 group by poll_id;
 
+
 -- average historic hits along with the last hit, the Z-FUCKING SCORE
-select * from (
+-- from last hour
+select poll_id,
+hits,
+avg_hits,
+std_hits,
+z_score
+ from (
 	select *,
-	abs((b.hits - tt.avg_hits) / tt.std_hits) as z_score
+	coalesce(((b.hits - tt.avg_hits) / tt.std_hits),-9999) as z_score
 	from (
 		select
 		poll_id,
@@ -195,21 +319,24 @@ select * from (
 		where created > DATE_SUB(NOW(), INTERVAL 1 HOUR)
 		group by poll_id) as b
 	cross join (
-		select poll_id,
+		select poll_id as poll_id_2,
 		avg(a.hits) as avg_hits,
 		stddev(a.hits) as std_hits
 		from (
-			select
-			date_format(created - interval 1 hour, '%Y-%m-%d-%H') AS hour_grouped,
+			select poll_id,
+			date_format(created - interval 1 HOUR, '%Y-%m-%d-%H') AS hour_grouped,
 			count(created) as hits
 			from poll_visit
 			group by poll_id, hour_grouped
 		) as a
 		group by poll_id
 	) as tt
-	on b.poll_id = tt.poll_id
+	on b.poll_id = tt.poll_id_2
 	) as c
-order by c.z_score asc;
+order by c.z_score desc;
+
+
+
 
 
 

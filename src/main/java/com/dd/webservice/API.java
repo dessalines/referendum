@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.Model;
+import org.javalite.activejdbc.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,7 +131,7 @@ public class API {
 			}
 
 		});
-		
+
 		post("/unlock_poll", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
@@ -385,16 +388,16 @@ public class API {
 			try {	
 				Tools.allowAllHeaders(req, res);
 
-				
-				
+
+
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
 				Tools.dbInit();
 
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
-				
+
 				String json = Tools.replaceNewlines(POLL_VIEW.findFirst("id = ?", pollId).toJson(false));
-				
+
 				Actions.addPollVisit(uv.getId().toString(), pollId);
 
 				return json;
@@ -553,7 +556,82 @@ public class API {
 
 
 		});
-		
+
+		get("/get_trending_polls/:tagId/:order/:pageSize/:startIndex", (req, res) -> {
+
+			try {
+				Tools.allowAllHeaders(req, res);
+
+				Tools.dbInit();
+
+				String tagId = req.params(":tagId");
+				String order = req.params(":order");
+				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
+				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
+				
+
+				Paginator polls = null;
+
+				if (tagId.equals("all")) {
+					polls = new Paginator<PollView>(PollView.class,
+							pageSize, 
+							"1=?", "1").
+							orderBy(order);
+				} else {
+					polls = new Paginator<PollUngroupedView>(PollUngroupedView.class, 
+							pageSize, 
+							"tag_id = ?", tagId).
+							orderBy(order);
+				}
+
+				Integer pageNum = (startIndex/pageSize)+1;
+
+				String json = Tools.replaceNewlines(polls.getPage(pageNum).toJson(false));
+
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+
+		get("/get_trending_tags/:order/:pageSize/:startIndex", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+				Tools.dbInit();
+
+				String order = req.params(":order");
+				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
+				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
+
+				Paginator tags = null;
+				
+				tags = new Paginator<TagView>(TagView.class,
+						pageSize, 
+						"1=?", "1").
+						orderBy(order);
+
+				Integer pageNum = (startIndex/pageSize)+1;
+
+				String json = tags.getPage(pageNum).toJson(false);
+
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+
 		get("/get_poll_tags/:pollId", (req, res) -> {
 
 			try {	
@@ -562,9 +640,9 @@ public class API {
 				Tools.dbInit();
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
-				
+
 				String json = POLL_TAG_VIEW.find("poll_id = ?", pollId).toJson(false);
-				
+
 				return json;
 			} catch (Exception e) {
 				res.status(666);
@@ -576,6 +654,31 @@ public class API {
 
 
 		});
+		
+		get("/get_tag/:tagId", (req, res) -> {
+
+			try {	
+				Tools.allowAllHeaders(req, res);
+
+				Tools.dbInit();
+
+				String tagId = req.params(":tagId");
+
+				String json = TAG_VIEW.findFirst("id = ?", tagId).toJson(false);
+
+				return json;
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+
+
 
 		post("/save_ballot/:pollId/:candidateId/:rank", (req, res) -> {
 			try {
@@ -646,7 +749,7 @@ public class API {
 			}
 
 		});
-		
+
 		get("/tag_search/:query", (req, res) -> {
 
 			try {
@@ -678,14 +781,14 @@ public class API {
 
 
 		});
-		
+
 		post("/save_poll_tag", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
-				
+
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
@@ -707,14 +810,14 @@ public class API {
 			}
 
 		});
-		
+
 		post("/clear_tags/:pollId", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
-				
+
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
@@ -731,8 +834,8 @@ public class API {
 			}
 
 		});
-		
-		
+
+
 
 		post("/login", (req, res) -> {
 			try {
@@ -797,7 +900,7 @@ public class API {
 
 
 	}
-	
+
 	public static String constructQueryString(String query, String columnName) {
 
 		try {

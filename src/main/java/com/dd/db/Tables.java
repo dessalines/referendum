@@ -14,6 +14,10 @@ public class Tables {
 	@Table("poll_view")
 	public static class PollView extends Model {}
 	public static final PollView POLL_VIEW = new PollView();
+	
+	@Table("poll_ungrouped_view")
+	public static class PollUngroupedView extends Model {}
+	public static final PollUngroupedView POLL_UNGROUPED_VIEW = new PollUngroupedView();
 
 	@Table("poll_type")
 	public static class PollType extends Model {}
@@ -34,6 +38,10 @@ public class Tables {
 	@Table("tag")
 	public static class Tag extends Model {}
 	public static final Tag TAG = new Tag();
+	
+	@Table("tag_view")
+	public static class TagView extends Model {}
+	public static final TagView TAG_VIEW = new TagView();
 	
 	@Table("tag_visit")
 	public static class TagVisit extends Model {}

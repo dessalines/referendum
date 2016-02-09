@@ -31,5 +31,25 @@ public class DynamicPages {
 			
 			return Tools.readFile(DataSources.PAGES("comment"));
 		});
+		
+		get("tag/:tagId", (req, res) -> {
+			Tools.allowAllHeaders(req, res);
+			
+			return Tools.readFile(DataSources.PAGES("tag"));
+		});
+		
+		get("browse_tags", (req, res) -> {
+			Tools.allowAllHeaders(req, res);
+			
+			return Tools.readFile(DataSources.PAGES("browse_tags"));
+		});
+		
+		get("browse_polls", (req, res) -> {
+			Tools.allowAllHeaders(req, res);
+			
+			return Tools.readFile(DataSources.PAGES("browse_polls"));
+		});
+		
+		
 	}
 }

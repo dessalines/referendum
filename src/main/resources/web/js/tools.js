@@ -401,10 +401,16 @@ function simplePost(shortUrl, postData, reload, successFunctions, noToast, exter
 var standardDateFormatObj = {
   "dateformat": function() {
     return function(text, render) {
-      var t = parseInt(render(text));
-      var date = new Date(t);
 
-      return moment(date).fromNow();
+      var t = render(text);
+      if (moment(t).isValid()) {
+        return moment(t).fromNow();
+      } else {
+        t = parseInt(render(text));
+        var date = new Date(t);
+        return moment(date).fromNow();
+      }
+
       // return date.customFormat("#YYYY#/#MM#/#DD#")
     }
   }

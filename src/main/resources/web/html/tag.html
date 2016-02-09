@@ -81,35 +81,24 @@
     <!--Main Content -->
     <div class="container">
       <div class="row">
-        <div class="col-md-6 vertical-line-right">
-          <h3><a href="#">Referendum</a></h3>
-          <p>A group decision-making and polling platform</p>
+        <div class="col-md-12">
+          <h3 class="text-center">Trending Polls for <span id="tag_name"></span></h3>
           <hr>
-          <p><a href="https://en.wikipedia.org/wiki/Direct_democracy">Direct democracy</a> is the future, but <i>how might it work in practice?</i>
-          </p>
-          <p> How can increasingly larger groups of people come to a <a href="https://en.wikipedia.org/wiki/Consensus_decision-making">consensus</a>, when there are <i>too many of them to fit into one room?</i>
-          </p>
-          <p> Referendum is a simple platform, created out of a desire to answer those questions. I wanted for people to be able to make <i>dynamic polls</i>, where voters could contribute options themselves. I wanted the system to feature <b>discussion before voting</b>, a key feature in <a href="https://en.wikipedia.org/wiki/Consensus_decision-making#Objectives">collaborative systems</a>. I wanted it to have <b>bottom-up democracy</b>, <a href="http://rangevoting.org/UniqBest.html">minimizing voter regret</a> by using the best voting method possible, <a href="http://rangevoting.org/">Range Voting</a> (also known as olympic score voting).</p>
-          <p> Check out a sample poll <a href="">here</a>.
-          </p>
-          <ul>
-            <li> Polls can be private, or open.</li>
-            <li> Uses <a href="http://rangevoting.org/">Range Voting</a>.</li>
-            <li> <a href="http://rangevoting.org/UniqBest.html">Why Range Voting is the better than other voting methods</a>.</li>
-            <li> Code fully open source on <a href=""> Github</a>.</li>
-          </ul>
-          <br>
-          <button class="btn btn-default btn-block create_empty_poll"> Create a poll</button>
-        </div>
-        <div class="col-md-6">
-          <h4 class="text-center">Trending Polls</h4>
-          <hr>
+          <div class="text-center">
+            <ul id="poll_trending_ul" class="pagination pagination-sm">
+              <li><a class="text-muted hand" data-type="hour">hour</a></li>
+              <li class="active"><a class="text-muted hand" data-type="day">day</a></li>
+              <li><a class="text-muted hand" data-type="week">week</a></li>
+              <li><a class="text-muted hand" data-type="month">month</a></li>
+              <li><a class="text-muted hand" data-type="year">year</a></li>
+            </ul>
+          </div>
           <div id="trending_polls_div">
             <script id="trending_polls_template" type="x-tmpl-mustache">
               {{#.}}
-              <h5><a href="/poll/{{id}}" class="text-muted">{{subject}}</a></h5>
-              <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a> to {{#tag_name}}
-                <a href="/tag/{{tag_id}}" class="label label-default"> {{tag_name}}</a>{{/tag_name}}</p>
+              <h6><a href="/poll/{{id}}" class="text-muted">{{subject}}</a></h6>
+              <p>submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a> to
+                <a href="/tag/{{tag_id}}" class="label label-default"> {{tag_name}}</a></p>
               <small>
               <ul class="list-inline">
                 <li><a class="text-muted" href="/poll/{{id}}">{{number_of_comments}} comments</a></li>
@@ -118,15 +107,6 @@
               </small> {{/.}}
             </script>
           </div>
-          <p class="text-right"><a class="text-muted" href="/browse_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
-          <h4 class="text-center">Trending Tags</h4>
-          <hr>
-          <div id="trending_tags_div">
-            <script id="trending_tags_template" type="x-tmpl-mustache">
-              {{#.}} <a href="/tag/{{id}}" class="label label-default">{{name}}</a> {{/.}}
-            </script>
-          </div>
-          <p class="text-right"><a class="text-muted" href="/browse_tags"> more tags <i class="fa fa-arrow-right"></i></a></p>
         </div>
       </div>
     </div>
@@ -214,9 +194,7 @@
       <!-- my scripts -->
       <script src="../js/tools.js"></script>
       <script src="../js/common.js"></script>
-      <script src="../js/home.js"></script>
-      <script src="../js/browse_tags.js"></script>
-      <script src="../js/browse_polls.js"></script>
+      <script src="../js/tag.js"></script>
 </body>
 
 </html>

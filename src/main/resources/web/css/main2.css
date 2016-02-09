@@ -32,6 +32,27 @@
   background: #BABABA;
 }*/
 
+.info-line {
+  margin-bottom : 5px;
+}
+.label {
+  display: inline-table;
+  line-height: initial;
+}
+
+.col-xs-3:nth-child(4n+1),
+.col-md-3:nth-child(4n+1),
+.col-md-2:nth-child(6n+1),
+.col-md-4:nth-child(3n+1) {
+  clear: left;
+}
+
+
+.pagination {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .form-btn {
   margin-top: 0px !important;
 }

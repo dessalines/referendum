@@ -367,4 +367,132 @@ ALTER TABLE `tag_visit` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
 -- ('','','','');
 -- INSERT INTO `poll_sum_type` (`id`,`name`) VALUES
 -- ('','');
+
+
+-- Create the trending tables and keys
+DROP TABLE IF EXISTS `poll_visit_trending_hour`;
+CREATE TABLE `poll_visit_trending_hour` (
+  `poll_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`poll_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `poll_visit_trending_hour` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+
+DROP TABLE IF EXISTS `poll_visit_trending_day`;
+CREATE TABLE `poll_visit_trending_day` (
+  `poll_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`poll_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `poll_visit_trending_day` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+
+DROP TABLE IF EXISTS `poll_visit_trending_week`;
+CREATE TABLE `poll_visit_trending_week` (
+  `poll_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`poll_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `poll_visit_trending_week` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+
+DROP TABLE IF EXISTS `poll_visit_trending_month`;
+CREATE TABLE `poll_visit_trending_month` (
+  `poll_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`poll_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `poll_visit_trending_month` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+
+DROP TABLE IF EXISTS `poll_visit_trending_year`;
+CREATE TABLE `poll_visit_trending_year` (
+  `poll_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`poll_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `poll_visit_trending_year` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+
+-- the tag tables:
+
+-- Create the trending tables and keys
+DROP TABLE IF EXISTS `tag_visit_trending_hour`;
+CREATE TABLE `tag_visit_trending_hour` (
+  `tag_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`tag_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `tag_visit_trending_hour` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+
+DROP TABLE IF EXISTS `tag_visit_trending_day`;
+CREATE TABLE `tag_visit_trending_day` (
+  `tag_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`tag_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `tag_visit_trending_day` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+
+DROP TABLE IF EXISTS `tag_visit_trending_week`;
+CREATE TABLE `tag_visit_trending_week` (
+  `tag_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`tag_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `tag_visit_trending_week` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+
+DROP TABLE IF EXISTS `tag_visit_trending_month`;
+CREATE TABLE `tag_visit_trending_month` (
+  `tag_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`tag_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `tag_visit_trending_month` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+
+DROP TABLE IF EXISTS `tag_visit_trending_year`;
+CREATE TABLE `tag_visit_trending_year` (
+  `tag_id` INTEGER DEFAULT NULL,
+  `hits` INTEGER NOT NULL DEFAULT '0',
+  `avg_hits` double DEFAULT NULL,
+  `std_hits` double DEFAULT NULL,
+  `z_score` double DEFAULT NULL,
+  PRIMARY KEY (`tag_id`),
+  INDEX(`z_score`)
+);
+ALTER TABLE `tag_visit_trending_year` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+
+
 SET FOREIGN_KEY_CHECKS=1;
+

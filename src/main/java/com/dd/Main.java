@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
+import com.dd.scheduled.ScheduledJobs;
 import com.dd.tools.Tools;
 import com.dd.webservice.WebService;
 
@@ -51,6 +52,8 @@ public class Main {
 		Tools.copyResourcesToHomeDir(true);
 
 		Tools.addExternalWebServiceVarToTools(local);
+		
+		ScheduledJobs.start();
 
 		// Startup the web service
 		WebService.start();
