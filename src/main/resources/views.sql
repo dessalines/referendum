@@ -1,4 +1,4 @@
-drop view if exists candidate_view, ballot_view, user_login_view, poll_view, comment_view,
+drop view if exists candidate_view, ballot_view, user_login_view, user_view, poll_view, comment_view,
 poll_tag_view, tag_view, poll_ungrouped_view;
 
 create view candidate_view as
@@ -10,13 +10,17 @@ discussion.subject,
 discussion.text,
 candidate.user_id,
 coalesce(full_user.name, concat('user_',candidate.user_id)) as user_name,
+avg(ballot.rank) as avg_rank,
 candidate.created,
 candidate.modified
 from candidate
 inner join discussion
 on candidate.discussion_id = discussion.id
 left join full_user
-on candidate.user_id = full_user.user_id;
+on candidate.user_id = full_user.user_id
+left join ballot
+on ballot.candidate_id = candidate.id
+group by candidate.id;
 
 create view ballot_view as 
 select ballot.poll_id,
@@ -64,6 +68,14 @@ on tag_visit_trending_year.tag_id = tag.id
 group by tag.id;
 
 
+create view user_view as 
+select user.id,
+coalesce(full_user.name, concat('user_',user.id)) as user_name,
+user.created,
+user.modified
+from user
+left join full_user
+on full_user.user_id = user.id;
 
 
 create view user_login_view as 

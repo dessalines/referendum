@@ -38,6 +38,12 @@ public class DynamicPages {
 			return Tools.readFile(DataSources.PAGES("tag"));
 		});
 		
+		get("user/:userId", (req, res) -> {
+			Tools.allowAllHeaders(req, res);
+			
+			return Tools.readFile(DataSources.PAGES("user"));
+		});
+		
 		get("browse_tags", (req, res) -> {
 			Tools.allowAllHeaders(req, res);
 			

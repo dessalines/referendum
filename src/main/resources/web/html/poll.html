@@ -424,8 +424,8 @@
                               </td>
                               <td>
                                 <h1 class="panel-title">
-                                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_id_{{id}}" aria-expanded="true" aria-controls="collapse_id_{{id}}">{{subject}}
-                                  </a>
+                                  <span class="text-normal" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_id_{{id}}" aria-expanded="true" aria-controls="collapse_id_{{id}}">{{subject}}
+                                  </span>
                           
                                   <small>
                                     <p class="info-line text-muted">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a></p>
@@ -433,10 +433,10 @@
                                 </h1>
                                 <small id="user_candidate_option_list_{{id}}" class="hide user_candidate_options_btns">
                                   <ul class="list-inline">
-                                    <li><a id="edit_candidate_btn_{{id}}" class="text-muted hand edit_candidate_btn">Edit</a></li>
-                                    <li><a id="delete_candidate_btn_{{id}}" class="text-muted hand delete_candidate_btn">Delete</a></li>
-                                    <li><a id="delete_candidate_sure_yes_btn_{{id}}" class="hide text-danger hand delete_candidate_sure_yes_btn">(Yes</a> 
-                                      <a id="delete_candidate_sure_no_btn_{{id}}" class="hide text-muted hand delete_candidate_sure_no_btn">/No)</a></li>
+                                    <li><span id="edit_candidate_btn_{{id}}" class="text-muted hand edit_candidate_btn">Edit</span></li>
+                                    <li><span id="delete_candidate_btn_{{id}}" class="text-muted hand delete_candidate_btn">Delete</span></li>
+                                    <li><span id="delete_candidate_sure_yes_btn_{{id}}" class="hide text-danger hand delete_candidate_sure_yes_btn">(Yes</span> 
+                                      <span id="delete_candidate_sure_no_btn_{{id}}" class="hide text-muted hand delete_candidate_sure_no_btn">/No)</span></li>
                                   </ul>
                                 </small>
                               </td>

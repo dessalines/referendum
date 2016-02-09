@@ -119,10 +119,9 @@
             </script>
           </div>
           <p class="text-right"><a class="text-muted" href="/browse_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
-          <h4 class="text-center">Trending Tags</h4>
-          <hr>
           <div id="trending_tags_div">
             <script id="trending_tags_template" type="x-tmpl-mustache">
+            {{#0}} <span> trending tags: </span>{{/0}}
               {{#.}} <a href="/tag/{{id}}" class="label label-default">{{name}}</a> {{/.}}
             </script>
           </div>

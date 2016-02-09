@@ -62,6 +62,29 @@ public class API {
 			}
 
 		});
+		
+		get("get_user_info/:userId", (req, res) -> {
+
+			try {
+
+				Tools.dbInit();
+
+				String userId = req.params(":userId");
+				
+				String json = USER_VIEW.findFirst("id = ?", userId).toJson(false);
+				
+				return json;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
 
 
 		post("/create_empty_poll", (req, res) -> {
@@ -240,7 +263,7 @@ public class API {
 
 				String json = Tools.replaceNewlines(
 						CANDIDATE_VIEW.find("poll_id = ?", 
-								pollId).toJson(false));
+								pollId).orderBy("avg_rank desc").toJson(false));
 
 
 				return json;
@@ -559,7 +582,7 @@ public class API {
 
 		});
 
-		get("/get_trending_polls/:tagId/:order/:pageSize/:startIndex", (req, res) -> {
+		get("/get_trending_polls/:tagId/:userId/:order/:pageSize/:startIndex", (req, res) -> {
 
 			try {
 				Tools.allowAllHeaders(req, res);
@@ -567,6 +590,7 @@ public class API {
 				Tools.dbInit();
 
 				String tagId = req.params(":tagId");
+				String userId = req.params(":userId");
 				String order = req.params(":order");
 				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
 				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
@@ -574,16 +598,26 @@ public class API {
 
 				Paginator polls = null;
 
-				if (tagId.equals("all")) {
+				if (tagId.equals("all") && userId.equals("all")) {
 					polls = new Paginator<PollView>(PollView.class,
 							pageSize, 
 							"1=?", "1").
-							orderBy(order);
-				} else {
+							orderBy(order + " desc");
+				} else if (tagId.equals("all") && !userId.equals("all")){
+					polls = new Paginator<PollUngroupedView>(PollUngroupedView.class, 
+							pageSize, 
+							"user_id = ?", userId).
+							orderBy(order + " desc");
+				} else if (!tagId.equals("all") && userId.equals("all")){
 					polls = new Paginator<PollUngroupedView>(PollUngroupedView.class, 
 							pageSize, 
 							"tag_id = ?", tagId).
-							orderBy(order);
+							orderBy(order + " desc");
+				} else {
+					polls = new Paginator<PollUngroupedView>(PollUngroupedView.class, 
+							pageSize, 
+							"user_id = ? and tag_id = ?", userId, tagId).
+							orderBy(order + " desc");
 				}
 
 				Integer pageNum = (startIndex/pageSize)+1;
@@ -619,7 +653,7 @@ public class API {
 				tags = new Paginator<TagView>(TagView.class,
 						pageSize, 
 						"1=?", "1").
-						orderBy(order);
+						orderBy(order + " desc");
 
 				Integer pageNum = (startIndex/pageSize)+1;
 

@@ -40,8 +40,8 @@ function setupTrendingPolls(period) {
 
   var pageSize = fromHomeScreen ? 4 : browsePageSize;
 
-  if (pageSize <= recordCount) {
-    getJson('get_trending_polls/' + tagId + '/' + order + '/' + pageSize + '/' + startIndex).done(function(e) {
+  if ((pageSize <= recordCount) || (period !== undefined )) {
+    getJson('get_trending_polls/' + tagId + '/all/' + order + '/' + pageSize + '/' + startIndex).done(function(e) {
       var data = JSON.parse(replaceNewlines(e));
       console.log(data);
       recordCount = data['record_count'];
@@ -60,5 +60,21 @@ function setupTitle() {
 
     $('#tag_name').text(data['name']);
 
+  });
+}
+
+function setupTrendingPollsBtns() {
+  $('#poll_trending_ul a').on('click', function(e) {
+    e.preventDefault();
+
+    $('#poll_trending_ul li').removeClass('active');
+
+    $(this).parent().addClass('active');
+
+    var type = $(this).attr('data-type');
+    console.log(type);
+
+    setupTrendingPolls(type);
+    trendingPollsType = type;
   });
 }

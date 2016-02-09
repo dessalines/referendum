@@ -36,10 +36,10 @@ function setupTrendingPolls(period) {
 
   var order = (period === undefined) ? trendingPollsType + '_score' : period + '_score';
 
-  var pageSize = fromHomeScreen ? 4 : browsePageSize;
+  var pageSize = fromHomeScreen ? 5 : browsePageSize;
 
-  if (pageSize <= recordCount) {
-    getJson('get_trending_polls/all/' + order + '/' + pageSize + '/' + startIndex).done(function(e) {
+  if ((pageSize <= recordCount) || (period !== undefined )) {
+    getJson('get_trending_polls/all/all/' + order + '/' + pageSize + '/' + startIndex).done(function(e) {
       var data = JSON.parse(replaceNewlines(e));
       console.log(data);
       recordCount = data['record_count'];

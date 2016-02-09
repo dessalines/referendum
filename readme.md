@@ -123,11 +123,11 @@ TODO
 
 * Poll searching
 * Comment/poll sorting
-* Poll paging
 * Results limit?
 * A user page : your comments, poll candidates, and votes
 
-* Trending categories
-* Trending polls
+
 * Use viewcounts as a way to do trendings/filter spam
 * Tag pages w/trending polls on them
+
+* A footer

@@ -31,8 +31,10 @@
 /*.slider-track-high {
   background: #BABABA;
 }*/
-table a:not(.btn), .table a:not(.btn) {
-    color: #fff;
+
+
+table a:not(.btn) {
+    color: #2a9fd6;
     text-decoration: unset;
 }
 

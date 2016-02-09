@@ -87,6 +87,10 @@ public class Tables {
 	public static class User extends Model {}
 	public static final User USER = new User();
 	
+	@Table("user_view")
+	public static class UserView extends Model {}
+	public static final UserView USER_VIEW = new UserView();
+	
 	@Table("full_user")
 	public static class FullUser extends Model {}
 	public static final FullUser FULL_USER = new FullUser();
