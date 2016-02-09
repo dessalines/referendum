@@ -185,13 +185,10 @@
                       </div>
                       <br>
                       <!-- tag form stuff -->
-                      <input type='hidden' name='tag_id' form="tag_form" />
-                      <input type='hidden' name='tag_name' form="tag_form" />
-                      <input type='hidden' name='poll_id' form="tag_form" />
                       <div class="row">
                         <div class="col-md-4">
                           <div class="input-group">
-                            <div id="search_box" class="form-group">
+                            <div id="tag_search_box" class="form-group">
                               <input name="search_input" type="text" class="form-control typeahead rounded-left" placeholder="enter tags" form="tag_form">
                             </div>
                             <span class="input-group-btn">
@@ -214,6 +211,9 @@
                       </div>
                     </form>
                     <form id="tag_form" class="" role="search" class="form-inline">
+                      <input type='hidden' name='tag_id' form="tag_form" />
+                      <input type='hidden' name='tag_name' form="tag_form" />
+                      <input type='hidden' name='poll_id' form="tag_form" />
                     </form>
                   </div>
                 </div>

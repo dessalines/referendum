@@ -793,7 +793,6 @@ public class API {
 			try {
 
 				Tools.allowAllHeaders(req, res);
-				Tools.set15MinuteCache(req, res);
 				Tools.dbInit();
 
 				String query = req.params(":query");
@@ -803,7 +802,39 @@ public class API {
 				String queryStr = constructQueryString(query, "name");
 				log.info(queryStr);
 
-				json = TAG.find(queryStr.toString()).limit(5).orderBy("name asc").toJson(false);
+				json = TAG_VIEW.find(queryStr.toString()).limit(5).orderBy("day_score desc").toJson(false);
+
+				log.info(json);
+
+				return json;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+
+		});
+		
+		get("/poll_search/:query", (req, res) -> {
+
+			try {
+
+				Tools.allowAllHeaders(req, res);
+				Tools.dbInit();
+
+				String query = req.params(":query");
+
+				String json = null;
+
+				String queryStr = constructQueryString(query, "subject");
+				log.info(queryStr);
+
+				json = POLL_VIEW.find(queryStr.toString()).limit(5).orderBy("day_score desc").toJson(false, 
+						"id", "subject", "day_hits");
 
 				log.info(json);
 

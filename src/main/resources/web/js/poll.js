@@ -58,7 +58,7 @@ function setupTagSearch() {
 
   tagList.initialize();
 
-  var typeAhead = $('#search_box .typeahead').typeahead({
+  var typeAhead = $('#tag_search_box .typeahead').typeahead({
     hint: true,
     highlight: true,
     minLength: 3,
@@ -75,7 +75,7 @@ function setupTagSearch() {
     // console.log(searchId);
     // $('#search_id').val(searchId);
 
-    $('input[name=tag_id]').val(data['id']);
+    $('#tag_form input[name=tag_id]').val(data['id']);
 
     $('#tag_form').submit();
   }).bind('typeahead:render', function(e) {
@@ -88,19 +88,19 @@ function setupTagSearch() {
   // $('[name=search_input]').focus();
 
   // $('.tt-input').focus();
-  setTimeout("$('[name=search_input]').focus();", 0);
+  setTimeout("$('#tag_form [name=search_input]').focus();", 0);
 
   $("#tag_form").submit(function(event) {
     var formData = $("#tag_form").serializeArray();
 
-    hideKeyboard($('[name=search_input]'));
+    hideKeyboard($('#tag_form [name=search_input]'));
 
     // var classList = document.getElementsByName('creators_list').className.split(/\s+/);
     // console.log(classList);
     console.log(formData);
 
     // Save it into a different input field for some reason
-    $('input[name=tag_name]').val(formData[3].value);
+    $('#tag_form input[name=tag_name]').val(formData[0].value);
 
 
     // This removes the left tab considered active, so that it can be reshown with 
@@ -113,12 +113,12 @@ function setupTagSearch() {
 
       // refetch the poll tags
       setupPollTags();
-      $('input[name=tag_id]').val('');
+      $('#tag_form input[name=tag_id]').val('');
 
       tagList.initialize();
 
     }, null, null, function() {
-      $('input[name=tag_id]').val('');
+      $('#tag_form input[name=tag_id]').val('');
     });
 
     // console.log(searchString);

@@ -63,6 +63,21 @@
           <ul class="nav navbar-nav">
             <li><a href="#" class="create_empty_poll">Create a poll</a>
             </li>
+            <li id="searchbar">
+              <form id="search_form" class="navbar-form navbar-left navbar-input-group " role="search">
+                <input id='search_id' type='hidden' name='id' />
+                <input id='search_type' type='hidden' name='search_type' />
+                <div class="input-group">
+                  <div id="search_box" class="form-group">
+                    <input name="search_input" type="text" class="form-control typeahead rounded-left" placeholder="search for polls or tags">
+                  </div>
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default rounded-right"><i class="fa fa-search"></i>
+                        </button>
+                   </span>
+                </div>
+              </form>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown hide logged-in">
@@ -102,7 +117,7 @@
           <button class="btn btn-default btn-block create_empty_poll"> Create a poll</button>
         </div>
         <div class="col-md-6">
-          <h4 class="text-center">Trending Polls</h4>
+          <h4 class="text-center"><a class="text-normal" href="/browse_polls">Trending Polls</a></h4>
           <hr>
           <div id="trending_polls_div">
             <script id="trending_polls_template" type="x-tmpl-mustache">
@@ -118,15 +133,25 @@
               </small> {{/records}}
             </script>
           </div>
-          <p class="text-right"><a class="text-muted" href="/browse_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
+          <p><a href="/browse_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
           <div id="trending_tags_div">
             <script id="trending_tags_template" type="x-tmpl-mustache">
-            {{#0}} <span> trending tags: </span>{{/0}}
-              {{#.}} <a href="/tag/{{id}}" class="label label-default">{{name}}</a> {{/.}}
+              {{#0}} <span> <a class="text-muted" href="/browse_tags">trending tags:</a> </span>{{/0}} {{#.}} <a href="/tag/{{id}}" class="label label-default">{{name}}</a> {{/.}}
+              <span><a class="text-muted" href="/browse_tags"> <i class="fa fa-arrow-right"></i></a></span>
             </script>
           </div>
-          <p class="text-right"><a class="text-muted" href="/browse_tags"> more tags <i class="fa fa-arrow-right"></i></a></p>
         </div>
+      </div>
+      <!-- Footer -->
+      <div class="row-fluid">
+        <hr class="featurette-divider">
+        <footer>
+          <p class="pull-right"><a href="#">back to top</a>
+          </p>
+          <p>&copy; 2016 Referendum, Inc. &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">about</a> &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">contact</a> &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">support</a> &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">github</a>
+            <br>
+          </p>
+        </footer>
       </div>
     </div>
     <!-- Modals -->
