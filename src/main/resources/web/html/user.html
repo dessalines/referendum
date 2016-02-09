@@ -82,19 +82,10 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h3 class="text-center">Trending Polls for <span id="tag_name"></span></h3>
+          <h3 class="text-center">Polls for <span id="user_name"></span></h3>
           <hr>
-          <div class="text-center">
-            <ul id="poll_trending_ul" class="pagination pagination-sm">
-              <li><a class="text-muted hand" data-type="hour">hour</a></li>
-              <li class="active"><a class="text-muted hand" data-type="day">day</a></li>
-              <li><a class="text-muted hand" data-type="week">week</a></li>
-              <li><a class="text-muted hand" data-type="month">month</a></li>
-              <li><a class="text-muted hand" data-type="year">year</a></li>
-            </ul>
-          </div>
-          <div id="trending_polls_div">
-            <script id="trending_polls_template" type="x-tmpl-mustache">
+          <div id="polls_div">
+            <script id="polls_template" type="x-tmpl-mustache">
               {{#records}}
               <div class="col-md-4">
                 <h6><a href="/poll/{{id}}" class="text-muted">{{subject}}</a></h6>
@@ -196,7 +187,7 @@
       <!-- my scripts -->
       <script src="../js/tools.js"></script>
       <script src="../js/common.js"></script>
-      <script src="../js/tag.js"></script>
+      <script src="../js/user.js"></script>
 </body>
 
 </html>
