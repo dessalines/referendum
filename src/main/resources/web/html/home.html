@@ -106,7 +106,7 @@
           <hr>
           <div id="trending_polls_div">
             <script id="trending_polls_template" type="x-tmpl-mustache">
-              {{#.}}
+              {{#records}}
               <h5><a href="/poll/{{id}}" class="text-muted">{{subject}}</a></h5>
               <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a> to {{#tag_name}}
                 <a href="/tag/{{tag_id}}" class="label label-default"> {{tag_name}}</a>{{/tag_name}}</p>
@@ -115,7 +115,7 @@
                 <li><a class="text-muted" href="/poll/{{id}}">{{number_of_comments}} comments</a></li>
                 <li>{{year_hits}} views</li>
               </ul>
-              </small> {{/.}}
+              </small> {{/records}}
             </script>
           </div>
           <p class="text-right"><a class="text-muted" href="/browse_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>

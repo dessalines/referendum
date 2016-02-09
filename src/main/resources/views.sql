@@ -9,7 +9,9 @@ discussion_id,
 discussion.subject,
 discussion.text,
 candidate.user_id,
-coalesce(full_user.name, concat('user_',candidate.user_id)) as user_name
+coalesce(full_user.name, concat('user_',candidate.user_id)) as user_name,
+candidate.created,
+candidate.modified
 from candidate
 inner join discussion
 on candidate.discussion_id = discussion.id

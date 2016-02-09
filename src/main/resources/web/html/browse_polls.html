@@ -95,7 +95,7 @@
           </div>
           <div id="trending_polls_div">
             <script id="trending_polls_template" type="x-tmpl-mustache">
-              {{#.}}
+              {{#records}}
               <div class="col-md-4">
                 <h5><a href="/poll/{{id}}" class="text-muted">{{subject}}</a></h5>
                 <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a> to
@@ -106,7 +106,7 @@
                   <li>{{year_hits}} views</li>
                 </ul>
                 </small>
-              </div>{{/.}}
+              </div>{{/records}}
             </script>
           </div>
         </div>

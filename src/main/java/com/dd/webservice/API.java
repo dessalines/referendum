@@ -424,6 +424,8 @@ public class API {
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+				
+				log.info("uid = " + uv.getId().toString());
 
 				String json = BALLOT_VIEW.find("poll_id = ? and user_id = ?",
 						pollId, uv.getId().toString()).toJson(false);
@@ -586,7 +588,9 @@ public class API {
 
 				Integer pageNum = (startIndex/pageSize)+1;
 
-				String json = Tools.replaceNewlines(polls.getPage(pageNum).toJson(false));
+				String json = Tools.wrapPaginatorArray(
+						Tools.replaceNewlines(polls.getPage(pageNum).toJson(false)),
+								polls.getCount());
 
 				return json;
 			} catch (Exception e) {

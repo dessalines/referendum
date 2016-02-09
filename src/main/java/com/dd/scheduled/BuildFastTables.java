@@ -43,6 +43,9 @@ public class BuildFastTables implements Job {
 			    		prop.getProperty("dbpassword"));
 			    
 			    ScriptRunner runner = new ScriptRunner(mConnection, false, false);
+			    runner.setErrorLogWriter(null);
+			    runner.setLogWriter(null);
+			    log.info("Rebuilding fast tables....");
 				runner.runScript(new BufferedReader(new FileReader(DataSources.SQL_FAST_TABLES_FILE())));
 				
 				

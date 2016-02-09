@@ -537,5 +537,13 @@ public class Tools {
 	public static Timestamp newCurrentTimestamp() {
 		return new Timestamp(new Date().getTime());
 	}
+	
+	public static final String wrapPaginatorArray(String json, Long totalRecordCount) {
+		String jtableJson = "{" + 
+				"\"records\": " + json + "," + 
+				"\"record_count\": " + totalRecordCount + 
+				"}";
+		return jtableJson;
+	}
 
 }

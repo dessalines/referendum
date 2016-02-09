@@ -318,9 +318,9 @@ public class Actions {
 
 	public static String setCookiesForLogin(FullUser fu, String auth, Response res) {
 		Boolean secure = false;
-		res.removeCookie("auth");
-		res.removeCookie("uid");
-		res.removeCookie("username");
+		res.cookie("auth",null, 0);
+		res.cookie("uid",null, 0);
+		res.cookie("username",null, 0);
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uid", fu.getString("user_id"), DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("username", fu.getString("name"), DataSources.EXPIRE_SECONDS, secure);
@@ -330,8 +330,9 @@ public class Actions {
 
 	public static String setCookiesForLogin(User user, String auth, Response res) {
 		Boolean secure = false;
-		res.removeCookie("auth");
-		res.removeCookie("uid");
+		res.cookie("auth",null, 0);
+		res.cookie("uid",null, 0);
+		
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uid", user.getId().toString(), DataSources.EXPIRE_SECONDS, secure);
 
@@ -354,17 +355,21 @@ public class Actions {
 
 				// See if you have a login that hasn't expired yet
 				Login login = LOGIN.findFirst("user_id = ? and expire_time > ?", user.getId(),
-						Tools.newCurrentTimestamp());
-				//				log.info(Tools.newCurrentTimestamp().toString());
-				//				log.info(login.toJson(false));
+						Tools.newCurrentTimestamp().toString());
+//								log.info(Tools.newCurrentTimestamp().toString());
+//								log.info(login.toJson(false));
 
+			
+				
 				// It found a login item for that user row, so the cookie, like u shoulda
 				if (login != null) {
 					auth = login.getString("auth");
 					Actions.setCookiesForLogin(user, auth, res);
-				} 
+				}
+				
 				// Need to login for that user and set the cookie
 				else {
+					
 					auth = Tools.generateSecureRandom();
 					login = LOGIN.createIt("user_id", user.getId(), 
 							"auth", auth,
@@ -378,10 +383,11 @@ public class Actions {
 				return uv;
 			}
 
-		} 
+		}
 		// The auth cookie is there, so find the user from the login
 		else {
 			uv = USER_LOGIN_VIEW.findFirst("auth = ?" , auth);
+			log.info("found the auth cookie: " + auth + " : uv " + uv.toJson(false));
 		}
 
 		// The user doesn't exist, so you need to create the user and login

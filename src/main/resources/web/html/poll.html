@@ -21,7 +21,6 @@
   <link rel="stylesheet" href="../bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css" />
   <!--   toastr css -->
   <link href="../bower_components/toastr/toastr.css" rel="stylesheet" />
-
   <!-- Pickadate -->
   <link href="../bower_components/pickadate/lib/themes/default.css" rel="stylesheet" />
   <link href="../bower_components/pickadate/lib/themes/default.date.css" rel="stylesheet" />
@@ -117,6 +116,7 @@
               <div id="poll_div">
                 <script id="poll_template" type="x-tmpl-mustache">
                   <h3> {{subject}} </h3>
+                  <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a></p>
                   <div class="panel panel-default">
                     <div class="panel-body">
                       <div id="poll_text">
@@ -218,7 +218,6 @@
                   </div>
                 </div>
               </div>
-              
               <div id="tag_div">
                 <script id="tag_template" type="x-tmpl-mustache">
                   {{#0}}<span> tags: </span> {{/0}} {{#.}}
@@ -398,43 +397,56 @@
                 <div id="candidates_div">
                   <script id="candidates_template" type="x-tmpl-mustache">
                     {{#.}}
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <!-- A sample range vote table -->
-                        <table id="id_{{id}}_range_vote_table" class="range_vote_table hide">
-                          <tr>
-                            <td>
-                              <input id="id_{{id}}" class="range_vote" data-slider-id='id_{{id}}_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <i id='id_{{id}}_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
-                            </td>
-                          </tr>
-                        </table>
-                        <button id='id_{{id}}_vote' class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="auto" title="Vote">
-                          <i class="fa fa-fw fa-thumbs-up fa-2"></i>
-                          <span id="id_{{id}}_vote_rank" class="label label-default label-as-badge hide"> 32.1
-                          </span>
-                        </button>
-                        <h1 class="panel-title">
-                          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_id_{{id}}" aria-expanded="true" aria-controls="collapse_id_{{id}}">
-                            {{subject}}
-                          </a>
-                        </h1>
-                        <small id="user_candidate_option_list_{{id}}" class="hide user_candidate_options_btns">
-                          <ul class="list-inline">
-                            <li><a id="edit_candidate_btn_{{id}}" class="text-muted hand edit_candidate_btn">Edit</a></li>
-                            <li><a id="delete_candidate_btn_{{id}}" class="text-muted hand delete_candidate_btn">Delete</a></li>
-                            <li><a id="delete_candidate_sure_yes_btn_{{id}}" class="hide text-danger hand delete_candidate_sure_yes_btn">(Yes</a> 
-                            <a id="delete_candidate_sure_no_btn_{{id}}" class="hide text-muted hand delete_candidate_sure_no_btn">/No)</a></li>
-                          </ul>
-                        </small>
-                      </div>
-                      <div id="collapse_id_{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                          {{#m2html}}{{{text}}}{{/m2html}}
+                    <div class="col-md-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <!-- A sample range vote table -->
+                          <table id="id_{{id}}_range_vote_table" class="range_vote_table hide">
+                            <tr>
+                              <td>
+                                <input id="id_{{id}}" class="range_vote" data-slider-id='id_{{id}}_slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" data-slider-orientation="vertical" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <i id='id_{{id}}_clear_vote' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                              </td>
+                            </tr>
+                          </table>
+                          <table class="inherit-background-color">
+                            <tr>
+                              <td>
+                                <button id='id_{{id}}_vote' class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="auto" title="Vote">
+                                  <i class="fa fa-fw fa-thumbs-up fa-2"></i>
+                                  <span id="id_{{id}}_vote_rank" class="label label-default label-as-badge hide"> 32.1 
+                                  </span>
+                                </button>
+                              </td>
+                              <td>
+                                <h1 class="panel-title">
+                                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_id_{{id}}" aria-expanded="true" aria-controls="collapse_id_{{id}}">{{subject}}
+                                  </a>
+                          
+                                  <small>
+                                    <p class="info-line text-muted">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a></p>
+                                  </small>
+                                </h1>
+                                <small id="user_candidate_option_list_{{id}}" class="hide user_candidate_options_btns">
+                                  <ul class="list-inline">
+                                    <li><a id="edit_candidate_btn_{{id}}" class="text-muted hand edit_candidate_btn">Edit</a></li>
+                                    <li><a id="delete_candidate_btn_{{id}}" class="text-muted hand delete_candidate_btn">Delete</a></li>
+                                    <li><a id="delete_candidate_sure_yes_btn_{{id}}" class="hide text-danger hand delete_candidate_sure_yes_btn">(Yes</a> 
+                                      <a id="delete_candidate_sure_no_btn_{{id}}" class="hide text-muted hand delete_candidate_sure_no_btn">/No)</a></li>
+                                  </ul>
+                                </small>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                        <div id="collapse_id_{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            {{#m2html}}{{{text}}}{{/m2html}}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -498,7 +510,6 @@
     <script src="../bower_components/mustache.js/mustache.js"></script>
     <script src="../bower_components/holderjs/holder.js"></script>
     <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
-
     <script src="../bower_components/pickadate/lib/picker.js"></script>
     <script src="../bower_components/pickadate/lib/picker.date.js"></script>
     <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>

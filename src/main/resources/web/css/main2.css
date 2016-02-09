@@ -31,11 +31,20 @@
 /*.slider-track-high {
   background: #BABABA;
 }*/
+table a:not(.btn), .table a:not(.btn) {
+    color: #fff;
+    text-decoration: unset;
+}
+
+.inherit-background-color {
+  background-color: inherit;
+}
+
 
 .info-line {
   margin-bottom : 5px;
 }
-.label {
+.label-nowrap {
   display: inline-table;
   line-height: initial;
 }
