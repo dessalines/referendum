@@ -117,17 +117,14 @@ Main page - Discuss, Vote, Results
 TODO 
 * Paging for results and candidates, and comments(Pretty tough)
 * User pages w/ captchas?
-* Use a hashtag based system (easily create new tags, and tag things)
 * poll searching, based on hashtags or poll names
 
 
 * Poll searching
 * Comment/poll sorting
 * Results limit?
+
 * A user page : your comments, poll candidates, and votes
 
-
-* Use viewcounts as a way to do trendings/filter spam
-* Tag pages w/trending polls on them
 
 * A footer

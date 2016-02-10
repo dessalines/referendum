@@ -493,9 +493,15 @@ var delay = (function() {
 })();
 
 function replaceNewlines(e, single, two) {
-  var r = (single === undefined) ? "\\n" : "\n";
-  var r = (two === undefined) ? r : "\n\n";
-  return e.replace(/--lb--/g, r);
+
+  if (e != null) {
+    var r = (single === undefined) ? "\\n" : "\n";
+    var r = (two === undefined) ? r : "\n\n";
+    return e.replace(/--lb--/g, r);
+  } else {
+    return '';
+  }
+
 }
 
 function replaceNewlinesV2(e) {

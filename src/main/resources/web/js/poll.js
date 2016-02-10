@@ -99,27 +99,32 @@ function setupTagSearch() {
     // console.log(classList);
     console.log(formData);
 
+    var tagName = formData[0].value;
+
     // Save it into a different input field for some reason
-    $('#tag_form input[name=tag_name]').val(formData[0].value);
+    $('#tag_form input[name=tag_name]').val(tagName);
 
 
     // This removes the left tab considered active, so that it can be reshown with 
     // updated data
     $('li.active a[data-toggle="tab"]').parent().removeClass('active');
 
+    if (tagName.length > 3 && tagName.length < 150) {
+      // Save the poll tag
+      standardFormPost('save_poll_tag', '#tag_form', null, null, function() {
 
-    // Save the poll tag
-    standardFormPost('save_poll_tag', '#tag_form', null, null, function() {
+        // refetch the poll tags
+        setupPollTags();
+        $('#tag_form input[name=tag_id]').val('');
 
-      // refetch the poll tags
-      setupPollTags();
-      $('#tag_form input[name=tag_id]').val('');
+        tagList.initialize();
 
-      tagList.initialize();
-
-    }, null, null, function() {
-      $('#tag_form input[name=tag_id]').val('');
-    });
+      }, null, null, function() {
+        $('#tag_form input[name=tag_id]').val('');
+      });
+    } else {
+      toastr.error('Tag must be between 3 and 150 characters');
+    }
 
     // console.log(searchString);
 

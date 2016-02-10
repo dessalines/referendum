@@ -699,8 +699,12 @@ public class API {
 				Tools.allowAllHeaders(req, res);
 
 				Tools.dbInit();
+				
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String tagId = req.params(":tagId");
+				
+				Actions.addTagVisit(uv.getId().toString(), tagId);
 
 				String json = TAG_VIEW.findFirst("id = ?", tagId).toJson(false);
 
@@ -804,8 +808,6 @@ public class API {
 
 				json = TAG_VIEW.find(queryStr.toString()).limit(5).orderBy("day_score desc").toJson(false);
 
-				log.info(json);
-
 				return json;
 
 			} catch (Exception e) {
@@ -835,8 +837,6 @@ public class API {
 
 				json = POLL_VIEW.find(queryStr.toString()).limit(5).orderBy("day_score desc").toJson(false, 
 						"id", "subject", "day_hits");
-
-				log.info(json);
 
 				return json;
 

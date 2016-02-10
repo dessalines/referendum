@@ -61,7 +61,22 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#" class="create_empty_poll">Create a poll</a>
+            <li><a href="#" class="create_empty_poll">create a poll</a>
+            </li>
+            <li id="searchbar">
+              <form id="search_form" class="navbar-form navbar-left navbar-input-group " role="search">
+                <input id='search_id' type='hidden' name='id' />
+                <input id='search_type' type='hidden' name='search_type' />
+                <div class="input-group">
+                  <div id="search_box" class="form-group">
+                    <input name="search_input" type="text" class="form-control typeahead rounded-left" placeholder="search for polls or tags">
+                  </div>
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default rounded-right"><i class="fa fa-search"></i>
+                        </button>
+                   </span>
+                </div>
+              </form>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -69,9 +84,10 @@
               <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li> <a href="#"> My Info</a></li>
+                <li> <a class="log_out"> Log out</a></li>
               </ul>
             </li>
-            <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">Log in or sign up</a></li>
+            <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -101,6 +117,17 @@
             </script>
           </div>
         </div>
+      </div>
+      <!-- Footer -->
+      <div class="row-fluid">
+        <hr class="featurette-divider">
+        <footer>
+          <p class="pull-right"><a href="#">back to top</a>
+          </p>
+          <p>&copy; 2016 Referendum, Inc. &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">about</a> &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">contact</a> &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">support</a> &middot; <a href="https://github.com/tchoulihan/direct_democracy" target="_blank">github</a>
+            <br>
+          </p>
+        </footer>
       </div>
     </div>
     <!-- Modals -->
