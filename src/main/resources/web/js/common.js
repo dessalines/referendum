@@ -75,7 +75,7 @@ function setupSearchBar() {
     // console.log(name);
 
     // Setting the search info
-    $('#search_id').val(data['id']);
+    $('#search_id').val(data['aid']);
     if (data.hasOwnProperty('subject')) {
       $('#search_type').val('poll');
     } else {

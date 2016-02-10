@@ -63,13 +63,13 @@ public class API {
 
 		});
 		
-		get("get_user_info/:userId", (req, res) -> {
+		get("get_user_info/:userAid", (req, res) -> {
 
 			try {
 
 				Tools.dbInit();
 
-				String userId = req.params(":userId");
+				String userId = ALPHA_ID.decode(req.params(":userAid")).toString();
 				
 				String json = USER_VIEW.findFirst("id = ?", userId).toJson(false);
 				
@@ -139,9 +139,6 @@ public class API {
 				String password = (private_) ? vars.get("private_password") : null;
 				String pollSumTypeId = vars.get("sum_type_radio");
 				Boolean fullUsersOnly = (vars.get("full_users_only") != null) ? true : false;
-				
-				log.info("full user only = " + fullUsersOnly + " | " + vars.get("full_users_only"));
-				//				log.info(text);
 
 				String message = Actions.savePoll(uv.getId().toString(), pollId, 
 						subject, text, password, pollSumTypeId, fullUsersOnly, res);
@@ -577,15 +574,17 @@ public class API {
 
 		});
 
-		get("/get_trending_polls/:tagId/:userId/:order/:pageSize/:startIndex", (req, res) -> {
+		get("/get_trending_polls/:tagAid/:userAid/:order/:pageSize/:startIndex", (req, res) -> {
 
 			try {
 				Tools.allowAllHeaders(req, res);
 
 				Tools.dbInit();
 
-				String tagId = req.params(":tagId");
-				String userId = req.params(":userId");
+				String tagAid = req.params(":tagAid");
+				String tagId = (tagAid.equals("all")) ? "all" : ALPHA_ID.decode(tagAid).toString();
+				String userAid = req.params(":userAid");
+				String userId = (userAid.equals("all")) ? "all" : ALPHA_ID.decode(userAid).toString();
 				String order = req.params(":order");
 				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
 				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
@@ -596,22 +595,22 @@ public class API {
 				if (tagId.equals("all") && userId.equals("all")) {
 					polls = new Paginator<PollView>(PollView.class,
 							pageSize, 
-							"1=?", "1").
+							"subject is not null").
 							orderBy(order + " desc");
 				} else if (tagId.equals("all") && !userId.equals("all")){
 					polls = new Paginator<PollView>(PollView.class, 
 							pageSize, 
-							"user_id = ?", userId).
+							"subject is not null and user_id = ?", userId).
 							orderBy(order + " desc");
 				} else if (!tagId.equals("all") && userId.equals("all")){
 					polls = new Paginator<PollUngroupedView>(PollUngroupedView.class, 
 							pageSize, 
-							"tag_id = ?", tagId).
+							"subject is not null and tag_id = ?", tagId).
 							orderBy(order + " desc");
 				} else {
 					polls = new Paginator<PollView>(PollView.class, 
 							pageSize, 
-							"user_id = ? and tag_id = ?", userId, tagId).
+							"subject is not null and user_id = ? and tag_id = ?", userId, tagId).
 							orderBy(order + " desc");
 				}
 
@@ -831,7 +830,7 @@ public class API {
 				String queryStr = constructQueryString(query, "subject");
 
 				json = POLL_VIEW.find(queryStr.toString()).limit(5).orderBy("day_score desc").toJson(false, 
-						"id", "subject", "day_hits");
+						"aid", "subject", "day_hits");
 
 				return json;
 

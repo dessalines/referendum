@@ -13,10 +13,11 @@ INSERT INTO `discussion` (`id`,`subject`,`text`)
 	(4,'Mace windu.... but only because purple.','Can\'t stop the purple'),
 	(5,'Yoda is my homeboy. Remember that part in episode two where he was flying around dooku like gangbustas? Sorry, no one can beat that.','### mmmmmk\r\n\r\nbada\r\n\r\n\r\nbing'),
 	(6,'Which side of the force is better?',''),(7,'Does a wookie wear pants?',''),(8,'Why does the chewbacca wear pants?',''),
-	(9,'Best force power?',''),(10,'Prequels or Sequals: Which and why',''),(11,'An untagged one','');
-INSERT INTO `poll` (id,aid,poll_type_id,poll_sum_type_id,discussion_id,user_id,private_password) 
-	VALUES (1,'1',1,1,1,1,NULL),(2,'2',1,1,6,2,NULL),(3,'3',1,1,7,3,NULL),
-	(4,'4',1,1,8,3,NULL),(5,'5',1,1,9,3,NULL),(6,'6',1,1,10,1,NULL),(7,'7',1,1,11,2,NULL);
+	(9,'Best force power?',''),(10,'Prequels or Sequals: Which and why',''),(11,'An untagged one',''),(12,'A user-only one','');
+INSERT INTO `poll` (id,aid,poll_type_id,poll_sum_type_id,discussion_id,user_id,private_password,full_user_only) 
+	VALUES (1,'1',1,1,1,1,NULL,0),(2,'2',1,1,6,2,NULL,0),(3,'3',1,1,7,3,NULL,0),
+	(4,'4',1,1,8,3,NULL,0),(5,'5',1,1,9,3,NULL,0),(6,'6',1,1,10,1,NULL,0),(7,'7',1,1,11,2,'test',0),
+	(8,'8',1,1,12,3,NULL,1);
 INSERT INTO `candidate` (`id`,`poll_id`,`discussion_id`,`user_id`)
 	VALUES (1,1,2,1),(2,1,3,1),(3,1,4,2),(4,1,5,3);
 INSERT INTO `ballot` (`id`,`poll_id`,`user_id`,`candidate_id`,`rank`)

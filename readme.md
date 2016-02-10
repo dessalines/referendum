@@ -131,3 +131,5 @@ TODO
 * Add indexes to poll_visit_trending and tag_visit rending, and comment_tree stuff
 
 * User-only polls(reduces bots).
+
+* Start working on comment and option paging

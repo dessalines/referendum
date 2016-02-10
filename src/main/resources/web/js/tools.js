@@ -73,7 +73,9 @@ function scrollSpy() {
   // });
 }
 
-function fillMustacheWithJson(data, templateHtml, divId, partial) {
+function fillMustacheWithJson(data, templateHtml, divId, partial, append) {
+
+  append = (typeof append === "undefined") ? false : append;
 
   $.extend(data, standardDateFormatObj);
   $.extend(data, m2htmlObj);
@@ -86,7 +88,12 @@ function fillMustacheWithJson(data, templateHtml, divId, partial) {
     rendered = Mustache.render(templateHtml, data, partial);
   }
 
-  $(divId).html(rendered);
+  // appending, for infinit scroll
+  if (append) {
+    $(divId).append(rendered);
+  } else {
+    $(divId).html(rendered);
+  }
 
   // console.log(rendered);
 

@@ -1,6 +1,6 @@
 var trendingPollsTemplate = $('#trending_polls_template').html();
 
-var tagId = getLastUrlPath();
+var tagAid = getLastUrlPath();
 
 
 var startIndex = 0;
@@ -41,7 +41,7 @@ function setupTrendingPolls(period) {
   var pageSize = fromHomeScreen ? 4 : browsePageSize;
 
   if ((pageSize <= recordCount) || (period !== undefined )) {
-    getJson('get_trending_polls/' + tagId + '/all/' + order + '/' + pageSize + '/' + startIndex).done(function(e) {
+    getJson('get_trending_polls/' + tagAid + '/all/' + order + '/' + pageSize + '/' + startIndex).done(function(e) {
       var data = JSON.parse(replaceNewlines(e));
       console.log(data);
       recordCount = data['record_count'];
@@ -54,7 +54,7 @@ function setupTrendingPolls(period) {
 }
 
 function setupTitle() {
-  getJson('get_tag/' + tagId).done(function(e) {
+  getJson('get_tag/' + tagAid).done(function(e) {
     var data = JSON.parse(e);
     console.log(data);
 

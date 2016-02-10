@@ -322,7 +322,7 @@ ALTER TABLE `comment` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `comment_tree` ADD FOREIGN KEY (parent_id) REFERENCES `comment` (`id`);
 ALTER TABLE `comment_tree` ADD FOREIGN KEY (child_id) REFERENCES `comment` (`id`);
 ALTER TABLE `tag` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
-ALTER TABLE `poll_tag` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `poll_tag` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 ALTER TABLE `poll_tag` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
 ALTER TABLE `ballot` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 ALTER TABLE `ballot` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
@@ -332,7 +332,7 @@ ALTER TABLE `comment_rank` ADD FOREIGN KEY (comment_id) REFERENCES `comment` (`i
 ALTER TABLE `comment_rank` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `login` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `poll_visit` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
-ALTER TABLE `poll_visit` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `poll_visit` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 ALTER TABLE `tag_visit` ADD FOREIGN KEY (user_id) REFERENCES `user` (`id`);
 ALTER TABLE `tag_visit` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
 -- ---
