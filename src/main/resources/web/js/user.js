@@ -34,7 +34,7 @@ function setupTrendingPolls() {
 
   var pageSize = fromHomeScreen ? 4 : browsePageSize;
 
-  if ((pageSize <= recordCount) || (period !== undefined )) {
+  if ((pageSize <= recordCount)) {
     getJson('get_trending_polls/all/' + userId + '/created/' + pageSize + '/' + startIndex).done(function(e) {
       var data = JSON.parse(replaceNewlines(e));
       console.log(data);

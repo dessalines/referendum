@@ -387,7 +387,6 @@ public class Actions {
 		// The auth cookie is there, so find the user from the login
 		else {
 			uv = USER_LOGIN_VIEW.findFirst("auth = ?" , auth);
-			log.info("found the auth cookie: " + auth + " : uv " + uv.toJson(false));
 		}
 
 		// The user doesn't exist, so you need to create the user and login

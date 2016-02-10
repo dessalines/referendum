@@ -447,8 +447,6 @@ public class API {
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
-				
-				log.info("uid = " + uv.getId().toString());
 
 				String json = BALLOT_VIEW.find("poll_id = ? and user_id = ?",
 						pollId, uv.getId().toString()).toJson(false);
@@ -475,8 +473,6 @@ public class API {
 				Tools.dbInit();
 
 				String json = Actions.rangePollResults(pollId);
-
-				log.info(json);
 
 				return json;
 			} catch (Exception e) {
@@ -507,8 +503,6 @@ public class API {
 
 				String json = Actions.fetchDiscussionComments(uv.getInteger("id"), discussionId);
 
-				log.info(json);
-
 				return json;
 			} catch (Exception e) {
 				res.status(666);
@@ -533,8 +527,6 @@ public class API {
 				Integer commentId = ALPHA_ID.decode(req.params(":commentId")).intValue();
 
 				String json = Actions.fetchComments(uv.getInteger("id"), commentId);
-
-				log.info(json);
 
 				return json;
 			} catch (Exception e) {
@@ -604,7 +596,7 @@ public class API {
 							"1=?", "1").
 							orderBy(order + " desc");
 				} else if (tagId.equals("all") && !userId.equals("all")){
-					polls = new Paginator<PollUngroupedView>(PollUngroupedView.class, 
+					polls = new Paginator<PollView>(PollView.class, 
 							pageSize, 
 							"user_id = ?", userId).
 							orderBy(order + " desc");
@@ -614,7 +606,7 @@ public class API {
 							"tag_id = ?", tagId).
 							orderBy(order + " desc");
 				} else {
-					polls = new Paginator<PollUngroupedView>(PollUngroupedView.class, 
+					polls = new Paginator<PollView>(PollView.class, 
 							pageSize, 
 							"user_id = ? and tag_id = ?", userId, tagId).
 							orderBy(order + " desc");
@@ -804,7 +796,7 @@ public class API {
 				String json = null;
 
 				String queryStr = constructQueryString(query, "name");
-				log.info(queryStr);
+
 
 				json = TAG_VIEW.find(queryStr.toString()).limit(5).orderBy("day_score desc").toJson(false);
 
@@ -833,7 +825,6 @@ public class API {
 				String json = null;
 
 				String queryStr = constructQueryString(query, "subject");
-				log.info(queryStr);
 
 				json = POLL_VIEW.find(queryStr.toString()).limit(5).orderBy("day_score desc").toJson(false, 
 						"id", "subject", "day_hits");
