@@ -4,8 +4,7 @@ var tagAid = getLastUrlPath();
 
 
 var startIndex = 0;
-var browsePageSize = 12;
-var fetchAmount = 12;
+var browsePageSize = 15;
 var recordCount = 1000;
 
 var trendingPollsType = 'day';
@@ -26,7 +25,7 @@ function setupWindowScrolling() {
       $(window).unbind('scroll');
       console.log('near bottom');
       // startIndex += browsePageSize;
-      browsePageSize += fetchAmount;
+      startIndex += browsePageSize;
       setupTrendingPolls();
     }
   });
@@ -38,14 +37,24 @@ function setupTrendingPolls(period) {
 
   var order = (period === undefined) ? trendingPollsType + '_score' : period + '_score';
 
-  var pageSize = fromHomeScreen ? 4 : browsePageSize;
+  var pageSize = fromHomeScreen ? 5 : browsePageSize;
 
-  if ((pageSize <= recordCount) || (period !== undefined )) {
+  var keepFetching = ((startIndex + browsePageSize) <= recordCount);
+
+
+  if (keepFetching || (period !== undefined)) {
     getJson('get_trending_polls/' + tagAid + '/all/' + order + '/' + pageSize + '/' + startIndex).done(function(e) {
       var data = JSON.parse(replaceNewlines(e));
       console.log(data);
       recordCount = data['record_count'];
-      fillMustacheWithJson(data, trendingPollsTemplate, '#trending_polls_div');
+
+      if (startIndex == 0) {
+        fillMustacheWithJson(data, trendingPollsTemplate, '#trending_polls_div');
+      } else {
+        // appending version
+        fillMustacheWithJson(data, trendingPollsTemplate, '#trending_polls_div', null, true);
+      }
+
       if (!fromHomeScreen) {
         setupWindowScrolling();
       }

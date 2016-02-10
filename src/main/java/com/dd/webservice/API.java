@@ -252,20 +252,33 @@ public class API {
 
 		});
 
-		get("/get_poll_candidates/:pollId", (req, res) -> {
+		get("/get_poll_candidates/:pollId/:pageSize/:startIndex", (req, res) -> {
 
-			try {	
+			try {
 				Tools.allowAllHeaders(req, res);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
-
+				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
+				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
+				
 				Tools.dbInit();
 
 				String json = Tools.replaceNewlines(
 						CANDIDATE_VIEW.find("poll_id = ?", 
 								pollId).orderBy("avg_rank desc").toJson(false));
 
+				Paginator candidates = 
+						new Paginator<CandidateView>(CandidateView.class,
+						pageSize,
+						"poll_id = ?", pollId).orderBy("avg_rank desc");
+				
 
+				Integer pageNum = (startIndex/pageSize)+1;
+
+				String json = Tools.wrapPaginatorArray(
+						Tools.replaceNewlines(polls.getPage(pageNum).toJson(false)),
+								polls.getCount());
+				
 				return json;
 			} catch (Exception e) {
 				res.status(666);
