@@ -107,10 +107,13 @@ public class Tables {
 			Integer parentId, Integer minPathLength, Integer maxPathLength) {
 		StringBuilder s = new StringBuilder("select \n"+
 				"comment.id,\n"+
+				"comment.aid,\n"+
 				"comment.discussion_id,\n"+
 				"poll.id as poll_id,\n"+
+				"poll.aid as poll_aid,\n"+
 				"text,\n"+
 				"comment.user_id,\n"+
+				"user.aid as user_aid,\n"+
 				"coalesce(full_user.name, concat('user_',comment.user_id)) as user_name,\n"+
 				"comment.deleted,\n"+
 				"-- min(a.path_length,b.path_length),\n"+
@@ -132,7 +135,9 @@ public class Tables {
 				"left join poll on \n"+
 				"comment.discussion_id = poll.discussion_id \n"+
 				"left join full_user \n"+
-				"on comment.user_id = full_user.user_id \n");
+				"on comment.user_id = full_user.user_id \n"+
+				"left join user \n"+
+				"on comment.user_id = user.id \n");
 
 		if (discussionId != null) {
 			s.append("WHERE comment.discussion_id = " + discussionId + "\n");

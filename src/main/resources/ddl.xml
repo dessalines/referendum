@@ -38,6 +38,9 @@
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="aid" null="1" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<default>NULL</default></row>
 <row name="poll_type_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="poll_type" row="id" />
@@ -57,6 +60,9 @@
 <row name="private_password" null="1" autoincrement="0">
 <datatype>VARCHAR(140)</datatype>
 <default>NULL</default></row>
+<row name="full_user_only" null="0" autoincrement="0">
+<datatype>TINYINT(1)</datatype>
+<default>0</default></row>
 <row name="created" null="0" autoincrement="0">
 <datatype>TIMESTAMP</datatype>
 <default>CURRENT_TIMESTAMP</default></row>
@@ -68,6 +74,9 @@
 </key>
 <key type="UNIQUE" name="">
 <part>discussion_id</part>
+</key>
+<key type="INDEX" name="">
+<part>aid</part>
 </key>
 </table>
 <table x="463" y="428" name="candidate">
@@ -99,7 +108,7 @@
 <part>discussion_id</part>
 </key>
 </table>
-<table x="243" y="640" name="discussion">
+<table x="246" y="659" name="discussion">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -119,9 +128,12 @@
 <part>id</part>
 </key>
 </table>
-<table x="455" y="609" name="comment">
+<table x="455" y="610" name="comment">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="aid" null="1" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
 <row name="discussion_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -145,6 +157,9 @@
 </row>
 <key type="PRIMARY" name="">
 <part>id</part>
+</key>
+<key type="INDEX" name="">
+<part>aid</part>
 </key>
 </table>
 <table x="660" y="608" name="comment_tree">
@@ -171,8 +186,12 @@
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
+<key type="INDEX" name="">
+<part>parent_id</part>
+<part>child_id</part>
+</key>
 </table>
-<table x="52" y="415" name="poll_type">
+<table x="48" y="393" name="poll_type">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -213,6 +232,9 @@
 <part>id</part>
 </key>
 <key type="UNIQUE" name="">
+<part>name</part>
+</key>
+<key type="INDEX" name="">
 <part>name</part>
 </key>
 </table>
@@ -280,6 +302,9 @@
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="aid" null="1" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<default>NULL</default></row>
 <row name="ip_address" null="1" autoincrement="0">
 <datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
@@ -291,6 +316,9 @@
 </row>
 <key type="PRIMARY" name="">
 <part>id</part>
+</key>
+<key type="INDEX" name="">
+<part>aid</part>
 </key>
 </table>
 <table x="389" y="7" name="full_user">
@@ -346,7 +374,7 @@
 <part>name</part>
 </key>
 </table>
-<table x="457" y="813" name="comment_rank">
+<table x="450" y="849" name="comment_rank">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

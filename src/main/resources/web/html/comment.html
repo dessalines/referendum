@@ -84,7 +84,7 @@
               <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li> <a href="#"> My Info</a></li>
-                <li> <a class="log_out"> Log out</a></li>
+                <li> <a href="#" class="log_out"> Log out</a></li>
               </ul>
             </li>
             <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
@@ -136,7 +136,7 @@
                         <i class="fa fa-fw fa-thumbs-up"></i>
                       </a>
                     </li>
-                    <li><a href="/user/{{userId}}">{{userName}}</a></li>
+                    <li><a href="/user/{{userAid}}">{{userName}}</a></li>
                     <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
                         {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
                           </span>
@@ -167,7 +167,7 @@
                     </form>
                     <small>
                         <ul class="list-inline">
-                          <li><a href="/comment/{{alphaId}}" class="text-muted">link</a></li>
+                          <li><a href="/comment/{{aid}}" class="text-muted">link</a></li>
                           <li><a id="comment_source_btn_{{id}}" class="text-muted hand">source</a></li>
                           <li class="hide"><a id="comment_edit_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">edit<a/></li>
                           <li class="hide"><a id="comment_delete_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">delete<a/></li>
@@ -210,7 +210,7 @@
                     <i class="fa fa-fw fa-thumbs-up"></i>
                   </a>
                 </li>
-                <li><a href="/user/{{userId}}">{{userName}}</a></li>
+                <li><a href="/user/{{userAid}}">{{userName}}</a></li>
                 <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
                         {{#avgRank}}{{avgRank}}{{/avgRank}}{{^avgRank}}?{{/avgRank}}
                           </span>
@@ -241,7 +241,7 @@
                 </form>
                 <small>
                         <ul class="list-inline">
-                          <li><a href="/comment/{{alphaId}}" class="text-muted">link</a></li>
+                          <li><a href="/comment/{{aid}}" class="text-muted">link</a></li>
                           <li><a id="comment_source_btn_{{id}}" class="text-muted hand">source</a></li>
                           <li class="hide"><a id="comment_edit_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">edit<a/></li>
                           <li class="hide"><a id="comment_delete_btn_{{id}}" user-id="{{userId}}" class="text-muted hand">delete<a/></li>

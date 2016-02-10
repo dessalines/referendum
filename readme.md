@@ -127,4 +127,7 @@ TODO
 * A user page : your comments, poll candidates, and votes
 
 
-* A footer
+* Add aid columns to comments, polls, users, and indexes
+* Add indexes to poll_visit_trending and tag_visit rending, and comment_tree stuff
+
+* User-only polls(reduces bots).

@@ -3,8 +3,19 @@ $(document).ready(function() {
   getAuth();
   setupCreateEmptyPoll();
   setupLoginForm();
+  setupLogOut();
   setupSearchBar();
 });
+
+function setupLogOut() {
+  $('.log_out').click(function() {
+    deleteCookie('auth');
+    deleteCookie('uid');
+    deleteCookie('username');
+    toastr.success('Logged out');
+    showLoggedOut();
+  });
+}
 
 function setupSearchBar() {
   // $('input[name=tag_id]').val('');
@@ -70,7 +81,7 @@ function setupSearchBar() {
     } else {
       $('#search_type').val('type');
     }
-    
+
 
     // $('input[name=tag_id]').val(data['id']);
 
@@ -87,7 +98,7 @@ function setupSearchBar() {
   // $('.tt-input').focus();
   setTimeout("$('[name=search_input]').focus();", 0);
 
-    setTimeout("$('[name=search_input]').focus();", 0);
+  setTimeout("$('[name=search_input]').focus();", 0);
 
 
   $("#search_form").submit(function(event) {
@@ -116,6 +127,7 @@ function getAuth() {
 
     deleteCookie('auth');
     deleteCookie('uid');
+    deleteCookie('uaid');
     deleteCookie('username');
     console.log('cookie was undefined');
     getJson('get_user').done(function() {
@@ -138,6 +150,12 @@ function showLoggedIn() {
   $('.logged-out').addClass('hide');
   $('.logged-in').removeClass('hide');
   $('#user_dropdown').html(getCookie('username') + ' <span class="caret"></span>');
+  $('#my_user_page').attr('href','/user/' + getCookie('uaid'));
+}
+
+function showLoggedOut() {
+  $('.logged-out').removeClass('hide');
+  $('.logged-in').addClass('hide');
 }
 
 function setupLoginForm() {

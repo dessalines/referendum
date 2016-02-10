@@ -70,13 +70,14 @@ public class Transformations {
 		List<CommentObj> cos = new ArrayList<>();
 		for (CommentView cv : cvs) {
 
-			Integer id = cv.getInteger("id");
-
 			// Create the comment object
-			CommentObj co = new CommentObj(id, 
+			CommentObj co = new CommentObj(cv.getInteger("id"), 
+					cv.getString("aid"),
 					cv.getInteger("discussion_id"), 
 					cv.getInteger("poll_id"), 
+					cv.getString("poll_aid"),
 					cv.getInteger("user_id"), 
+					cv.getString("user_aid"),
 					cv.getString("user_name"),
 					cv.getBoolean("deleted"),
 					cv.getDouble("avg_rank"),
@@ -126,21 +127,25 @@ public class Transformations {
 	public static class CommentObj {
 		private Integer id, discussionId, pollId, userId, userRank, parentId, topParentId;
 		private Double avgRank;
-		private String text, alphaId, userName;
+		private String aid, pollAid, userAid, text, userName;
 		private Timestamp created, modified;
 		private List<CommentObj> embedded;
 		private Boolean deleted;
 
 		private List<Integer> breadCrumbsList;
 
-		public CommentObj(Integer id, Integer discussionId, Integer pollId, Integer userId, 
+		public CommentObj(Integer id, String aid, Integer discussionId, 
+				Integer pollId, String pollAid, Integer userId, String userAid, 
 				String userName, Boolean deleted,
 				Double avgRank, Integer userRank, String text, String breadCrumbs,
 				Timestamp created, Timestamp modified) {
 			this.id = id;
+			this.aid = aid;
 			this.discussionId = discussionId;
 			this.pollId = pollId;
+			this.pollAid = pollAid;
 			this.userId = userId;
+			this.userAid = userAid;
 			this.userName = userName;
 			this.deleted = deleted;
 			this.avgRank = avgRank;
@@ -157,7 +162,6 @@ public class Transformations {
 			this.text = text;
 			this.created = created;
 			this.modified = modified;
-			this.alphaId = Tools.ALPHA_ID.encode(new BigInteger(id.toString()));
 			embedded = new ArrayList<>();
 			setBreadCrumbsArr(breadCrumbs);
 			setParentId();
@@ -283,8 +287,16 @@ public class Transformations {
 			return deleted;
 		}
 		
-		public String getAlphaId() {
-			return alphaId;
+		public String getAid() {
+			return aid;
+		}
+
+		public String getPollAid() {
+			return pollAid;
+		}
+
+		public String getUserAid() {
+			return userAid;
 		}
 
 

@@ -138,10 +138,13 @@ public class API {
 				Boolean private_ = vars.get("public_radio").equals("private");
 				String password = (private_) ? vars.get("private_password") : null;
 				String pollSumTypeId = vars.get("sum_type_radio");
+				Boolean fullUsersOnly = (vars.get("full_users_only") != null) ? true : false;
+				
+				log.info("full user only = " + fullUsersOnly + " | " + vars.get("full_users_only"));
 				//				log.info(text);
 
 				String message = Actions.savePoll(uv.getId().toString(), pollId, 
-						subject, text, password, pollSumTypeId, res);
+						subject, text, password, pollSumTypeId, fullUsersOnly, res);
 
 				return message;
 
@@ -406,14 +409,14 @@ public class API {
 
 
 
-		get("/get_poll/:pollId", (req, res) -> {
+		get("/get_poll/:pollAid", (req, res) -> {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
 
 
 
-				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+				Integer pollId = ALPHA_ID.decode(req.params(":pollAid")).intValue();
 
 				Tools.dbInit();
 
@@ -662,14 +665,14 @@ public class API {
 
 		});
 
-		get("/get_poll_tags/:pollId", (req, res) -> {
+		get("/get_poll_tags/:pollAid", (req, res) -> {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
 
 				Tools.dbInit();
 
-				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+				String pollId = ALPHA_ID.decode(req.params(":pollAid")).toString();
 
 				String json = POLL_TAG_VIEW.find("poll_id = ?", pollId).toJson(false);
 
@@ -685,7 +688,7 @@ public class API {
 
 		});
 		
-		get("/get_tag/:tagId", (req, res) -> {
+		get("/get_tag/:tagAid", (req, res) -> {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
@@ -694,7 +697,8 @@ public class API {
 				
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
-				String tagId = req.params(":tagId");
+				String tagAid = req.params(":tagAid");
+				Integer tagId = Tools.ALPHA_ID.decode(tagAid).intValue();
 				
 				Actions.addTagVisit(uv.getId().toString(), tagId);
 

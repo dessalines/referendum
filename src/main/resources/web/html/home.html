@@ -83,8 +83,8 @@
             <li class="dropdown hide logged-in">
               <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li> <a href="#"> My Info</a></li>
-                <li> <a class="log_out"> Log out</a></li>
+                <li> <a href="#" id="my_user_page"> My info</a></li>
+                <li> <a href="#" class="log_out"> Log out</a></li>
               </ul>
             </li>
             <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
@@ -105,14 +105,14 @@
           </p>
           <p> How can increasingly larger groups of people come to a <a href="https://en.wikipedia.org/wiki/Consensus_decision-making">consensus</a>, when there are <i>too many of them to fit into one room?</i>
           </p>
-          <p> Referendum is a simple platform, created out of a desire to answer those questions. I wanted for people to be able to make <i>dynamic polls</i>, where voters could contribute options themselves. I wanted the system to feature <b>discussion before voting</b>, a key feature in <a href="https://en.wikipedia.org/wiki/Consensus_decision-making#Objectives">collaborative systems</a>. I wanted it to have <b>bottom-up democracy</b>, <a href="http://rangevoting.org/UniqBest.html">minimizing voter regret</a> by using the best voting method possible, <a href="http://rangevoting.org/">Range Voting</a> (also known as olympic score voting).</p>
-          <p> Check out a sample poll <a href="">here</a>.
+          <p> Referendum is a simple platform, created out of a desire to answer those questions. I wanted for people to be able to make <i>dynamic polls</i>, where voters could contribute the options themselves. I wanted the system to feature <b>discussion before voting</b>, a key feature in <a href="https://en.wikipedia.org/wiki/Consensus_decision-making#Objectives">collaborative systems</a>. I wanted it to have <b>bottom-up democracy</b>, <a href="http://rangevoting.org/UniqBest.html">minimizing voter regret</a> by using the best voting method possible, <a href="http://rangevoting.org/">Range Voting</a> (also known as olympic score voting).</p>
+          <p> Check out a sample poll <a href="/poll/1">here</a>.
           </p>
           <ul>
             <li> Polls can be private, or open.</li>
-            <li> Uses <a href="http://rangevoting.org/">Range Voting</a>.</li>
-            <li> <a href="http://rangevoting.org/UniqBest.html">Why Range Voting is the better than other voting methods</a>.</li>
-            <li> Code fully open source on <a href=""> Github</a>.</li>
+            <li> Threaded discussions and polls, using <a href="http://rangevoting.org/">Range Voting</a>.</li>
+            <li><a href="http://rangevoting.org/UniqBest.html">Why Range Voting is the better than other voting methods</a>.</li>
+            <li> Code fully open source on <a href="https://github.com/tchoulihan/direct_democracy"> Github</a>.</li>
           </ul>
           <br>
           <button class="btn btn-default btn-block create_empty_poll"> Create a poll</button>
@@ -123,12 +123,12 @@
           <div id="trending_polls_div">
             <script id="trending_polls_template" type="x-tmpl-mustache">
               {{#records}}
-              <h5><a href="/poll/{{id}}" class="text-muted">{{subject}}</a></h5>
-              <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a> to {{#tag_name}}
-                <a href="/tag/{{tag_id}}" class="label label-default"> {{tag_name}}</a>{{/tag_name}}</p>
+              <h5><a href="/poll/{{aid}}" class="text-muted">{{subject}}</a></h5>
+              <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to {{#tag_name}}
+                <a href="/tag/{{tag_aid}}" class="label label-default"> {{tag_name}}</a>{{/tag_name}}</p>
               <small>
               <ul class="list-inline">
-                <li><a class="text-muted" href="/poll/{{id}}">{{number_of_comments}} comments</a></li>
+                <li><a class="text-muted" href="/poll/{{aid}}">{{number_of_comments}} comments</a></li>
                 <li>{{year_hits}} views</li>
               </ul>
               </small> {{/records}}
@@ -137,7 +137,7 @@
           <p><a href="/browse_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
           <div id="trending_tags_div">
             <script id="trending_tags_template" type="x-tmpl-mustache">
-              {{#0}} <span> <a class="text-muted" href="/browse_tags">trending tags:</a> </span>{{/0}} {{#.}} <a href="/tag/{{id}}" class="label label-default">{{name}}</a> {{/.}}
+              {{#0}} <span> <a class="text-muted" href="/browse_tags">trending tags:</a> </span>{{/0}} {{#.}} <a href="/tag/{{aid}}" class="label label-default">{{name}}</a> {{/.}}
               <span><a class="text-muted" href="/browse_tags"> <i class="fa fa-arrow-right"></i></a></span>
             </script>
           </div>

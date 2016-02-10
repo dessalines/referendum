@@ -54,13 +54,14 @@ public class Actions {
 				"user_id", userId,
 				"poll_type_id", 1,
 				"poll_sum_type_id", 1);
+		p.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(p.getLong("id")))).saveIt();
 
 		return p.getId().toString();
 	}
 
 	public static String savePoll(String userId, String pollId, 
 			String subject, String text, String password,
-			String pollSumTypeId, Response res) {
+			String pollSumTypeId, Boolean fullUsersOnly, Response res) {
 
 		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
 
@@ -69,7 +70,8 @@ public class Actions {
 		}
 
 		p.set("private_password", password,
-				"poll_sum_type_id", pollSumTypeId).saveIt();
+				"poll_sum_type_id", pollSumTypeId,
+				"full_user_only", fullUsersOnly).saveIt();
 
 
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
@@ -218,6 +220,8 @@ public class Actions {
 		Comment c = COMMENT.createIt("discussion_id", discussionId, 
 				"text", text,
 				"user_id", userId);
+		c.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(c.getLong("id")))).saveIt();
+
 
 		String childId = c.getId().toString();
 
@@ -320,9 +324,12 @@ public class Actions {
 		Boolean secure = false;
 		res.cookie("auth",null, 0);
 		res.cookie("uid",null, 0);
+		res.cookie("uaid",null, 0);
 		res.cookie("username",null, 0);
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uid", fu.getString("user_id"), DataSources.EXPIRE_SECONDS, secure);
+		res.cookie("uaid", Tools.ALPHA_ID.encode(new BigInteger(fu.getString("user_id"))), 
+				DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("username", fu.getString("name"), DataSources.EXPIRE_SECONDS, secure);
 
 		return "Logged in";
@@ -332,9 +339,11 @@ public class Actions {
 		Boolean secure = false;
 		res.cookie("auth",null, 0);
 		res.cookie("uid",null, 0);
+		res.cookie("uaid",null, 0);
 		
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uid", user.getId().toString(), DataSources.EXPIRE_SECONDS, secure);
+		res.cookie("uaid", user.getString("aid"), DataSources.EXPIRE_SECONDS, secure);
 
 		return "Logged in";
 	}
@@ -392,6 +401,7 @@ public class Actions {
 		// The user doesn't exist, so you need to create the user and login
 		if (uv == null) {
 			User user = USER.createIt("ip_address", req.ip());
+			user.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(user.getLong("id")))).saveIt();
 			auth = Tools.generateSecureRandom();
 			LOGIN.createIt("user_id", user.getId(), 
 					"auth", auth,
@@ -527,6 +537,8 @@ public class Actions {
 
 			// Create the user and full user
 			User user = USER.createIt("ip_address", req.ip());
+			user.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(user.getLong("id")))).saveIt();
+
 
 			String encryptedPassword = Tools.PASS_ENCRYPT.encryptPassword(password);
 			fu = FULL_USER.createIt("user_id", user.getId(),
@@ -551,12 +563,12 @@ public class Actions {
 
 	}
 
-	public static void addPollVisit(String userId, String pollId) {
+	public static void addPollVisit(String userId, Integer pollId) {
 		POLL_VISIT.createIt("user_id", userId, 
 				"poll_id", pollId);
 	}
 
-	public static void addTagVisit(String userId, String tagId) {
+	public static void addTagVisit(String userId, Integer tagId) {
 		TAG_VISIT.createIt("user_id", userId, 
 				"tag_id", tagId);
 	}
@@ -574,6 +586,7 @@ public class Actions {
 			if (tag == null) {
 				tag = TAG.createIt("user_id", userId,
 						"name", newTagName);
+				tag.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(tag.getLong("id")))).saveIt();
 				message = "New tag added";
 			}
 			

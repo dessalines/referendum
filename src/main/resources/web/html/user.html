@@ -84,7 +84,7 @@
               <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li> <a href="#"> My Info</a></li>
-                <li> <a class="log_out"> Log out</a></li>
+                <li> <a href="#" class="log_out"> Log out</a></li>
               </ul>
             </li>
             <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
@@ -104,12 +104,12 @@
             <script id="polls_template" type="x-tmpl-mustache">
               {{#records}}
               <div class="col-md-4">
-                <h6><a href="/poll/{{id}}" class="text-muted">{{subject}}</a></h6>
-                <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_id}}">{{user_name}}</a> to
-                  <a href="/tag/{{tag_id}}" class="label label-default label-nowrap"> {{tag_name}}</a></p>
+                <h6><a href="/poll/{{aid}}" class="text-muted">{{subject}}</a></h6>
+                <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to
+                  <a href="/tag/{{tag_aid}}" class="label label-default label-nowrap"> {{tag_name}}</a></p>
                 <small>
                 <ul class="list-inline">
-                  <li><a class="text-muted" href="/poll/{{id}}">{{number_of_comments}} comments</a></li>
+                  <li><a class="text-muted" href="/poll/{{aid}}">{{number_of_comments}} comments</a></li>
                   <li>{{year_hits}} views</li>
                 </ul>
                 </small>

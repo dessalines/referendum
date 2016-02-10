@@ -9,6 +9,7 @@ discussion_id,
 discussion.subject,
 discussion.text,
 candidate.user_id,
+user.aid as user_aid,
 coalesce(full_user.name, concat('user_',candidate.user_id)) as user_name,
 avg(ballot.rank) as avg_rank,
 candidate.created,
@@ -18,6 +19,8 @@ inner join discussion
 on candidate.discussion_id = discussion.id
 left join full_user
 on candidate.user_id = full_user.user_id
+left join user
+on candidate.user_id = user.id
 left join ballot
 on ballot.candidate_id = candidate.id
 group by candidate.id;
@@ -25,22 +28,28 @@ group by candidate.id;
 create view ballot_view as 
 select ballot.poll_id,
 ballot.user_id,
+user.aid as user_aid,
 ballot.candidate_id,
 ballot.rank
-from ballot;
+from ballot
+left join user
+on ballot.user_id = user.id;
 
 create view poll_tag_view as 
 select poll_tag.id,
 poll_tag.poll_id,
 poll_tag.tag_id,
+tag.aid as tag_aid,
 tag.name
 from poll_tag
 left join tag
 on tag.id = poll_tag.tag_id;
 
 create view tag_view as 
-select id,
-user_id,
+select tag.id,
+tag.aid,
+tag.user_id,
+user.aid as user_aid,
 name,
 tag_visit_trending_hour.hits as hour_hits,
 tag_visit_trending_hour.z_score as hour_score,
@@ -52,9 +61,11 @@ tag_visit_trending_month.hits as month_hits,
 tag_visit_trending_month.z_score as month_score,
 tag_visit_trending_year.hits as year_hits,
 tag_visit_trending_year.z_score as year_score,
-created,
-modified
+tag.created,
+tag.modified
 from tag
+left join user
+on tag.user_id = user.id
 left join tag_visit_trending_hour
 on tag_visit_trending_hour.tag_id = tag.id
 left join tag_visit_trending_day
@@ -70,6 +81,7 @@ group by tag.id;
 
 create view user_view as 
 select user.id,
+user.aid,
 coalesce(full_user.name, concat('user_',user.id)) as user_name,
 user.created,
 user.modified
@@ -80,6 +92,7 @@ on full_user.user_id = user.id;
 
 create view user_login_view as 
 select user.id,
+user.aid,
 ip_address,
 name,
 email,
@@ -94,6 +107,7 @@ on login.user_id = user.id;
 
 create view poll_view as 
 select poll.id,
+poll.aid,
 poll_type_id,
 poll_type.name as poll_type_name,
 poll_sum_type_id,
@@ -101,11 +115,13 @@ poll_sum_type.name as poll_sum_type_name,
 private_password,
 poll.discussion_id,
 poll.user_id,
+user.aid as user_aid,
 coalesce(full_user.name, concat('user_',poll.user_id)) as user_name,
 subject,
 discussion.text,
 count(comment.id) as number_of_comments,
 tag.id as tag_id,
+tag.aid as tag_aid,
 tag.name as tag_name,
 poll_visit_trending_hour.hits as hour_hits,
 poll_visit_trending_hour.z_score as hour_score,
@@ -128,6 +144,8 @@ inner join poll_sum_type
 on poll_sum_type.id = poll.poll_sum_type_id
 left join full_user
 on poll.user_id = full_user.user_id
+left join user
+on poll.user_id = user.id
 left join comment 
 on comment.discussion_id = poll.discussion_id
 left join poll_tag
@@ -148,6 +166,7 @@ group by poll.id;
 
 create view poll_ungrouped_view as 
 select poll.id,
+poll.aid,
 poll_type_id,
 poll_type.name as poll_type_name,
 poll_sum_type_id,
@@ -155,11 +174,13 @@ poll_sum_type.name as poll_sum_type_name,
 private_password,
 poll.discussion_id,
 poll.user_id,
+user.aid as user_aid,
 coalesce(full_user.name, concat('user_',poll.user_id)) as user_name,
 subject,
 discussion.text,
 count(comment.id) as number_of_comments,
 tag.id as tag_id,
+tag.aid as tag_aid,
 tag.name as tag_name,
 poll_visit_trending_hour.hits as hour_hits,
 poll_visit_trending_hour.z_score as hour_score,
@@ -182,6 +203,8 @@ inner join poll_sum_type
 on poll_sum_type.id = poll.poll_sum_type_id
 left join full_user
 on poll.user_id = full_user.user_id
+left join user
+on poll.user_id = user.id
 left join comment 
 on comment.discussion_id = poll.discussion_id
 left join poll_tag
@@ -233,10 +256,13 @@ group by poll.id, poll_tag.id;
 create view comment_view as 
 select 
 comment.id,
+comment.aid,
 comment.discussion_id,
 poll.id as poll_id,
+poll.aid as poll_aid,
 text,
 comment.user_id,
+user.aid as user_aid,
 coalesce(full_user.name, concat('user_',comment.user_id)) as user_name,
 -- min(a.path_length,b.path_length),
 AVG(c.rank) as avg_rank,
@@ -258,6 +284,8 @@ left join poll on
 comment.discussion_id = poll.discussion_id
 left join full_user
 on comment.user_id = full_user.user_id
+left join user
+on comment.user_id = user.id
 -- where comment.discussion_id >= 0
 -- and a.parent_id = 3 
 -- and b.parent_id >= 10
