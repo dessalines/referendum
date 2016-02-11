@@ -552,7 +552,7 @@ public class Actions {
 			User user = USER.createIt("ip_address", req.ip());
 			user.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(user.getLong("id")))).saveIt();
 
-
+			log.info("encrypting the user password");
 			String encryptedPassword = Tools.PASS_ENCRYPT.encryptPassword(password);
 			fu = FULL_USER.createIt("user_id", user.getId(),
 					"name", userName,

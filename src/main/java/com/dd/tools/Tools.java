@@ -41,6 +41,7 @@ import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
@@ -78,8 +79,7 @@ public class Tools {
 	
 	private static final SecureRandom RANDOM = new SecureRandom();
 	
-	public static final StrongPasswordEncryptor PASS_ENCRYPT = new StrongPasswordEncryptor();
-
+	public static final BasicPasswordEncryptor PASS_ENCRYPT = new BasicPasswordEncryptor();
 
 	public static void allowOnlyLocalHeaders(Request req, Response res) {
 
