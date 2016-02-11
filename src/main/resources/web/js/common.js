@@ -171,6 +171,12 @@ function setupLoginForm() {
       standardFormPost('login', loginForm, null, null, function() {
 
         showLoggedIn();
+
+        // reload the page if you're on a poll
+        if (window.location.pathname.startsWith('/poll')) {
+          location.reload(true);
+        }
+
       }, null, null);
     });
 
