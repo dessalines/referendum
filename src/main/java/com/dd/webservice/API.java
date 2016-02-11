@@ -252,32 +252,27 @@ public class API {
 
 		});
 
-		get("/get_poll_candidates/:pollId/:pageSize/:startIndex", (req, res) -> {
+		get("/get_poll_candidates/:pollAid/:pageSize/:startIndex", (req, res) -> {
 
 			try {
 				Tools.allowAllHeaders(req, res);
 
-				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+				String pollId = ALPHA_ID.decode(req.params(":pollAid")).toString();
 				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
 				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
 				
 				Tools.dbInit();
-
-				String json = Tools.replaceNewlines(
-						CANDIDATE_VIEW.find("poll_id = ?", 
-								pollId).orderBy("avg_rank desc").toJson(false));
 
 				Paginator candidates = 
 						new Paginator<CandidateView>(CandidateView.class,
 						pageSize,
 						"poll_id = ?", pollId).orderBy("avg_rank desc");
 				
-
 				Integer pageNum = (startIndex/pageSize)+1;
 
 				String json = Tools.wrapPaginatorArray(
-						Tools.replaceNewlines(polls.getPage(pageNum).toJson(false)),
-								polls.getCount());
+						Tools.replaceNewlines(candidates.getPage(pageNum).toJson(false)),
+						candidates.getCount());
 				
 				return json;
 			} catch (Exception e) {
@@ -887,7 +882,7 @@ public class API {
 
 		});
 
-		post("/clear_tags/:pollId", (req, res) -> {
+		post("/clear_tags/:pollAid", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
@@ -895,7 +890,7 @@ public class API {
 				Tools.dbInit();
 
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
-				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
+				String pollId = ALPHA_ID.decode(req.params(":pollAid")).toString();
 
 				String message = Actions.clearTags(uv.getId().toString(), pollId);
 

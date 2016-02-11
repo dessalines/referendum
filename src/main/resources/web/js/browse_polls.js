@@ -18,6 +18,7 @@ $(document).ready(function() {
 });
 
 function setupWindowScrolling() {
+  $(window).unbind('scroll');
   $(window).scroll(function() {
     if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
       $(window).unbind('scroll');
@@ -36,7 +37,7 @@ function setupTrendingPolls(period) {
 
   var pageSize = fromHomeScreen ? 5 : browsePageSize;
 
-  var keepFetching = ((startIndex + browsePageSize) <= recordCount);
+  var keepFetching = (startIndex < recordCount);
 
   console.log(keepFetching);
 

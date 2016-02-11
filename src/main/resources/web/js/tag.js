@@ -39,7 +39,7 @@ function setupTrendingPolls(period) {
 
   var pageSize = fromHomeScreen ? 5 : browsePageSize;
 
-  var keepFetching = ((startIndex + browsePageSize) <= recordCount);
+  var keepFetching = (startIndex < recordCount);
 
 
   if (keepFetching || (period !== undefined)) {

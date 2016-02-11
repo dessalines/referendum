@@ -20,7 +20,14 @@ function initializeAllRangeVotes() {
     $('.range_vote').each(function() {
       var candidateId = this.id.split("_")[1];
       var cId = '#' + this.id;
-      setupRangeVote(cId, votesToCandidateMap[candidateId]);
+
+      // Necessary, because this may be called multiple times
+      // as paged records load
+      var alreadyExists = ($(cId + '_slider .slider-track-high').length);
+      if (!alreadyExists) {
+        setupRangeVote(cId, votesToCandidateMap[candidateId]);
+      }
+
     });
   });
 
@@ -44,6 +51,7 @@ function votesArrayToMap(arr) {
 function setupRangeVote(obj, vote) {
 
   // With JQuery
+
   var slider = $(obj).bootstrapSlider({
       reversed: true,
       tooltip: 'show'
@@ -62,6 +70,10 @@ function setupRangeVote(obj, vote) {
 
 }
 
+function destroyRangeVote(obj) {
+
+}
+
 function slideStopActions(obj, cleared) {
 
   cleared = (typeof cleared === "undefined") ? false : cleared;
@@ -70,7 +82,7 @@ function slideStopActions(obj, cleared) {
   $(obj).attr('vote', true);
   $(obj + '_vote').removeClass('hide');
 
-  
+
 
   // set the color and tooltip
   var rank = null;
@@ -112,12 +124,12 @@ function slideStopActions(obj, cleared) {
   simplePost('save_ballot/' + pollId + '/' + candidateId + '/' + rank, null, null,
     function() {
       // alert('ballot saved');
-       setupResults();
+      setupResults();
     }, null, null, null);
 
   removeOverlay();
   // recalculate the poll results
- 
+
 }
 
 function setupThumbs(obj) {
@@ -125,10 +137,10 @@ function setupThumbs(obj) {
   // Hide slider and clear by default
 
   // Unhide slider and clear
-  $(obj + '_vote').click(function() {
+  $(obj + '_vote').unbind('click').click(function() {
     $(obj + '_range_vote_table').toggleClass('hide');
     $('[data-toggle="tooltip"]').tooltip('hide');
-    
+
     // $(obj + '_slider' + ',' + obj + '_clear_vote').toggleClass('hide');
     $(obj + '_vote').addClass('hide');
     addOverlay();
@@ -188,7 +200,7 @@ function RGBChange(obj) {
 
 
 function setupClearVote(obj) {
-  $(obj + '_clear_vote').click(function() {
+  $(obj + '_clear_vote').unbind('click').click(function() {
     console.log(obj);
     $(obj).bootstrapSlider('setValue', 5);
     $(obj + '_slider .slider-track-high').css('background', '#BABABA');

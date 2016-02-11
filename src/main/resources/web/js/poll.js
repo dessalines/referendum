@@ -6,11 +6,17 @@ var recurse = $("#recurse").html();
 
 var resultsData = null;
 
-var pollId = getLastUrlPath();
+var pollAid = getLastUrlPath();
+
+var activeTab = null;
+
+var cMap = {};
 
 $(document).ready(function() {
   setupAddCandidateBtn();
   setupAddCandidateForm();
+
+  setupActiveTabEvents();
 
   setupPoll();
   setupCandidates();
@@ -28,12 +34,46 @@ $(document).ready(function() {
 
   setupClearPollTags();
 
+
+
+
+
 });
+
+
+
+function setupActiveTabEvents() {
+
+  // First do a check to set the correct one
+  activeTab = '#' + $("ul#main_tab_list li.active").attr('name');
+
+  console.log(activeTab);
+
+  $(window).unbind('scroll');
+  if (activeTab == '#discuss_tab') {
+    // setupCommentsWindowScrolling();
+  } else if (activeTab == '#vote_tab') {
+    setupCandidatesWindowScrolling();
+  }
+
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    activeTab = $(e.target).attr('href');
+
+    console.log(activeTab);
+
+    $(window).unbind('scroll');
+    if (activeTab == '#discuss_tab') {
+      // setupCommentsWindowScrolling();
+    } else if (activeTab == '#vote_tab') {
+      setupCandidatesWindowScrolling();
+    }
+  });
+}
 
 function setupClearPollTags() {
 
-  $('#clear_poll_tags').click(function() {
-    simplePost('clear_tags/' + pollId, null, null,
+  $('#clear_poll_tags').unbind('click').click(function() {
+    simplePost('clear_tags/' + pollAid, null, null,
       function() {
         setupPollTags();
       }, null, null, null);
@@ -135,7 +175,7 @@ function setupTagSearch() {
 
 
 function setupPollTags() {
-  getJson('get_poll_tags/' + pollId).done(function(e) {
+  getJson('get_poll_tags/' + pollAid).done(function(e) {
     var data = JSON.parse(e);
     console.log(data);
     fillMustacheWithJson(data, tagTemplate, '#tag_div');
@@ -143,7 +183,7 @@ function setupPollTags() {
 }
 
 function setupComments() {
-  getJson('get_comments/' + pollId).done(function(e) {
+  getJson('get_comments/' + pollAid).done(function(e) {
     var data = JSON.parse(replaceNewlines(e));
     console.log(data);
     fillMustacheWithJson(data, commentsTemplate, '#comments_div', {
@@ -161,29 +201,76 @@ function setupEditRedirect() {
   }
 }
 
-function setupCandidates() {
-  getJson('get_poll_candidates/' + pollId).done(function(e) {
-    var data = JSON.parse(replaceNewlines(e));
-    console.log(data);
-    fillMustacheWithJson(data, candidatesTemplate, '#candidates_div');
-    initializeAllRangeVotes();
 
-    setupCandidateBtns(data);
-    setupDeleteCandidateBtn();
-    setupEditCandidateBtn(data);
+
+
+
+var candidatesStartIndex = 0;
+var candidatesBrowsePageSize = 3;
+var candidatesRecordCount = 1000;
+
+
+function setupCandidatesWindowScrolling() {
+
+  $(window).unbind('scroll');
+  $(window).scroll(function() {
+    if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+      $(window).unbind('scroll');
+      console.log('near bottom');
+      candidatesStartIndex += candidatesBrowsePageSize;
+      setupCandidates();
+    }
   });
 }
 
+
+function setupCandidates() {
+
+  var keepFetching = (candidatesStartIndex < candidatesRecordCount);
+
+  console.log(keepFetching);
+
+  if (keepFetching) {
+
+    getJson('get_poll_candidates/' + pollAid + '/' + candidatesBrowsePageSize + '/' + candidatesStartIndex).done(function(e) {
+      var data = JSON.parse(replaceNewlines(e));
+      console.log(data);
+      candidatesRecordCount = data['record_count'];
+      addToCandidateMap(data);
+
+
+      if (candidatesStartIndex == 0) {
+        $('#candidates_div').empty();
+        // $('#candidates_div').empty();
+        fillMustacheWithJson(data, candidatesTemplate, '#candidates_div');
+      } else {
+        // appending version
+        fillMustacheWithJson(data, candidatesTemplate, '#candidates_div', null, true);
+      }
+
+      // Only set it up if you're on that current tab:
+      if (activeTab == '#vote_tab') {
+        setupCandidatesWindowScrolling();
+      }
+
+      initializeAllRangeVotes();
+      setupCandidateBtns(data);
+      setupDeleteCandidateBtn();
+      setupEditCandidateBtn(data);
+    });
+  }
+}
+
 function setupPoll() {
-  getJson('get_poll/' + pollId).done(function(e) {
+  getJson('get_poll/' + pollAid).done(function(e) {
 
     var data = JSON.parse(replaceNewlines(e));
     console.log(data);
 
     // If it's a passworded poll, and that password is in the cookie
     if (data['private_password'] != null &&
-      data['private_password'] != getCookie('poll_password_' + pollId)) {
-      window.location = '/private_poll/' + pollId;
+      data['private_password'] != getCookie('poll_password_' + pollAid)) {
+      window.location = '/private_poll/' + pollAid;
     }
 
     fillMustacheWithJson(data, pollTemplate, '#poll_div');
@@ -202,9 +289,9 @@ function setupPoll() {
   });
 }
 
-function setupCandidateBtns(data) {
 
-  var cMap = candidateMap(data);
+
+function setupCandidateBtns(data) {
 
   console.log(cMap);
 
@@ -219,18 +306,16 @@ function setupCandidateBtns(data) {
   })
 }
 
-function candidateMap(data) {
-  var cMap = {};
-  data.forEach(function(e) {
+function addToCandidateMap(data) {
+  console.log(data);
+  data.records.forEach(function(e) {
     var cId = e['id'];
     cMap[cId] = e;
   });
-
-  return cMap;
 }
 
 function setupDeleteCandidateBtn() {
-  $('.delete_candidate_btn').click(function() {
+  $('.delete_candidate_btn').unbind('click').click(function() {
 
     // get this id
     var cId = this.id.split('_').slice(-1)[0];
@@ -241,17 +326,18 @@ function setupDeleteCandidateBtn() {
     $('#delete_candidate_sure_no_btn' + '_' + cId).removeClass('hide');
   });
 
-  $('.delete_candidate_sure_no_btn').click(function() {
+  $('.delete_candidate_sure_no_btn').unbind('click').click(function() {
     var cId = this.id.split('_').slice(-1)[0];
     $('#delete_candidate_btn' + '_' + cId).text('Delete');
     $('#delete_candidate_sure_yes_btn' + '_' + cId).addClass('hide');
     $('#delete_candidate_sure_no_btn' + '_' + cId).addClass('hide');
   });
 
-  $('.delete_candidate_sure_yes_btn').click(function() {
+  $('.delete_candidate_sure_yes_btn').unbind('click').click(function() {
     var cId = this.id.split('_').slice(-1)[0];
     simplePost('delete_candidate/' + cId, null, null,
       function() {
+        candidatesStartIndex = 0;
         setupCandidates();
         setupResults();
       }, null, null, null);
@@ -260,20 +346,20 @@ function setupDeleteCandidateBtn() {
 }
 
 function setupDeletePollBtn() {
-  $('#delete_poll_btn').click(function() {
+  $('#delete_poll_btn').unbind('click').click(function() {
     $('#delete_poll_btn').text('Are you sure?');
     $('#delete_sure_yes_btn').removeClass('hide');
     $('#delete_sure_no_btn').removeClass('hide');
   });
 
-  $('#delete_sure_no_btn').click(function() {
+  $('#delete_sure_no_btn').unbind('click').click(function() {
     $('#delete_poll_btn').text('Delete');
     $('#delete_sure_yes_btn').addClass('hide');
     $('#delete_sure_no_btn').addClass('hide');
   });
 
-  $('#delete_sure_yes_btn').click(function() {
-    simplePost('delete_poll/' + pollId, null, null,
+  $('#delete_sure_yes_btn').unbind('click').click(function() {
+    simplePost('delete_poll/' + pollAid, null, null,
       function() {
         delay(function() {
           window.location = '/';
@@ -288,10 +374,8 @@ function setupDeletePollBtn() {
 
 function setupEditCandidateBtn(data) {
 
-  var cMap = candidateMap(data);
 
-
-  $('.edit_candidate_btn').click(function() {
+  $('.edit_candidate_btn').unbind('click').click(function() {
     var cId = this.id.split('_').slice(-1)[0];
     fillCandidateForm(cMap[cId]);
 
@@ -313,7 +397,7 @@ function fillCandidateForm(obj) {
 
 function setupEditPollBtn() {
 
-  $('#edit_poll_btn').click(function() {
+  $('#edit_poll_btn').unbind('click').click(function() {
     $('#edit_poll_div').removeClass('hide');
     $('#poll_div').addClass('hide');
     // updateTextAreaHeight();
@@ -323,7 +407,7 @@ function setupEditPollBtn() {
 
 
 function setupAddCandidateBtn() {
-  $('#add_a_candidate').click(function() {
+  $('#add_a_candidate').unbind('click').click(function() {
     $(this).addClass('hide');
 
     // Resets the edit one if necessary
@@ -336,7 +420,7 @@ function setupAddCandidateBtn() {
 }
 
 function setupAddCandidateForm() {
-  $('input[name="poll_id"]').val(pollId);
+  $('input[name="poll_id"]').val(pollAid);
 
   var candidateForm = '#candidate_form';
   $(candidateForm).bootstrapValidator({
@@ -347,6 +431,7 @@ function setupAddCandidateForm() {
     .on('success.form.bv', function(event) {
       event.preventDefault();
       standardFormPost('save_candidate', candidateForm, null, null, function() {
+        candidatesStartIndex = 0;
         setupCandidates();
         setupResults();
         $('#candidate_form').addClass('hide');
@@ -360,7 +445,7 @@ function setupAddCandidateForm() {
       }, null, null);
     });
 
-  $('.candidate_save_cancel_btn').click(function() {
+  $('.candidate_save_cancel_btn').unbind('click').click(function() {
     $('#candidate_form').addClass('hide');
     $('#add_a_candidate').removeClass('hide');
   });
@@ -373,7 +458,7 @@ function setupAddCandidateForm() {
 
 
 function setupResults() {
-  getJson('get_poll_results/' + pollId).done(function(e) {
+  getJson('get_poll_results/' + pollAid).done(function(e) {
     resultsData = JSON.parse(e);
     console.log(resultsData);
 
@@ -521,7 +606,7 @@ function setupPollForm() {
     }
   });
 
-  $('.poll_save_cancel_btn').click(function() {
+  $('.poll_save_cancel_btn').unbind('click').click(function() {
     $('#edit_poll_div').addClass('hide');
     $('#poll_div').removeClass('hide');
   });
@@ -532,7 +617,7 @@ function fillPollForm(data) {
 
   console.log(data);
 
-  $('input[name="poll_id"]').val(pollId);
+  $('input[name="poll_id"]').val(pollAid);
   $('input[name="subject"]').val(data['subject']);
   $("input[name=sum_type_radio][value='" + data['poll_sum_type_id'] + "']").prop("checked", true);
   $('#edit_poll_text').data('markdown').setContent(data['text']);
