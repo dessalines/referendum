@@ -9,15 +9,15 @@ import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dd.db.Actions;
-import com.dd.db.Transformations;
-import com.dd.tools.Tools;
-import com.dd.voting.ballot.RangeBallot;
-import com.dd.voting.candidate.RangeCandidate;
-import com.dd.voting.election.RangeElection;
-import com.dd.voting.voting_system.choice_type.RangeVotingSystem.RangeVotingSystemType;
+import com.referendum.db.Actions;
+import com.referendum.db.Transformations;
+import com.referendum.tools.Tools;
+import com.referendum.voting.ballot.RangeBallot;
+import com.referendum.voting.candidate.RangeCandidate;
+import com.referendum.voting.election.RangeElection;
+import com.referendum.voting.voting_system.choice_type.RangeVotingSystem.RangeVotingSystemType;
 
-import static com.dd.db.Tables.*;
+import static com.referendum.db.Tables.*;
 
 public class RangeElectionTest2 extends TestCase {
 

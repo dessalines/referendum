@@ -21,8 +21,6 @@
   <link rel="stylesheet" href="../bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css" />
   <!--   toastr css -->
   <link href="../bower_components/toastr/toastr.css" rel="stylesheet" />
-  <!--   typeahead css -->
-  <link href="../css/typeaheadjs.css" rel="stylesheet" />
   <!-- Pickadate -->
   <link href="../bower_components/pickadate/lib/themes/default.css" rel="stylesheet" />
   <link href="../bower_components/pickadate/lib/themes/default.date.css" rel="stylesheet" />
@@ -63,17 +61,33 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#" class="create_empty_poll">Create a poll</a>
+            <li><a href="#" class="create_empty_poll">create a poll</a>
+            </li>
+            <li id="searchbar">
+              <form id="search_form" class="navbar-form navbar-left navbar-input-group " role="search">
+                <input id='search_id' type='hidden' name='id' />
+                <input id='search_type' type='hidden' name='search_type' />
+                <div class="input-group">
+                  <div id="search_box" class="form-group">
+                    <input name="search_input" type="text" class="form-control typeahead rounded-left" placeholder="search for polls or tags">
+                  </div>
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default rounded-right"><i class="fa fa-search"></i>
+                        </button>
+                   </span>
+                </div>
+              </form>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown hide logged-in">
               <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li> <a href="#"> My Info</a></li>
+                <li> <a href="#" id="my_user_page"> My info</a></li>
+                <li> <a href="#" class="log_out"> Log out</a></li>
               </ul>
             </li>
-            <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">Log in or sign up</a></li>
+            <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -83,25 +97,62 @@
     <!--Main Content -->
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <h3><a href="#">Referendum</a>
-            <small> A group decision-making and polling platform.</small>
-          </h3>
+        <div class="col-md-6 vertical-line-right">
+          <h3><a href="#">Referendum</a></h3>
+          <p>A group decision-making and polling platform</p>
+          <hr>
           <p><a href="https://en.wikipedia.org/wiki/Direct_democracy">Direct democracy</a> is the future, but <i>how might it work in practice?</i>
           </p>
           <p> How can increasingly larger groups of people come to a <a href="https://en.wikipedia.org/wiki/Consensus_decision-making">consensus</a>, when there are <i>too many of them to fit into one room?</i>
           </p>
-          <p> Referendum is a simple platform, created out of a desire to answer those questions. I wanted for people to be able to make <i>dynamic polls</i>, where voters could contribute options themselves. I wanted the system to feature <b>discussion before voting</b>, a key feature in <a href="https://en.wikipedia.org/wiki/Consensus_decision-making#Objectives">collaborative systems</a>. I wanted it to have <b>bottom-up democracy</b>, whilst <a href="http://rangevoting.org/UniqBest.html">minimizing voter regret</a> by using the best voting method possible, <a href="http://rangevoting.org/">Range Voting</a>(also known as olympic score voting).</p>
-          <p> Check out a sample poll <a href="">here</a>.
+          <p> Referendum is a simple platform, created out of a desire to answer those questions. I wanted for people to be able to make <i>dynamic polls</i>, where voters could contribute the options themselves. I wanted the system to feature <b>discussion before voting</b>, a key feature in <a href="https://en.wikipedia.org/wiki/Consensus_decision-making#Objectives">collaborative systems</a>. I wanted it to have <b>bottom-up democracy</b>, <a href="http://rangevoting.org/UniqBest.html">minimizing voter regret</a> by using the best voting method possible, <a href="http://rangevoting.org/">Range Voting</a> (also known as olympic score voting).</p>
+          <p> Check out a sample poll <a href="/poll/1">here</a>.
           </p>
           <ul>
             <li> Polls can be private, or open.</li>
-            <li> Uses <a href="http://rangevoting.org/">Range Voting</a>.</li>
-            <li> <a href="http://rangevoting.org/UniqBest.html">Why Range Voting is the better than other voting methods</a>.</li>
-            <li> Code fully open source on <a href=""> Github</a>.</li>
+            <li> Threaded discussions and polls, using <a href="http://rangevoting.org/">Range Voting</a>.</li>
+            <li><a href="http://rangevoting.org/UniqBest.html">Why Range Voting is the better than other voting methods</a>.</li>
+            <li> Code fully open source on <a href="https://github.com/tchoulihan/referendum"> Github</a>.</li>
           </ul>
-          <button class="btn btn-default create_empty_poll"> Create a poll</button>
+          <br>
+          <button class="btn btn-default btn-block create_empty_poll"> Create a poll</button>
         </div>
+        <div class="col-md-6">
+          <h4 class="text-center"><a class="text-normal" href="/browse_polls">Trending Polls</a></h4>
+          <hr>
+          <div id="trending_polls_div">
+            <script id="trending_polls_template" type="x-tmpl-mustache">
+              {{#records}}
+              <h5><a href="/poll/{{aid}}" class="text-muted">{{subject}}</a></h5>
+              <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to {{#tag_name}}
+                <a href="/tag/{{tag_aid}}" class="label label-default"> {{tag_name}}</a>{{/tag_name}}</p>
+              <small>
+              <ul class="list-inline">
+                <li><a class="text-muted" href="/poll/{{aid}}">{{number_of_comments}} comments</a></li>
+                <li>{{year_hits}} views</li>
+              </ul>
+              </small> {{/records}}
+            </script>
+          </div>
+          <p><a href="/browse_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
+          <div id="trending_tags_div">
+            <script id="trending_tags_template" type="x-tmpl-mustache">
+              {{#0}} <span> <a class="text-muted" href="/browse_tags">trending tags:</a> </span>{{/0}} {{#.}} <a href="/tag/{{aid}}" class="label label-default">{{name}}</a> {{/.}}
+              <span><a class="text-muted" href="/browse_tags"> <i class="fa fa-arrow-right"></i></a></span>
+            </script>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="row-fluid">
+        <hr class="featurette-divider">
+        <footer>
+          <p class="pull-right"><a href="#">back to top</a>
+          </p>
+          <p>&copy; 2016 Referendum, Inc. &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">about</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">contact</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">support</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">github</a>
+            <br>
+          </p>
+        </footer>
       </div>
     </div>
     <!-- Modals -->
@@ -163,33 +214,35 @@
           </div>
         </div>
       </div>
-      <!-- Bootstrap core JavaScript
+    </div>
+    <!-- Bootstrap core JavaScript
       ================================================== -->
-      <!-- Placed at the end of the document so the pages load faster -->
-      <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-      <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
-      <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-      <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
-      <script src="../bower_components/toastr/toastr.js"></script>
-      <script src="../bower_components/mustache.js/mustache.js"></script>
-      <script src="../bower_components/holderjs/holder.js"></script>
-      <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
-      <script src="../bower_components/highcharts/highcharts.js"></script>
-      <script src="../bower_components/highcharts/modules/exporting.js"></script>
-      <script src="../bower_components/pickadate/lib/picker.js"></script>
-      <script src="../bower_components/pickadate/lib/picker.date.js"></script>
-      <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>
-      <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
-      <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
-      <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
-      <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
-      <script src="../bower_components/d3/d3.min.js"></script>
-      <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-      <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
-      <!-- my scripts -->
-      <script src="../js/tools.js"></script>
-      <script src="../js/range_voting.js"></script>
-      <script src="../js/common.js"></script>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+    <script src="../bower_components/toastr/toastr.js"></script>
+    <script src="../bower_components/mustache.js/mustache.js"></script>
+    <script src="../bower_components/holderjs/holder.js"></script>
+    <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
+    <script src="../bower_components/pickadate/lib/picker.js"></script>
+    <script src="../bower_components/pickadate/lib/picker.date.js"></script>
+    <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>
+    <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+    <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
+    <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+    <script src="../bower_components/d3/d3.min.js"></script>
+    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
+    <script src="../bower_components/moment/min/moment.min.js"></script>
+    <!-- my scripts -->
+    <script src="../js/tools.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/home.js"></script>
+    <script src="../js/browse_tags.js"></script>
+    <script src="../js/browse_polls.js"></script>
 </body>
 
 </html>

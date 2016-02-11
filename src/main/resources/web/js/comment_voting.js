@@ -411,8 +411,9 @@ function initializeCommentSlider(commentId) {
   var commentSliderObj = $('#comment_slider_' + commentId);
   var vote = commentSliderObj.attr('user-rank');
   // console.log(vote);
-  if (vote -= '-1') {
-    var voteNum = parseFloat(vote) / 10;
+  if (vote != '-1') {
+    // console.log(vote);
+    var voteNum = parseFloat(vote/10);
 
     // Fill the data
     commentSliderObj.bootstrapSlider('setValue', voteNum);

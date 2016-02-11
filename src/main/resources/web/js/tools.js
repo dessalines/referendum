@@ -8,14 +8,17 @@ var localSparkService = "http://127.0.0.1:4567/"
 
 
 
-function getJson(shortUrl) {
+function getJson(shortUrl, async) {
+
+  async = (typeof async === "undefined") ? true : async;
   var url = sparkService + shortUrl; // the script where you handle the form input.
   return $.ajax({
     type: "GET",
     url: url,
-    xhrFields: {
-      withCredentials: true
-    },
+    // xhrFields: {
+    //   withCredentials: true
+    // },
+    async: async,
     // data: seriesData, 
     success: function(data, status, xhr) {
       // console.log(data);
@@ -73,7 +76,9 @@ function scrollSpy() {
   // });
 }
 
-function fillMustacheWithJson(data, templateHtml, divId, partial) {
+function fillMustacheWithJson(data, templateHtml, divId, partial, append) {
+
+  append = (typeof append === "undefined") ? false : append;
 
   $.extend(data, standardDateFormatObj);
   $.extend(data, m2htmlObj);
@@ -86,7 +91,12 @@ function fillMustacheWithJson(data, templateHtml, divId, partial) {
     rendered = Mustache.render(templateHtml, data, partial);
   }
 
-  $(divId).html(rendered);
+  // appending, for infinit scroll
+  if (append) {
+    $(divId).append(rendered);
+  } else {
+    $(divId).html(rendered);
+  }
 
   // console.log(rendered);
 
@@ -222,7 +232,8 @@ function getLastUrlPath() {
 
 }
 
-function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, noToast, clearForm) {
+function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, noToast, clearForm,
+  errorFunctions) {
   // !!!!!!They must have names unfortunately
   // An optional arg
   modalId = (typeof modalId === "undefined") ? "defaultValue" : modalId;
@@ -237,7 +248,7 @@ function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, n
 
   // serializes the form's elements.
   var formData = $(formId).serializeArray();
-  // console.log(formData);
+  console.log(formData);
 
   var btn = $("[type=submit]", formId);
 
@@ -292,6 +303,11 @@ function standardFormPost(shortUrl, formId, modalId, reload, successFunctions, n
         toastr.error("Couldn't find endpoint " + url);
 
       }
+
+      if (errorFunctions != null) {
+        errorFunctions();
+      }
+
       btn.button('reset');
     }
   });
@@ -395,10 +411,16 @@ function simplePost(shortUrl, postData, reload, successFunctions, noToast, exter
 var standardDateFormatObj = {
   "dateformat": function() {
     return function(text, render) {
-      var t = parseInt(render(text));
-      var date = new Date(t);
-      
-      return moment(date).fromNow();
+
+      var t = render(text);
+      if (moment(t).isValid()) {
+        return moment(t).fromNow();
+      } else {
+        t = parseInt(render(text));
+        var date = new Date(t);
+        return moment(date).fromNow();
+      }
+
       // return date.customFormat("#YYYY#/#MM#/#DD#")
     }
   }
@@ -481,9 +503,15 @@ var delay = (function() {
 })();
 
 function replaceNewlines(e, single, two) {
-  var r = (single === undefined) ? "\\n" : "\n";
-  var r = (two === undefined) ? r : "\n\n";
-  return e.replace(/--lb--/g, r);
+
+  if (e != null) {
+    var r = (single === undefined) ? "\\n" : "\n";
+    var r = (two === undefined) ? r : "\n\n";
+    return e.replace(/--lb--/g, r);
+  } else {
+    return '';
+  }
+
 }
 
 function replaceNewlinesV2(e) {
@@ -562,4 +590,16 @@ function addOverlay() {
 
 function removeOverlay() {
   $('#overlay').remove();
+}
+
+
+function hideKeyboard(element) {
+  element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
+  element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
+  setTimeout(function() {
+    element.blur(); //actually close the keyboard
+    // Remove readonly attribute after keyboard is hidden.
+    element.removeAttr('readonly');
+    element.removeAttr('disabled');
+  }, 100);
 }

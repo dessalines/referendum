@@ -19,7 +19,7 @@ function setupComments() {
       "recurse": recurse
     });
 
-    $('#view_poll_btn').attr('href', '/poll/' + data[0]['pollId']);
+    $('#view_poll_btn').attr('href', '/poll/' + data[0]['pollAid']);
 
     initializeAllCommentVotes(data);
 

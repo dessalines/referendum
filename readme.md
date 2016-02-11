@@ -107,6 +107,9 @@ http://stackoverflow.com/questions/20584065/reinitializing-jscroll-after-ajax-ca
 Trend with sql query:
 http://stackoverflow.com/questions/20883195/identifying-trend-with-sql-query
 
+nesting forms:
+http://stackoverflow.com/a/21900324/1655478
+
 
 Main page - Discuss, Vote, Results
 
@@ -114,16 +117,19 @@ Main page - Discuss, Vote, Results
 TODO 
 * Paging for results and candidates, and comments(Pretty tough)
 * User pages w/ captchas?
-* Use a hashtag based system (easily create new tags, and tag things)
 * poll searching, based on hashtags or poll names
 
 
 * Poll searching
 * Comment/poll sorting
-* Poll paging
 * Results limit?
+
 * A user page : your comments, poll candidates, and votes
 
-* Trending categories
-* Trending polls
-* Use viewcounts as a way to 
+
+* Add aid columns to comments, polls, users, and indexes
+* Add indexes to poll_visit_trending and tag_visit rending, and comment_tree stuff
+
+* User-only polls(reduces bots).
+
+* Start working on comment and option paging

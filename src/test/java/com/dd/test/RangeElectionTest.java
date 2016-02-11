@@ -8,11 +8,11 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dd.tools.Tools;
-import com.dd.voting.ballot.RangeBallot;
-import com.dd.voting.candidate.RangeCandidate;
-import com.dd.voting.election.RangeElection;
-import com.dd.voting.voting_system.choice_type.RangeVotingSystem.RangeVotingSystemType;
+import com.referendum.tools.Tools;
+import com.referendum.voting.ballot.RangeBallot;
+import com.referendum.voting.candidate.RangeCandidate;
+import com.referendum.voting.election.RangeElection;
+import com.referendum.voting.voting_system.choice_type.RangeVotingSystem.RangeVotingSystemType;
 
 public class RangeElectionTest extends TestCase {
 	
