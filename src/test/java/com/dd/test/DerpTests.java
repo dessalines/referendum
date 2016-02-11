@@ -1,6 +1,6 @@
 package com.dd.test;
 
-import static com.dd.db.Tables.*;
+import static com.referendum.db.Tables.*;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -14,9 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dd.db.Transformations;
-import com.dd.db.Transformations.CommentObj;
-import com.dd.tools.Tools;
+import com.referendum.db.Transformations;
+import com.referendum.db.Transformations.CommentObj;
+import com.referendum.tools.Tools;
 
 import junit.framework.TestCase;
 

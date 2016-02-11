@@ -6,12 +6,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dd.tools.Tools;
-import com.dd.voting.ballot.RankedBallot;
-import com.dd.voting.candidate.RankedCandidate;
-import com.dd.voting.election.ElectionRoundItem;
-import com.dd.voting.election.STVElection;
-import com.dd.voting.election.STVElection.Quota;
+import com.referendum.tools.Tools;
+import com.referendum.voting.ballot.RankedBallot;
+import com.referendum.voting.candidate.RankedCandidate;
+import com.referendum.voting.election.ElectionRoundItem;
+import com.referendum.voting.election.STVElection;
+import com.referendum.voting.election.STVElection.Quota;
 
 import junit.framework.TestCase;
 
