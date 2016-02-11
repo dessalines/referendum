@@ -226,7 +226,7 @@ function setupCandidatesWindowScrolling() {
 
 function setupCandidates() {
 
-  var keepFetching = (candidatesStartIndex < candidatesRecordCount);
+  var keepFetching = (candidatesStartIndex <= candidatesRecordCount);
 
   console.log(keepFetching);
 
