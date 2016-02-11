@@ -51,6 +51,8 @@ function setupCommentTop() {
   commentReplyBtn.click(function() {
     commentReplyForm.removeClass('hide');
     commentReplyBtn.addClass('hide');
+
+     setTimeout("$('#comment_top_form [name=text]').focus();", 5);
   });
 
 
@@ -269,6 +271,8 @@ function setupCommentReply(commentId) {
 
   commentReplyBtn.click(function() {
     commentReplyForm.removeClass('hide');
+
+    setTimeout("$('#comment_reply_form_" + commentId  + " [name=text]').focus();", 0);
   });
 
 

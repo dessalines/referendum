@@ -128,7 +128,7 @@ function setupTagSearch() {
   // $('[name=search_input]').focus();
 
   // $('.tt-input').focus();
-  setTimeout("$('#tag_form [name=search_input]').focus();", 0);
+  
 
   $("#tag_form").submit(function(event) {
     var formData = $("#tag_form").serializeArray();
@@ -579,6 +579,10 @@ function scoreFix(d, text) {
 
 
 function setupPollForm() {
+
+  setTimeout("$('#poll_form [name=subject]').focus();", 0);
+
+  
   var pollForm = '#poll_form';
 
   // Setting the vars

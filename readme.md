@@ -124,3 +124,5 @@ TODO
 
 * Start working on comment and option paging
   * Got option paging working, comment paging on hold for now
+
+* Work on focus thangs

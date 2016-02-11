@@ -12,7 +12,7 @@ function setupTrendingTags(period) {
 
   var order = period + '_score';
 
-  getJson('get_trending_tags/' + order + '/20/0').done(function(e) {
+  getJson('get_trending_tags/' + order + '/400/0').done(function(e) {
     var data = JSON.parse(replaceNewlines(e));
     console.log(data);
     fillMustacheWithJson(data, trendingTagsTemplate, '#trending_tags_div');
