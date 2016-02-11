@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Referendum</title>
+  <!-- favicon -->
+  <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon" />
+  <!-- Bootstrap core CSS -->
+  <link href="../css/cyborg.bootstrap.min.css" rel="stylesheet">
+  <!-- Link to font awesome -->
+  <!-- <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Bootstrap social css -->
+  <link href="../bower_components/bootstrap-social/bootstrap-social.css" rel="stylesheet">
+  <!--   Bootstrap validator -->
+  <link rel="stylesheet" href="../bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css" />
+  <!--   toastr css -->
+  <link href="../bower_components/toastr/toastr.css" rel="stylesheet" />
+  <!-- Pickadate -->
+  <link href="../bower_components/pickadate/lib/themes/default.css" rel="stylesheet" />
+  <link href="../bower_components/pickadate/lib/themes/default.date.css" rel="stylesheet" />
+  <!-- Jquery UI -->
+  <link rel="stylesheet" href="../bower_components/jquery-ui/themes/cupertino/jquery-ui.min.css">
+  <!-- The jtable crud interface -->
+  <link href="../bower_components/jtable/lib/themes/lightcolor/blue/jtable.min.css" rel="stylesheet" type="text/css" />
+  <!-- Bootstrap markdown -->
+  <link rel="stylesheet" href="../bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css">
+  <!-- Bootstrap slider css -->
+  <link rel="stylesheet" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
+  <!-- This main css -->
+  <link href="../css/main2.css" rel="stylesheet">
+  <!-- Just for debugging purposes. Don't actually copy this line! -->
+  <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+</head>
+
+<body>
+  <div id="wrapper">
+    <!-- plug into here -->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://github.com/tchoulihan/referendum">Referendum <small class="text-muted">beta</small></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="#" class="create_empty_poll">create a poll</a>
+            </li>
+            <li id="searchbar">
+              <form id="search_form" class="navbar-form navbar-left navbar-input-group " role="search">
+                <input id='search_id' type='hidden' name='id' />
+                <input id='search_type' type='hidden' name='search_type' />
+                <div class="input-group">
+                  <div id="search_box" class="form-group">
+                    <input name="search_input" type="text" class="form-control typeahead rounded-left" placeholder="search for polls or tags">
+                  </div>
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default rounded-right"><i class="fa fa-search"></i>
+                        </button>
+                   </span>
+                </div>
+              </form>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown hide logged-in">
+              <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#" id="my_user_page"> My Polls</a></li>
+                <li><a href="#" class="log_out"> Log out</a></li>
+              </ul>
+            </li>
+            <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container-fluid -->
+    </nav>
+    <!--Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="text-center">Trending Polls</h3>
+          <hr>
+          <div class="text-center">
+            <ul id="poll_trending_ul" class="pagination pagination-sm">
+              <li><a class="text-muted hand" data-type="hour">hour</a></li>
+              <li class="active"><a class="text-muted hand" data-type="day">day</a></li>
+              <li><a class="text-muted hand" data-type="week">week</a></li>
+              <li><a class="text-muted hand" data-type="month">month</a></li>
+              <li><a class="text-muted hand" data-type="year">year</a></li>
+            </ul>
+          </div>
+          <div id="trending_polls_div">
+            <script id="trending_polls_template" type="x-tmpl-mustache">
+              {{#records}}
+              <div class="col-md-4">
+                <h5><a href="/poll/{{aid}}" class="text-muted">{{subject}}</a></h5>
+                <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to
+                  <a href="/tag/{{tag_aid}}" class="label label-default label-nowrap"> {{tag_name}}</a></p>
+                <small>
+                <ul class="list-inline">
+                  <li><a class="text-muted" href="/poll/{{aid}}">{{number_of_comments}} comments</a></li>
+                  <li>{{year_hits}} views</li>
+                </ul>
+                </small>
+              </div>{{/records}}
+            </script>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="row-fluid">
+        <hr class="featurette-divider">
+        <footer>
+          <p class="pull-right"><a href="#">back to top</a>
+          </p>
+          <p>&copy; 2016 Referendum, Inc. &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">about</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">contact</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">support</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">github</a>
+            <br>
+          </p>
+        </footer>
+      </div>
+    </div>
+    <!-- Modals -->
+    <div class="modal fade bs-example-modal-sm" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 vertical-line-right">
+                <h4 class="text-center"> Create a new account </h4>
+                <br>
+                <form id="signup_form" class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="username" class="form-control" placeholder="choose a username" minlength="6" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username is required" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="verifyPassword" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="verifyPassword" type="password" class="form-control" id="inputPassword3" placeholder="verify password" data-bv-notempty="true" data-bv-notempty-message="The confirm password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="password" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="email" type="inputEmail3" class="form-control" id="inputEmail3" placeholder="email (optional)" data-bv-emailaddress="true" data-bv-emailaddress-message="The input is not a valid email address" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <button id="signinBtn" type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Sign up</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- The sign up tab -->
+              <div class="col-md-6">
+                <h4 class="text-center"> Log in </h4>
+                <br>
+                <form id="login_form" class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="user_or_email" class="form-control" placeholder="username or email" minlength="6" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username or email is required" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Log In</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modals -->
+      <div class="modal fade bs-example-modal-sm" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6 vertical-line-right">
+                  <h4 class="text-center"> Create a new account </h4>
+                  <br>
+                  <form id="signup_form" class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="username" class="form-control" placeholder="choose a username" minlength="6" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username is required" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="verifyPassword" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="verifyPassword" type="password" class="form-control" id="inputPassword3" placeholder="verify password" data-bv-notempty="true" data-bv-notempty-message="The confirm password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="password" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="email" type="inputEmail3" class="form-control" id="inputEmail3" placeholder="email (optional)" data-bv-emailaddress="true" data-bv-emailaddress-message="The input is not a valid email address" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <button id="signinBtn" type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Sign up</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- The sign up tab -->
+                <div class="col-md-6">
+                  <h4 class="text-center"> Log in </h4>
+                  <br>
+                  <form id="login_form" class="form-horizontal">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="user_or_email" class="form-control" placeholder="username or email" minlength="6" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username or email is required" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Log In</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+      <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+      <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+      <script src="../bower_components/toastr/toastr.js"></script>
+      <script src="../bower_components/mustache.js/mustache.js"></script>
+      <script src="../bower_components/holderjs/holder.js"></script>
+      <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
+      <script src="../bower_components/pickadate/lib/picker.js"></script>
+      <script src="../bower_components/pickadate/lib/picker.date.js"></script>
+      <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>
+      <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+      <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
+      <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
+      <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+      <script src="../bower_components/d3/d3.min.js"></script>
+      <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+      <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
+      <script src="../bower_components/moment/min/moment.min.js"></script>
+      <!-- my scripts -->
+      <script src="../js/tools.js"></script>
+      <script src="../js/common.js"></script>
+      <script src="../js/trending_polls.js"></script>
+</body>
+
+</html>
