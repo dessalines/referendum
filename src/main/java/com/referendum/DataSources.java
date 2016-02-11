@@ -22,7 +22,7 @@ public class DataSources {
 	
 	public static String EXTERNAL_URL = "http://" + EXTERNAL_IP + ":" + EXTERNAL_SPARK_WEB_PORT + "/";	
 	
-	public static final String DD_DOMAIN_NAME = "directdemocracy.ml";
+	public static final String DD_DOMAIN_NAME = "referendum.ml";
 	
 	public static final String DD_PORT = "80";// Main is 80, dev is 4567
 	
