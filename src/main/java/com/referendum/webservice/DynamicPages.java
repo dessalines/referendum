@@ -49,18 +49,18 @@ public class DynamicPages {
 			return Tools.readFile(DataSources.PAGES("user"));
 		});
 		
-		get("browse_tags", (req, res) -> {
+		get("trending_tags", (req, res) -> {
 			Tools.allowAllHeaders(req, res);
 			Tools.set15MinuteCache(req, res);
 			
-			return Tools.readFile(DataSources.PAGES("browse_tags"));
+			return Tools.readFile(DataSources.PAGES("trending_tags"));
 		});
 		
-		get("browse_polls", (req, res) -> {
+		get("trending_polls", (req, res) -> {
 			Tools.allowAllHeaders(req, res);
 			Tools.set15MinuteCache(req, res);
 			
-			return Tools.readFile(DataSources.PAGES("browse_polls"));
+			return Tools.readFile(DataSources.PAGES("trending_polls"));
 		});
 		
 		
