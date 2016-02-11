@@ -52,7 +52,7 @@ function setupCommentTop() {
     commentReplyForm.removeClass('hide');
     commentReplyBtn.addClass('hide');
 
-     setTimeout("$('#comment_top_form [name=text]').focus();", 5);
+     setTimeout("$('#comment_top_form [name=text]').focus();", 0);
   });
 
 
