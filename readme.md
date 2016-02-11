@@ -115,21 +115,12 @@ Main page - Discuss, Vote, Results
 
 
 TODO 
-* Paging for results and candidates, and comments(Pretty tough)
-* User pages w/ captchas?
-* poll searching, based on hashtags or poll names
+* login pages w/ captchas?
 
-
-* Poll searching
-* Comment/poll sorting
-* Results limit?
-
-* A user page : your comments, poll candidates, and votes
-
-
-* Add aid columns to comments, polls, users, and indexes
-* Add indexes to poll_visit_trending and tag_visit rending, and comment_tree stuff
+* A user page : your comments, poll candidates, and votes?
+  * Just your polls for now.
 
 * User-only polls(reduces bots).
 
 * Start working on comment and option paging
+  * Got option paging working, comment paging on hold for now
