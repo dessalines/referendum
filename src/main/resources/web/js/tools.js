@@ -8,14 +8,17 @@ var localSparkService = "http://127.0.0.1:4567/"
 
 
 
-function getJson(shortUrl) {
+function getJson(shortUrl, async) {
+
+  async = (typeof async === "undefined") ? true : async;
   var url = sparkService + shortUrl; // the script where you handle the form input.
   return $.ajax({
     type: "GET",
     url: url,
-    xhrFields: {
-      withCredentials: true
-    },
+    // xhrFields: {
+    //   withCredentials: true
+    // },
+    async: async,
     // data: seriesData, 
     success: function(data, status, xhr) {
       // console.log(data);

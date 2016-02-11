@@ -49,7 +49,7 @@ public class API {
 
 				Tools.dbInit();
 
-				UserLoginView uv = Actions.getUserFromCookie(req, res);
+				UserLoginView uv = Actions.getOrCreateUserFromCookie(req, res);
 
 				return uv.toJson(false);
 
@@ -294,8 +294,6 @@ public class API {
 				Tools.dbInit();
 
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
-
-
 
 				String candidateId = req.params(":candidateId");
 

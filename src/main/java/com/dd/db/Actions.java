@@ -349,9 +349,22 @@ public class Actions {
 	}
 
 	public static UserLoginView getUserFromCookie(Request req, Response res) {
+		
+		String auth = req.cookie("auth");
+		
+		UserLoginView uv = null;
+		
+		uv = USER_LOGIN_VIEW.findFirst("auth = ?" , auth);
+		
+		return uv;
+		
+	}
+	
+	
+	public static UserLoginView getOrCreateUserFromCookie(Request req, Response res) {
 
 		String auth = req.cookie("auth");
-
+		
 		UserLoginView uv = null;
 
 		// If no cookie, fetch user by ip address

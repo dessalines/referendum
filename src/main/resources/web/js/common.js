@@ -130,7 +130,7 @@ function getAuth() {
     deleteCookie('uaid');
     deleteCookie('username');
     console.log('cookie was undefined');
-    getJson('get_user').done(function() {
+    getJson('get_user', false).done(function() {
       // setUserInfo();
 
     });
