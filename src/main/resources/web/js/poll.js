@@ -206,7 +206,7 @@ function setupEditRedirect() {
 
 
 var candidatesStartIndex = 0;
-var candidatesBrowsePageSize = 3;
+var candidatesBrowsePageSize = 15;
 var candidatesRecordCount = 1000;
 
 
