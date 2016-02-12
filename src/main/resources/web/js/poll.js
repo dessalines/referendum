@@ -271,10 +271,17 @@ function setupPoll() {
     if (data['private_password'] != null &&
       data['private_password'] != getCookie('poll_password_' + pollAid)) {
       window.location = '/private_poll/' + pollAid;
-    }
+    } else if (data['full_user_only'] == 1 && getCookie('username') === undefined) {
+      console.log('full user only = ' + data['full_user_only']);
+      toastr.error('This poll is for users only');
+      delay(function() {
+        window.location = '/';
+      }, 1000);
+    } else {
 
-    fillMustacheWithJson(data, pollTemplate, '#poll_div');
-    $('#comment_top_form input[name=discussion_id]').attr('value', data['discussion_id']);
+      fillMustacheWithJson(data, pollTemplate, '#poll_div');
+      $('#comment_top_form input[name=discussion_id]').attr('value', data['discussion_id']);
+    }
 
     // Setup the edit button, if its the right user
     if (getCookie('uid') == data['user_id']) {

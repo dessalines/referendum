@@ -96,9 +96,9 @@ function setupSearchBar() {
   // $('[name=search_input]').focus();
 
   // $('.tt-input').focus();
-  setTimeout("$('[name=search_input]').focus();", 0);
+  // setTimeout("$('[name=search_input]').focus();", 0);
 
-  setTimeout("$('[name=search_input]').focus();", 0);
+  // setTimeout("$('[name=search_input]').focus();", 0);
 
 
   $("#search_form").submit(function(event) {
