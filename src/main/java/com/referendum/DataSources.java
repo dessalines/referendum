@@ -32,7 +32,7 @@ public class DataSources {
 		
 	public static final String DD_URL(){ 
 		String domain = (SSL) ? "https:" : "http:";
-		domain += "//" + DD_DOMAIN_NAME;
+		domain += "//" + DD_DOMAIN_NAME + "/";
 		return domain;
 	}
 	
