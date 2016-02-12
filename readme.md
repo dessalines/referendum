@@ -117,11 +117,9 @@ Main page - Discuss, Vote, Results
 TODO 
 * login pages w/ captchas?
 
-* A user page : your comments, poll candidates, and votes?
   * Just your polls for now.
 
-* User-only polls(reduces bots).
-
+* SSH, and ssh reroute
 * Start working on comment and option paging
   * Got option paging working, comment paging on hold for now
 

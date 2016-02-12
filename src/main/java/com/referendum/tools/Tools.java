@@ -447,7 +447,7 @@ public class Tools {
 					DataSources.EXTERNAL_URL + "';";
 
       String sparkServiceLine = (local) ? "var sparkService = '" +  DataSources.WEB_SERVICE_URL + "';" : 
-        "var sparkService = '" +  DataSources.EXTERNAL_URL + "';";
+        "var sparkService = '" +  DataSources.DD_URL + "';";
 			
       lines.set(0, interalServiceLine);
 			lines.set(1, ddServiceLine);

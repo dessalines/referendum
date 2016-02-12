@@ -389,6 +389,8 @@ function setupEditCandidateBtn(data) {
     $('#add_a_candidate').addClass('hide');
     $('#candidate_form').removeClass('hide');
     $("#edit_candidate_text").get(0).scrollIntoView();
+    
+    setTimeout("$('#candidate_subject').focus();", 0);
     updateTextAreaHeight();
   });
 
@@ -422,6 +424,8 @@ function setupAddCandidateBtn() {
     $('#candidate_subject').val('');
     $('#edit_candidate_text').data('markdown').setContent('');
     $('#candidate_form').removeClass('hide');
+
+    setTimeout("$('#candidate_subject').focus();", 0);
     updateTextAreaHeight();
   });
 }
