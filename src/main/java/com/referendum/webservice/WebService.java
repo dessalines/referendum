@@ -6,6 +6,8 @@ import static spark.Spark.port;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import spark.Spark;
+
 import com.referendum.DataSources;
 import com.referendum.tools.Tools;
 
@@ -22,6 +24,10 @@ public class WebService {
 //		Spark.secure(DataSources.KEYSTORE(), "foobar",null,null);
 
 
+		if (DataSources.SSL) {
+			Spark.secure(DataSources.KEYSTORE_FILE(), "changeit", null,null);
+		}
+		
 		port(DataSources.INTERNAL_SPARK_WEB_PORT);
 		
 		API.setup();

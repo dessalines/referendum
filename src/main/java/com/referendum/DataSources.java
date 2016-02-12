@@ -11,7 +11,11 @@ public class DataSources {
 
 	public static String APP_NAME = "referendum";
 	
-	public static Integer EXTERNAL_SPARK_WEB_PORT = 80; // Main is port 80, dev is port 4567
+	public static Integer EXTERNAL_SPARK_WEB_PORT() {return (SSL) ? 443 : 80;} // Main is port 80, dev is port 4567
+	
+	
+	public static Boolean SSL = false;
+	
 	
 	// iptables are used to route all requests to 80 to 4567.
 	public static Integer INTERNAL_SPARK_WEB_PORT = 4567;
@@ -20,7 +24,7 @@ public class DataSources {
 	
 	public static String EXTERNAL_IP = Tools.httpGetString("http://api.ipify.org/").trim();
 	
-	public static String EXTERNAL_URL = "http://" + EXTERNAL_IP + ":" + EXTERNAL_SPARK_WEB_PORT + "/";	
+	public static String EXTERNAL_URL = "http://" + EXTERNAL_IP + ":" + EXTERNAL_SPARK_WEB_PORT() + "/";	
 	
 	public static final String DD_DOMAIN_NAME = "referendum.ml";
 	
@@ -86,6 +90,9 @@ public class DataSources {
 	public static final Properties DB_PROP = Tools.loadProperties(DB_PROP_FILE);
 
 	public static final Integer EXPIRE_SECONDS = 86400;
+	
+	
+	public static final String KEYSTORE_FILE() {return HOME_DIR() + "/keystore.jks";}
 	
 
 }

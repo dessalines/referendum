@@ -27,6 +27,9 @@ public class Main {
 
 	@Option(name="-local", usage="Use the local webservice")
 	private boolean local;
+	
+	@Option(name="-ssl",usage="Uses SSL")
+	private boolean ssl;
 
 	public void doMain(String[] args) {
 
@@ -40,7 +43,8 @@ public class Main {
 		if (maintenanceRedirect) {
 			DataSources.BASE_ENDPOINT = DataSources.MAINTENANCE_PAGE_URL();
 		}
-
+		
+		DataSources.SSL = ssl;
 
 		log.setLevel(Level.toLevel(loglevel));
 //		log.getLoggerContext().getLogger("org.eclipse.jetty").setLevel(Level.OFF);
