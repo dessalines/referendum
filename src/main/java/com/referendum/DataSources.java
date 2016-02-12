@@ -29,8 +29,12 @@ public class DataSources {
 	public static final String DD_DOMAIN_NAME = "referendum.ml";
 	
 	public static final String DD_PORT = "80";// Main is 80, dev is 4567
-	
-	public static final String DD_URL = "http://" + DD_DOMAIN_NAME + ":" + DD_PORT + "/";
+		
+	public static final String DD_URL(){ 
+		String domain = (SSL) ? "https:" : "http:";
+		domain += "//" + DD_DOMAIN_NAME;
+		return domain;
+	}
 	
 	public static final String DD_INTERNAL_URL = "http://" + DD_DOMAIN_NAME + ":" + INTERNAL_SPARK_WEB_PORT + "/";
 	

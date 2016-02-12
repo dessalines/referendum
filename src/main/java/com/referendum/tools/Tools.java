@@ -451,13 +451,13 @@ public class Tools {
 					DataSources.WEB_SERVICE_URL + "';";
 
 			String ddServiceLine = "var ddSparkService ='" + 
-					DataSources.DD_URL + "';";
+					DataSources.DD_URL() + "';";
 
 			String externalServiceLine = "var externalSparkService ='" + 
 					DataSources.EXTERNAL_URL + "';";
 
 			String sparkServiceLine = (local) ? "var sparkService = '" +  DataSources.WEB_SERVICE_URL + "';" : 
-				"var sparkService = '" +  DataSources.DD_URL + "';";
+				"var sparkService = '" +  DataSources.DD_URL() + "';";
 
 			lines.set(0, interalServiceLine);
 			lines.set(1, ddServiceLine);
