@@ -5,15 +5,8 @@ $(document).ready(function() {
   setupLoginForm();
   setupLogOut();
   setupSearchBar();
-  setupRecaptcha();
 });
 
-function setupRecaptcha() {
-
-
-
-
-}
 
 function setupLogOut() {
   $('.log_out').click(function() {

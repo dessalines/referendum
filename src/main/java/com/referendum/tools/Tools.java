@@ -582,12 +582,12 @@ public class Tools {
 				try {
 					String responseStr = IOUtils.toString(instream, Charsets.UTF_8); 
 					
-					log.info(responseStr);
 					JsonNode on = jsonToNode(responseStr);
+					
+//					log.info(responseStr);
 					
 					Boolean success = on.get("success").asBoolean();
 					
-					log.info("success = " + success);
 					return success;
 					
 				} finally {

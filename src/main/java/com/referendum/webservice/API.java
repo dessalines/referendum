@@ -945,8 +945,9 @@ public class API {
 				String userName = vars.get("username");
 				String password = vars.get("password");
 				String email = vars.get("email");
+				String recaptchaResponse = vars.get("g-recaptcha-response");
 
-				String message = Actions.signup(userName, password, email, req, res);
+				String message = Actions.signup(userName, password, email, recaptchaResponse, req, res);
 
 				return message;
 

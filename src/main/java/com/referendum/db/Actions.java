@@ -547,8 +547,16 @@ public class Actions {
 
 	}
 
-	public static String signup(String userName, String password, String email, Request req, Response res) {
+	public static String signup(String userName, String password, String email, 
+			String recaptchaResponse, Request req, Response res) {
 
+		// First verify the recaptchaResponse
+		Boolean recaptchaPassed = Tools.verifyRecaptcha(recaptchaResponse, req.ip());
+		
+		if (!recaptchaPassed) {
+			throw new NoSuchElementException("Recaptcha failed");
+		}
+		
 		// Find the user, then create a login for them
 
 		FullUser fu = FULL_USER.findFirst("name = ? or email = ?", userName, userName);

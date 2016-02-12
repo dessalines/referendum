@@ -394,7 +394,6 @@
                   <script id="candidates_template" type="x-tmpl-mustache">
                     {{#records}}
                     <div class="col-md-4">
-                    
                       <div class="panel panel-default">
                         <div class="panel-heading">
                           <!-- A sample range vote table -->
@@ -508,6 +507,7 @@
       </div>
     </div>
     <!-- Modals -->
+    <!-- Modals -->
     <div class="modal fade bs-example-modal-sm" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -537,6 +537,7 @@
                       <input name="email" type="inputEmail3" class="form-control" id="inputEmail3" placeholder="email (optional)" data-bv-emailaddress="true" data-bv-emailaddress-message="The input is not a valid email address" />
                     </div>
                   </div>
+                  <div id="recaptcha_signup" style="transform:scale(0.8);transform-origin:0 0"></div>
                   <div class="form-group">
                     <div class="col-sm-12">
                       <button id="signinBtn" type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Sign up</button>
@@ -559,6 +560,7 @@
                       <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
                     </div>
                   </div>
+                  <div id="recaptcha_login" style="transform:scale(0.8);transform-origin:0 0"></div>
                   <button type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Log In</button>
                 </form>
               </div>
@@ -595,6 +597,20 @@
     <script src="../js/range_voting.js"></script>
     <script src="../js/comment_voting.js"></script>
     <script src="../js/poll.js"></script>
+    <!-- Recaptcha -->
+    <script type="text/javascript">
+    var CaptchaCallback = function() {
+      grecaptcha.render('recaptcha_signup', {
+        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T',
+        'theme': 'dark'
+      });
+      grecaptcha.render('recaptcha_login', {
+        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T',
+        'theme': 'dark'
+      });
+    };
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
 </body>
 
 </html>
