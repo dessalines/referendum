@@ -5,7 +5,15 @@ $(document).ready(function() {
   setupLoginForm();
   setupLogOut();
   setupSearchBar();
+  setupRecaptcha();
 });
+
+function setupRecaptcha() {
+
+
+
+
+}
 
 function setupLogOut() {
   $('.log_out').click(function() {
@@ -150,7 +158,7 @@ function showLoggedIn() {
   $('.logged-out').addClass('hide');
   $('.logged-in').removeClass('hide');
   $('#user_dropdown').html(getCookie('username') + ' <span class="caret"></span>');
-  $('#my_user_page').attr('href','/user/' + getCookie('uaid'));
+  $('#my_user_page').attr('href', '/user/' + getCookie('uaid'));
 }
 
 function showLoggedOut() {
@@ -177,7 +185,10 @@ function setupLoginForm() {
           location.reload(true);
         }
 
-      }, null, null);
+      }, null, null, function() {
+        // if it fails, reset the recaptcha
+        grecaptcha.reset();grecaptcha.reset();
+      });
     });
 
   var signupForm = '#signup_form';
@@ -191,7 +202,9 @@ function setupLoginForm() {
       standardFormPost('signup', signupForm, null, null, function() {
         $('#login_modal').modal('hide');
         showLoggedIn();
-      }, null, null);
+      }, null, null, function() {
+        grecaptcha.reset();grecaptcha.reset();
+      });
     });
 
 }

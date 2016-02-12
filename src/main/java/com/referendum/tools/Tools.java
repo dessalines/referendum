@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -38,6 +39,15 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
@@ -71,14 +81,14 @@ public class Tools {
 	public static final Gson GSON2 = new GsonBuilder().setPrettyPrinting().create();
 
 	public static final ObjectMapper MAPPER = new ObjectMapper();
-	
+
 	public static final SimpleDateFormat RESPONSE_HEADER_DATE_FORMAT = 
 			new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
-	
+
 	public static final BaseX ALPHA_ID = new BaseX();
-	
+
 	private static final SecureRandom RANDOM = new SecureRandom();
-	
+
 	public static final BasicPasswordEncryptor PASS_ENCRYPT = new BasicPasswordEncryptor();
 
 	public static void allowOnlyLocalHeaders(Request req, Response res) {
@@ -110,7 +120,7 @@ public class Tools {
 
 
 	}
-	
+
 	public static void set15MinuteCache(Request req, Response res) {
 		res.header("Cache-Control", "private,max-age=300,s-maxage=900");
 		res.header("Last-Modified", RESPONSE_HEADER_DATE_FORMAT.format(DataSources.APP_START_DATE));
@@ -158,7 +168,7 @@ public class Tools {
 			}
 		}
 
-		log.debug(GSON2.toJson(postMap));
+		log.info(GSON2.toJson(postMap));
 
 		return postMap;
 
@@ -175,7 +185,7 @@ public class Tools {
 		}
 	}
 
-	
+
 
 	public static String encodeURL(String s) {
 		try {
@@ -216,9 +226,9 @@ public class Tools {
 			}
 			Tools.unzip(new File(zipFile), new File(DataSources.SOURCE_CODE_HOME()));
 			//		new Tools().copyJarResourcesRecursively("src", configHome);
-			
-//			WriteMultilingualHTMLFiles.write();
-			
+
+			//			WriteMultilingualHTMLFiles.write();
+
 		} else {
 			log.info("The source directory already exists");
 		}
@@ -297,12 +307,12 @@ public class Tools {
 			e.printStackTrace();
 		}
 	}
-	
+
 
 	public static final void dbInit() {
-		
+
 		Properties prop = DataSources.DB_PROP;
-		
+
 		try {
 			new DB("default").open("com.mysql.jdbc.Driver", 
 					prop.getProperty("dburl") + "?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull", 
@@ -402,7 +412,7 @@ public class Tools {
 		byte[] encoded;
 		try {
 			encoded = java.nio.file.Files.readAllBytes(Paths.get(path));
-			
+
 			s = new String(encoded, Charset.defaultCharset());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -410,11 +420,11 @@ public class Tools {
 		}
 		return s;
 	}
-	
+
 	public static HttpServletResponse writeFileToResponse(File file, Response res) {
 		return writeFileToResponse(file.getAbsolutePath(), res);
 	}
-	
+
 	public static HttpServletResponse writeFileToResponse(String path, Response res) {
 
 		byte[] encoded;
@@ -425,7 +435,7 @@ public class Tools {
 			os.write(encoded);
 			os.close();
 			return res.raw();
-			
+
 		} catch (IOException e) {
 			throw new NoSuchElementException("Couldn't write response from path: " + path);
 		}
@@ -442,14 +452,14 @@ public class Tools {
 
 			String ddServiceLine = "var ddSparkService ='" + 
 					DataSources.DD_URL + "';";
-			
+
 			String externalServiceLine = "var externalSparkService ='" + 
 					DataSources.EXTERNAL_URL + "';";
 
-      String sparkServiceLine = (local) ? "var sparkService = '" +  DataSources.WEB_SERVICE_URL + "';" : 
-        "var sparkService = '" +  DataSources.DD_URL + "';";
-			
-      lines.set(0, interalServiceLine);
+			String sparkServiceLine = (local) ? "var sparkService = '" +  DataSources.WEB_SERVICE_URL + "';" : 
+				"var sparkService = '" +  DataSources.DD_URL + "';";
+
+			lines.set(0, interalServiceLine);
 			lines.set(1, ddServiceLine);
 			lines.set(2, externalServiceLine);
 			lines.set(3, sparkServiceLine);
@@ -489,7 +499,7 @@ public class Tools {
 	}
 
 	public static void setContentTypeFromFileName(String pageName, Response res) {
-		
+
 		if (pageName.endsWith(".css")) {
 			res.type("text/css");
 		} else if (pageName.endsWith(".js")) {
@@ -517,27 +527,27 @@ public class Tools {
 		return prop;
 
 	}
-	
+
 	public static void setJsonContentType(Response res) {
 		res.type("application/json; charset=utf-8");
 	}
-	
+
 	public static String replaceNewlines(String text) {
 		return text.replace("\r", "").replace("\n", "--lb--").replace("\\", "");
 	}
-	
+
 	public static String generateSecureRandom() {
 		return new BigInteger(256, RANDOM).toString(32);
 	}
-	
+
 	public static Timestamp newExpireTimestamp() {
 		return new Timestamp(new Date().getTime() + 1000 * DataSources.EXPIRE_SECONDS);
 	}
-	
+
 	public static Timestamp newCurrentTimestamp() {
 		return new Timestamp(new Date().getTime());
 	}
-	
+
 	public static final String wrapPaginatorArray(String json, Long totalRecordCount) {
 		String jtableJson = "{" + 
 				"\"records\": " + json + "," + 
@@ -546,4 +556,51 @@ public class Tools {
 		return jtableJson;
 	}
 
+	public static Boolean verifyRecaptcha(String recaptchaResponse, String ip) {
+
+		try {
+			String recaptchaSecret = DataSources.DB_PROP.getProperty("recaptcha_secret");
+
+			HttpClient httpclient = HttpClients.createDefault();
+			HttpPost httppost = new HttpPost("https://www.google.com/recaptcha/api/siteverify");
+
+			// Request parameters and other properties.
+			List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+			params.add(new BasicNameValuePair("secret", recaptchaSecret));
+			params.add(new BasicNameValuePair("response", recaptchaResponse));
+			params.add(new BasicNameValuePair("remoteip", ip));
+
+			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+
+			//Execute and get the response.
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+
+			if (entity != null) {
+				InputStream instream = entity.getContent();
+				try {
+					String responseStr = IOUtils.toString(instream, Charsets.UTF_8); 
+					
+					log.info(responseStr);
+					JsonNode on = jsonToNode(responseStr);
+					
+					Boolean success = on.get("success").asBoolean();
+					
+					log.info("success = " + success);
+					return success;
+					
+				} finally {
+					instream.close();
+				}
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+
+	}
 }

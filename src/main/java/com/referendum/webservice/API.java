@@ -917,8 +917,9 @@ public class API {
 
 				String userOrEmail = vars.get("user_or_email");
 				String password = vars.get("password");
-
-				String message = Actions.login(userOrEmail, password, res);
+				String recaptchaResponse = vars.get("g-recaptcha-response");
+				
+				String message = Actions.login(userOrEmail, password, recaptchaResponse, req, res);
 
 				return message;
 
