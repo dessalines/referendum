@@ -115,11 +115,12 @@ Main page - Discuss, Vote, Results
 
 
 TODO 
-* login pages w/ captchas?
 
   * Just your polls for now.
 
-* SSH, and ssh reroute
+* Redirecting to the SSH site
+
+
 * Start working on comment and option paging
   * Got option paging working, comment paging on hold for now
 
