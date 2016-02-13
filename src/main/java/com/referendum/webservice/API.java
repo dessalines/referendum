@@ -62,7 +62,7 @@ public class API {
 			}
 
 		});
-		
+
 		get("get_user_info/:userAid", (req, res) -> {
 
 			try {
@@ -70,9 +70,9 @@ public class API {
 				Tools.dbInit();
 
 				String userId = ALPHA_ID.decode(req.params(":userAid")).toString();
-				
+
 				String json = USER_VIEW.findFirst("id = ?", userId).toJson(false);
-				
+
 				return json;
 
 			} catch (Exception e) {
@@ -84,7 +84,7 @@ public class API {
 			}
 
 		});
-		
+
 
 
 		post("/create_empty_poll", (req, res) -> {
@@ -260,20 +260,20 @@ public class API {
 				String pollId = ALPHA_ID.decode(req.params(":pollAid")).toString();
 				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
 				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
-				
+
 				Tools.dbInit();
 
 				Paginator candidates = 
 						new Paginator<CandidateView>(CandidateView.class,
-						pageSize,
-						"poll_id = ?", pollId).orderBy("avg_rank desc");
-				
+								pageSize,
+								"poll_id = ?", pollId).orderBy("avg_rank desc");
+
 				Integer pageNum = (startIndex/pageSize)+1;
 
 				String json = Tools.wrapPaginatorArray(
 						Tools.replaceNewlines(candidates.getPage(pageNum).toJson(false)),
 						candidates.getCount());
-				
+
 				return json;
 			} catch (Exception e) {
 				res.status(666);
@@ -425,10 +425,30 @@ public class API {
 
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
-				String json = Tools.replaceNewlines(POLL_VIEW.findFirst("id = ?", pollId).toJson(false));
+				PollView pv = POLL_VIEW.findFirst("id = ?", pollId);
 
-				Actions.addPollVisit(uv.getId().toString(), pollId);
 
+				// check if its private, and if it is, make sure the cookie is there
+				String json = null;
+				if (pv.getBoolean("private") == true) {
+					String cookiePassword = req.cookie("poll_password_" + pollId);
+
+					// fetch the poll for the encrypted password
+					Poll p = POLL.findFirst("id = ?", pollId);
+					Boolean correctPass = Tools.PASS_ENCRYPT.checkPassword(cookiePassword, p.getString("private_password"));
+
+					// If its incorrect, then redirect to the password page
+					if (cookiePassword != null && correctPass) {
+						json = Tools.replaceNewlines(pv.toJson(false));
+					} else {
+						json = "incorrect_password";
+					}
+				} else {
+
+					json = Tools.replaceNewlines(pv.toJson(false));
+
+					Actions.addPollVisit(uv.getId().toString(), pollId);
+				}
 				return json;
 			} catch (Exception e) {
 				res.status(666);
@@ -594,7 +614,7 @@ public class API {
 				String order = req.params(":order");
 				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
 				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
-				
+
 
 				Paginator polls = null;
 
@@ -620,11 +640,23 @@ public class API {
 							orderBy(order + " desc");
 				}
 
+
+
 				Integer pageNum = (startIndex/pageSize)+1;
 
+				// Exclude private password from the query
 				String json = Tools.wrapPaginatorArray(
 						Tools.replaceNewlines(polls.getPage(pageNum).toJson(false)),
-								polls.getCount());
+						polls.getCount());
+
+				/*
+				 * "aid", "created","day_hits", "day_score", "hour_hits", "hour_score",
+								"discussion_id", "full_user_only", "id", "modified", "month_hits",
+								"month_score", "number_of_comments", "poll_sum_type_id", "poll_sum_type_name",
+								"poll_type_id", "poll_type_name", "subject", "tag_aid",
+								"tag_id", "tag_name", "user_aid", "user_id", "user_name", 
+								"week_hits", "week_score", "year_hits", "year_score"
+				 */
 
 				return json;
 			} catch (Exception e) {
@@ -649,7 +681,7 @@ public class API {
 				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
 
 				Paginator tags = null;
-				
+
 				tags = new Paginator<TagView>(TagView.class,
 						pageSize, 
 						"1=?", "1").
@@ -692,19 +724,19 @@ public class API {
 
 
 		});
-		
+
 		get("/get_tag/:tagAid", (req, res) -> {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
 
 				Tools.dbInit();
-				
+
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
 
 				String tagAid = req.params(":tagAid");
 				Integer tagId = Tools.ALPHA_ID.decode(tagAid).intValue();
-				
+
 				Actions.addTagVisit(uv.getId().toString(), tagId);
 
 				String json = TAG_VIEW.findFirst("id = ?", tagId).toJson(false);
@@ -821,7 +853,7 @@ public class API {
 
 
 		});
-		
+
 		get("/poll_search/:query", (req, res) -> {
 
 			try {
@@ -918,7 +950,7 @@ public class API {
 				String userOrEmail = vars.get("user_or_email");
 				String password = vars.get("password");
 				String recaptchaResponse = vars.get("g-recaptcha-response");
-				
+
 				String message = Actions.login(userOrEmail, password, recaptchaResponse, req, res);
 
 				return message;

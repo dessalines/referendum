@@ -107,7 +107,7 @@
             <div class="col-md-12">
               <div id="poll_div">
                 <script id="poll_template" type="x-tmpl-mustache">
-                  <h3> {{subject}} </h3>
+                  <h3> {{subject}} <small>{{#private}}[private]{{/private}}{{#full_user_only}}[user-only]{{/full_user_only}}</small></h3>
                   <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a></p>
                   {{#text}}
                   <div class="panel panel-default">

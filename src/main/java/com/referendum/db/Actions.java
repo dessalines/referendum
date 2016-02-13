@@ -68,8 +68,9 @@ public class Actions {
 		if (p == null) {
 			throw new NoSuchElementException("Wrong User");
 		}
-
-		p.set("private_password", password,
+		
+		String passwordEncrypted = Tools.PASS_ENCRYPT.encryptPassword(password);
+		p.set("private_password", passwordEncrypted,
 				"poll_sum_type_id", pollSumTypeId,
 				"full_user_only", fullUsersOnly).saveIt();
 
@@ -92,8 +93,9 @@ public class Actions {
 
 		Poll p = POLL.findFirst("id = ? ", pollId);
 
-
-		if (password.equals(p.getString("private_password"))) {
+		Boolean correctPass = Tools.PASS_ENCRYPT.checkPassword(password, p.getString("private_password"));
+		
+		if (correctPass) {
 			res.removeCookie("poll_password_" + pollId);
 			res.cookie("poll_password_" + pollId, password);
 		} else {
@@ -321,7 +323,7 @@ public class Actions {
 
 
 	public static String setCookiesForLogin(FullUser fu, String auth, Response res) {
-		Boolean secure = false;
+		Boolean secure = DataSources.SSL;
 		res.cookie("auth",null, 0);
 		res.cookie("uid",null, 0);
 		res.cookie("uaid",null, 0);
@@ -336,7 +338,7 @@ public class Actions {
 	}
 
 	public static String setCookiesForLogin(User user, String auth, Response res) {
-		Boolean secure = false;
+		Boolean secure = DataSources.SSL;
 		res.cookie("auth",null, 0);
 		res.cookie("uid",null, 0);
 		res.cookie("uaid",null, 0);

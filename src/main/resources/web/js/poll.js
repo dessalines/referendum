@@ -128,7 +128,7 @@ function setupTagSearch() {
   // $('[name=search_input]').focus();
 
   // $('.tt-input').focus();
-  
+
 
   $("#tag_form").submit(function(event) {
     var formData = $("#tag_form").serializeArray();
@@ -264,14 +264,19 @@ function setupCandidates() {
 function setupPoll() {
   getJson('get_poll/' + pollAid).done(function(e) {
 
+    if (e == 'incorrect_password') {
+      toastr.error('This poll is private');
+      delay(function() {
+        window.location = '/private_poll/' + pollAid;
+      }, 1000);
+    }
+
     var data = JSON.parse(replaceNewlines(e));
     console.log(data);
 
     // If it's a passworded poll, and that password is in the cookie
-    if (data['private_password'] != null &&
-      data['private_password'] != getCookie('poll_password_' + pollAid)) {
-      window.location = '/private_poll/' + pollAid;
-    } else if (data['full_user_only'] == 1 && getCookie('username') === undefined) {
+
+    if (data['full_user_only'] == 1 && getCookie('username') === undefined) {
       console.log('full user only = ' + data['full_user_only']);
       toastr.error('This poll is for users only');
       delay(function() {
@@ -389,7 +394,7 @@ function setupEditCandidateBtn(data) {
     $('#add_a_candidate').addClass('hide');
     $('#candidate_form').removeClass('hide');
     $("#edit_candidate_text").get(0).scrollIntoView();
-    
+
     setTimeout("$('#candidate_subject').focus();", 0);
     updateTextAreaHeight();
   });
@@ -593,7 +598,7 @@ function setupPollForm() {
 
   setTimeout("$('#poll_form [name=subject]').focus();", 0);
 
-  
+
   var pollForm = '#poll_form';
 
   // Setting the vars

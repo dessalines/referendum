@@ -113,7 +113,7 @@
             <script id="trending_polls_template" type="x-tmpl-mustache">
               {{#records}}
               <div class="col-md-4">
-                <h6><a href="/poll/{{aid}}" class="text-muted">{{subject}}</a></h6>
+                <h6><a href="/poll/{{aid}}" class="text-muted">{{subject}}</a> <small>{{#private}}[private]{{/private}}{{#full_user_only}}[user-only]{{/full_user_only}}</small></h6>
                 <p class="info-line">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to
                   <a href="/tag/{{tag_aid}}" class="label label-default label-nowrap"> {{tag_name}}</a></p>
                 <small>

@@ -117,8 +117,7 @@ Main page - Discuss, Vote, Results
 TODO 
 
   * Just your polls for now.
-
-* Redirecting to the SSH site
+* show if the poll is private, rework private password(because its coming back as a json result)
 
 
 * Start working on comment and option paging
