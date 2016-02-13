@@ -14,7 +14,7 @@ INSERT INTO `discussion` (`id`,`subject`,`text`)
 	(5,'Yoda is my homeboy. Remember that part in episode two where he was flying around dooku like gangbustas? Sorry, no one can beat that.','### mmmmmk\r\n\r\nbada\r\n\r\n\r\nbing'),
 		-- Some more polls
 	(6,'When should we hold the eco-summit?',''),(7,'Where to hold the mass protest on 08/11?',''),(8,'Which valar is your favorite?',''),
-	(9,'Which political candidate should we endorse?',''),(10,'What should be our stated mission?',''),(11,'An untagged one',''),(12,'A user-only one','');
+	(9,'Which candidate should we endorse?',''),(10,'What should be our stated mission?',''),(11,'Should the plant go on strike?',''),(12,'A user-only one','');
 INSERT INTO `poll` (id,aid,poll_type_id,poll_sum_type_id,discussion_id,user_id,private_password,full_user_only) 
 	VALUES (1,'1',1,1,1,1,NULL,0),(2,'2',1,1,6,2,NULL,0),(3,'3',1,1,7,3,'test',0),
 	(4,'4',1,1,8,3,NULL,0),(5,'5',1,1,9,3,NULL,1),(6,'6',1,1,10,1,NULL,0),(7,'7',1,1,11,2,NULL,0),
@@ -25,9 +25,9 @@ INSERT INTO `ballot` (`id`,`poll_id`,`user_id`,`candidate_id`,`rank`)
 	VALUES (1,1,1,1,82),(5,1,1,2,20),(8,1,1,4,32),(9,1,2,2,38),(10,1,3,2,67);
 INSERT INTO `tag` (`id`, `aid`, `user_id`, `name`) 
 	VALUES (1,'1',1,'Cascadia Now!'),(2,'2',2,'Star Wars'),(3,'3',3,'Lord of the Rings'),
-	(4,'4',3,'Socialist Alternative (US)');
+	(4,'4',3,'Socialist Alternative (US)'),(5,'5',1,'GM (arlington, TX)');
 INSERT INTO `poll_tag` (`id`, `poll_id`, `tag_id`) 
-	VALUES (1,1,3), (2,1,2),(3,2,1),(4,3,4),(5,4,3),(6,5,4),(7,6,1);
+	VALUES (1,1,3), (2,1,2),(3,2,1),(4,3,4),(5,4,3),(6,5,4),(7,6,1),(8,7,5);
 INSERT INTO `poll_visit` (`id`,`user_id`,`poll_id`,`created`)
 	VALUES (1,1,1,'2016-02-08 14:22:54'), (2,2,2,'2016-01-08 14:22:54'),(3,1,3,'2016-02-07 14:22:54'),
 	(4,1,4,'2016-02-07 14:22:54'),(5,2,5,'2016-02-07 14:22:54'),(6,1,6,'2016-02-07 14:22:54'),
