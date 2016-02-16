@@ -83,6 +83,8 @@ function setupTrendingPollsBtns() {
     var type = $(this).attr('data-type');
     console.log(type);
 
+    startIndex = 0;
+
     setupTrendingPolls(type);
     trendingPollsType = type;
   });
