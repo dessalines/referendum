@@ -56,7 +56,7 @@ public class DerpTests extends TestCase {
 	}
 	
 	public void testReplaceQuotes() {
-		System.out.println(Tools.replaceQuotes("This \" could be a shitshow\""));
+		System.out.println(Tools.replaceQuotes("This asdfasdf"));
 	}
 	
 

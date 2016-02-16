@@ -537,7 +537,11 @@ public class Tools {
 	}
 	
 	public static String replaceQuotes(String text) {
-		return text.replace("\"", "&dblq;");
+		if (text != null) {
+			return text.replace("\"", "&dblq;");
+		} else {
+			return null;
+		}
 	}
 
 	public static String generateSecureRandom() {
