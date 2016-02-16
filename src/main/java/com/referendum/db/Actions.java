@@ -148,7 +148,7 @@ public class Actions {
 	public static String createCandidate(String userId, String pollId, String subject, String text) {
 
 		// First create a discussion
-		Discussion d = DISCUSSION.createIt("subject", subject,
+		Discussion d = DISCUSSION.createIt("subject", Tools.replaceQuotes(subject),
 				"text", Tools.replaceQuotes(text));
 
 		CANDIDATE.createIt("poll_id", pollId,
