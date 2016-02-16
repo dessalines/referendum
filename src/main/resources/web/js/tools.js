@@ -505,9 +505,10 @@ var delay = (function() {
 function replaceNewlines(e, single, two) {
 
   if (e != null) {
+
     var r = (single === undefined) ? "\\n" : "\n";
     var r = (two === undefined) ? r : "\n\n";
-    return e.replace(/--lb--/g, r);
+    return e.replace(/--lb--/g, r).replace(/&dblq;/g, '\\"');
   } else {
     return '';
   }

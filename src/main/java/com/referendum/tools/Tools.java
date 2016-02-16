@@ -535,6 +535,10 @@ public class Tools {
 	public static String replaceNewlines(String text) {
 		return text.replace("\r", "").replace("\n", "--lb--").replace("\\", "");
 	}
+	
+	public static String replaceQuotes(String text) {
+		return text.replace("\"", "&dblq;");
+	}
 
 	public static String generateSecureRandom() {
 		return new BigInteger(256, RANDOM).toString(32);

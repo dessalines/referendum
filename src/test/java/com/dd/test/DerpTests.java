@@ -55,6 +55,10 @@ public class DerpTests extends TestCase {
 		System.out.println(Tools.ALPHA_ID.encode(new BigInteger("10")));
 	}
 	
+	public void testReplaceQuotes() {
+		System.out.println(Tools.replaceQuotes("This \" could be a shitshow\""));
+	}
+	
 
 
 

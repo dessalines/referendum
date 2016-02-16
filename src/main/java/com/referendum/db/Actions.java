@@ -76,8 +76,8 @@ public class Actions {
 
 
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
-		d.set("subject", subject,
-				"text", text).saveIt();
+		d.set("subject", Tools.replaceQuotes(subject),
+				"text", Tools.replaceQuotes(text)).saveIt();
 
 		if (password != null) {
 			res.removeCookie("poll_password_" + pollId);
@@ -149,7 +149,7 @@ public class Actions {
 
 		// First create a discussion
 		Discussion d = DISCUSSION.createIt("subject", subject,
-				"text", text);
+				"text", Tools.replaceQuotes(text));
 
 		CANDIDATE.createIt("poll_id", pollId,
 				"discussion_id", d.getId().toString(),
@@ -171,8 +171,8 @@ public class Actions {
 		// Update the discussion
 		Discussion d = DISCUSSION.findFirst("id = ?", c.getInteger("discussion_id"));
 
-		d.set("subject", subject,
-				"text", text).saveIt();
+		d.set("subject", Tools.replaceQuotes(subject),
+				"text", Tools.replaceQuotes(text)).saveIt();
 
 
 		return "Candidate updated";
@@ -188,7 +188,7 @@ public class Actions {
 			throw new NoSuchElementException("Wrong User");
 		}
 
-		c.set("text", text).saveIt();
+		c.set("text", Tools.replaceQuotes(text)).saveIt();
 
 
 		return "Comment updated";
@@ -220,7 +220,7 @@ public class Actions {
 
 		// find the candidate
 		Comment c = COMMENT.createIt("discussion_id", discussionId, 
-				"text", text,
+				"text", Tools.replaceQuotes(text),
 				"user_id", userId);
 		c.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(c.getLong("id")))).saveIt();
 
@@ -616,7 +616,7 @@ public class Actions {
 
 			if (tag == null) {
 				tag = TAG.createIt("user_id", userId,
-						"name", newTagName);
+						"name", Tools.replaceQuotes(newTagName));
 				tag.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(tag.getLong("id")))).saveIt();
 				message = "New tag added";
 			}
