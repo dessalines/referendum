@@ -54,7 +54,8 @@ public class Actions {
 				"user_id", userId,
 				"poll_type_id", 1,
 				"poll_sum_type_id", 1);
-		p.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(p.getLong("id")))).saveIt();
+		p.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(p.getLong("id"))),
+				"modified", "0000-00-00 00:00:00").saveIt();
 
 		return p.getId().toString();
 	}
@@ -222,7 +223,8 @@ public class Actions {
 		Comment c = COMMENT.createIt("discussion_id", discussionId, 
 				"text", Tools.replaceQuotes(text),
 				"user_id", userId);
-		c.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(c.getLong("id")))).saveIt();
+		c.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(c.getLong("id"))),
+				"modified", "0000-00-00 00:00:00").saveIt();
 
 
 		String childId = c.getId().toString();
@@ -416,7 +418,8 @@ public class Actions {
 		// The user doesn't exist, so you need to create the user and login
 		if (uv == null) {
 			User user = USER.createIt("ip_address", req.ip());
-			user.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(user.getLong("id")))).saveIt();
+			user.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(user.getLong("id"))),
+					"modified", "0000-00-00 00:00:00").saveIt();
 			auth = Tools.generateSecureRandom();
 			LOGIN.createIt("user_id", user.getId(), 
 					"auth", auth,
@@ -568,7 +571,8 @@ public class Actions {
 
 			// Create the user and full user
 			User user = USER.createIt("ip_address", req.ip());
-			user.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(user.getLong("id")))).saveIt();
+			user.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(user.getLong("id"))),
+					"modified", "0000-00-00 00:00:00").saveIt();
 
 			log.info("encrypting the user password");
 			String encryptedPassword = Tools.PASS_ENCRYPT.encryptPassword(password);
@@ -617,7 +621,8 @@ public class Actions {
 			if (tag == null) {
 				tag = TAG.createIt("user_id", userId,
 						"name", Tools.replaceQuotes(newTagName));
-				tag.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(tag.getLong("id")))).saveIt();
+				tag.set("aid", Tools.ALPHA_ID.encode(BigInteger.valueOf(tag.getLong("id"))),
+						"modified", "0000-00-00 00:00:00").saveIt();
 				message = "New tag added";
 			}
 			
