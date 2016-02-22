@@ -36,6 +36,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
@@ -60,6 +61,7 @@ import org.slf4j.LoggerFactory;
 
 import spark.Request;
 import spark.Response;
+import spark.utils.GzipUtils;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.google.common.base.Charsets;
@@ -117,6 +119,8 @@ public class Tools {
 		String origin = req.headers("Origin");
 		res.header("Access-Control-Allow-Credentials", "true");
 		res.header("Access-Control-Allow-Origin", origin);
+		res.header("Content-Encoding", "gzip");
+
 
 
 	}
@@ -421,19 +425,40 @@ public class Tools {
 		return s;
 	}
 
-	public static HttpServletResponse writeFileToResponse(File file, Response res) {
-		return writeFileToResponse(file.getAbsolutePath(), res);
+	public static Boolean writeFileToResponse(File file, Request req, Response res) {
+		return writeFileToResponse(file.getAbsolutePath(), req, res);
 	}
 
-	public static HttpServletResponse writeFileToResponse(String path, Response res) {
+
+	public static Boolean writeFileToResponse(String path, Request req, Response res) {
+		try {
+			
+			OutputStream wrappedOutputStream = GzipUtils.checkAndWrap(req.raw(), 
+					res.raw());
+
+			IOUtils.copy(new FileInputStream(new File(path)), wrappedOutputStream);
+
+			wrappedOutputStream.flush();
+			wrappedOutputStream.close();
+			
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+	public static HttpServletResponse writeFileToResponse2(String path, Response res) {
 
 		byte[] encoded;
 		try {
 			encoded = java.nio.file.Files.readAllBytes(Paths.get(path));
 
+
 			ServletOutputStream os = res.raw().getOutputStream();
 			os.write(encoded);
 			os.close();
+
 			return res.raw();
 
 		} catch (IOException e) {
@@ -501,9 +526,9 @@ public class Tools {
 	public static void setContentTypeFromFileName(String pageName, Response res) {
 
 		if (pageName.endsWith(".css")) {
-			res.type("text/css");
+			res.type("text/css; charset=UTF-8");
 		} else if (pageName.endsWith(".js")) {
-			res.type("application/javascript");
+			res.type("application/javascript; charset=UTF-8");
 		} else if (pageName.endsWith(".png")) {
 			res.type("image/png");
 			res.header("Content-Disposition", "attachment;");
@@ -535,7 +560,7 @@ public class Tools {
 	public static String replaceNewlines(String text) {
 		return text.replace("\r", "").replace("\n", "--lb--").replace("\\", "");
 	}
-	
+
 	public static String replaceQuotes(String text) {
 		if (text != null) {
 			return text.replace("\"", "&dblq;");
@@ -589,15 +614,15 @@ public class Tools {
 				InputStream instream = entity.getContent();
 				try {
 					String responseStr = IOUtils.toString(instream, Charsets.UTF_8); 
-					
+
 					JsonNode on = jsonToNode(responseStr);
-					
-//					log.info(responseStr);
-					
+
+					//					log.info(responseStr);
+
 					Boolean success = on.get("success").asBoolean();
-					
+
 					return success;
-					
+
 				} finally {
 					instream.close();
 				}
@@ -607,7 +632,7 @@ public class Tools {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return false;
 
 	}

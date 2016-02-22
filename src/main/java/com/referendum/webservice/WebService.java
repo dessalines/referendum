@@ -3,10 +3,20 @@ package com.referendum.webservice;
 import static spark.Spark.get;
 import static spark.Spark.port;
 
+
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
+
 import spark.Spark;
+import spark.utils.GzipUtils;
 
 import com.referendum.DataSources;
 import com.referendum.tools.Tools;
@@ -57,8 +67,8 @@ public class WebService {
 			
 			Tools.setContentTypeFromFileName(pageName, res);
 			
-			return Tools.writeFileToResponse(webHomePath, res);
-			
+			return Tools.writeFileToResponse(webHomePath, req, res);
+
 		});
 
 		

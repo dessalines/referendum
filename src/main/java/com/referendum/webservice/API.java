@@ -46,6 +46,8 @@ public class API {
 		get("get_user", (req, res) -> {
 
 			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -66,6 +68,8 @@ public class API {
 		get("get_user_info/:userAid", (req, res) -> {
 
 			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -256,6 +260,7 @@ public class API {
 
 			try {
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollAid")).toString();
 				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
@@ -416,6 +421,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 
 
@@ -467,6 +473,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -493,6 +500,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				String pollId = ALPHA_ID.decode(req.params(":pollId")).toString();
 
@@ -516,6 +524,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -545,6 +554,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -570,6 +580,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -604,6 +615,7 @@ public class API {
 
 			try {
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -673,6 +685,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -706,6 +719,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -729,6 +743,7 @@ public class API {
 
 			try {	
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
 
 				Tools.dbInit();
 
@@ -830,6 +845,8 @@ public class API {
 			try {
 
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+				
 				Tools.dbInit();
 
 				String query = req.params(":query");
@@ -859,6 +876,8 @@ public class API {
 			try {
 
 				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+				
 				Tools.dbInit();
 
 				String query = req.params(":query");
