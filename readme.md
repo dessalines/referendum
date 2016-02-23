@@ -18,10 +18,9 @@ Check out a sample poll [here](https://referendum.ml/poll/1)
 [Change log](https://github.com/tchoulihan/referendum/releases)
 
 ## Screenshots:
-<img src="http://i.imgur.com/Ul4HF8b.png">
-<img src="http://i.imgur.com/E0SgzWY.png">
-<img src="http://i.imgur.com/1ALYtwD.png">
-
+<img src="http://i.imgur.com/DKgWaGo.png">
+<img src="http://i.imgur.com/mQsffmJ.png">
+<img src="http://i.imgur.com/Orpd76R.png">
 
 
 ## Bugs and feature requests
