@@ -80,7 +80,7 @@ function setupCommentTop() {
         // commentReplyForm.addClass('hide');
         // commentText.removeClass('hide');
 
-      }, null, null);
+      }, true, null);
     });
 
 
@@ -93,7 +93,7 @@ function setupCommentVote(commentId) {
   var commentSliderObj = $('#comment_slider_' + commentId);
 
   // With JQuery
-  var slider = commentSliderObj.bootstrapSlider({
+  var slider = commentSliderObj.slider({
       reversed: true,
       tooltip: 'show'
     })
@@ -298,7 +298,7 @@ function setupCommentReply(commentId) {
         // commentReplyForm.addClass('hide');
         // commentText.removeClass('hide');
 
-      }, null, null);
+      }, true, null);
     });
 
 
@@ -343,7 +343,7 @@ function commentSlideStopActions(commentId, cleared) {
   // set the color and tooltip
   var rank = null;
   if (!cleared) {
-    rank = commentSliderObj.bootstrapSlider('getValue');
+    rank = commentSliderObj.slider('getValue');
     var color = commentRGBChange(commentId);
     commentVoteObj.css('color', color);
 
@@ -371,7 +371,7 @@ function commentSlideStopActions(commentId, cleared) {
     function() {
       // alert('ballot saved');
       // TODO reload comments?
-    }, null, null, null);
+    }, true, null, null);
 
   removeOverlay();
   // recalculate the poll results
@@ -420,7 +420,7 @@ function initializeCommentSlider(commentId) {
     var voteNum = parseFloat(vote/10);
 
     // Fill the data
-    commentSliderObj.bootstrapSlider('setValue', voteNum);
+    commentSliderObj.slider('setValue', voteNum);
 
     var commentVoteObj = $('#comment_vote_' + commentId);
     var color = commentRGBChange(commentId);
@@ -431,7 +431,7 @@ function initializeCommentSlider(commentId) {
     commentSliderObj.attr('vote', false);
   }
 
-  $('#comment_slider_special' + commentId).find('.slider-track-high').css('background', '#BABABA');
+  $('#comment_slider_special' + commentId).find('.slider-track-high').css('background', '#737373');
 
 
 }
@@ -443,9 +443,9 @@ function commentRGBChange(commentId) {
   var commentSliderObj = $('#comment_slider_' + commentId);
   var commentSliderSpecialObj = $('#comment_slider_special_' + commentId);
 
-  var val = commentSliderObj.bootstrapSlider('getValue');
-  // $(obj).bootstrapSlider('setAttribute','tooltip','show');
-  // console.log($(obj).bootstrapSlider('getAttribute','tooltip'));
+  var val = commentSliderObj.slider('getValue');
+  // $(obj).slider('setAttribute','tooltip','show');
+  // console.log($(obj).slider('getAttribute','tooltip'));
 
   // var correctId = '#comment_slider_' + commentId + '_slider';
 
@@ -463,8 +463,8 @@ function commentRGBChange(commentId) {
 };
 
 function colorChange(val) {
-  // $(obj).bootstrapSlider('setAttribute','tooltip','show');
-  // console.log($(obj).bootstrapSlider('getAttribute','tooltip'));
+  // $(obj).slider('setAttribute','tooltip','show');
+  // console.log($(obj).slider('getAttribute','tooltip'));
 
   // var correctId = '#comment_slider_' + commentId + '_slider';
 
@@ -487,8 +487,8 @@ function setupCommentClearVote(commentId) {
   commentClearVoteObj.click(function() {
     var commentSliderObj = $('#comment_slider_' + commentId);
     console.log(commentSliderObj);
-    commentSliderObj.bootstrapSlider('setValue', 5);
-    $('#comment_slider_special_' + commentId + ' .slider-track-high').css('background', '#BABABA');
+    commentSliderObj.slider('setValue', 5);
+    $('#comment_slider_special_' + commentId + ' .slider-track-high').css('background', '#737373');
     commentSliderObj.attr('vote', false);
 
     commentSlideStopActions(commentId, true);

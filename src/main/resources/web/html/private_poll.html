@@ -11,38 +11,23 @@
   <!-- favicon -->
   <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon" />
   <!-- Bootstrap core CSS -->
-  <link href="../css/cyborg.bootstrap.min.css" rel="stylesheet">
+  <link href="../css/white.plum.bootstrap.min.css" rel="stylesheet">
   <!-- Link to font awesome -->
-  <!-- <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"> -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
   <!-- Bootstrap social css -->
   <link href="../bower_components/bootstrap-social/bootstrap-social.css" rel="stylesheet">
   <!--   Bootstrap validator -->
   <link rel="stylesheet" href="../bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css" />
   <!--   toastr css -->
   <link href="../bower_components/toastr/toastr.css" rel="stylesheet" />
-  <!-- Pickadate -->
-  <link href="../bower_components/pickadate/lib/themes/default.css" rel="stylesheet" />
-  <link href="../bower_components/pickadate/lib/themes/default.date.css" rel="stylesheet" />
-  <!-- Jquery UI -->
-  <link rel="stylesheet" href="../bower_components/jquery-ui/themes/cupertino/jquery-ui.min.css">
-  <!-- The jtable crud interface -->
-  <link href="../bower_components/jtable/lib/themes/lightcolor/blue/jtable.min.css" rel="stylesheet" type="text/css" />
   <!-- Bootstrap markdown -->
   <link rel="stylesheet" href="../bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css">
   <!-- Bootstrap slider css -->
   <link rel="stylesheet" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
   <!-- This main css -->
   <link href="../css/main2.css" rel="stylesheet">
-  <!-- Just for debugging purposes. Don't actually copy this line! -->
-  <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-      <![endif]-->
 </head>
-
 <body>
   <div id="wrapper">
     <!-- plug into here -->
@@ -186,24 +171,19 @@
     <!-- Bootstrap core JavaScript
       ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
     <script src="../bower_components/toastr/toastr.js"></script>
     <script src="../bower_components/mustache.js/mustache.js"></script>
     <script src="../bower_components/holderjs/holder.js"></script>
-    <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
-    <script src="../bower_components/pickadate/lib/picker.js"></script>
-    <script src="../bower_components/pickadate/lib/picker.date.js"></script>
-    <script src="../bower_components/jtable/lib/jquery.jtable.min.js" type="text/javascript"></script>
     <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
     <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
     <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
     <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
     <script src="../bower_components/d3/d3.min.js"></script>
-    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-    <script src="../bower_components/foggy/jquery.foggy.min.js"></script>
+    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
+    <script src="../bower_components/moment/min/moment.min.js"></script>
     <!-- my scripts -->
     <script src="../js/tools.js"></script>
     <script src="../js/common.js"></script>
@@ -212,12 +192,10 @@
     <script type="text/javascript">
     var CaptchaCallback = function() {
       grecaptcha.render('recaptcha_signup', {
-        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T',
-        'theme': 'dark'
+        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
       });
       grecaptcha.render('recaptcha_login', {
-        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T',
-        'theme': 'dark'
+        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
       });
     };
     </script>

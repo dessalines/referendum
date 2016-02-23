@@ -114,7 +114,7 @@ public class Tables {
 				"text,\n"+
 				"comment.user_id,\n"+
 				"user.aid as user_aid,\n"+
-				"coalesce(full_user.name, concat('user_',comment.user_id)) as user_name,\n"+
+				"coalesce(full_user.name, concat('user_',user.aid)) as user_name,\n"+
 				"comment.deleted,\n"+
 				"-- min(a.path_length,b.path_length),\n"+
 				"AVG(c.rank) as avg_rank,\n"+

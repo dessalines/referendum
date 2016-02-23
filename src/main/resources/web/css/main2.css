@@ -32,14 +32,27 @@
   background: #BABABA;
 }*/
 
+.slider-selection, .slider-track-high {
+  background: #bababa;
+}
 
+.navbar {
+  z-index: 50;
+}
+
+.container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px
+}
 
 #search_form > .input-group > .form-group {
   display: inline !important;
 }
 
 #search_form {
-  margin-top:5px;
+  margin-top: 5px;
 }
 
 @media (max-width: 767px) {
@@ -74,11 +87,8 @@
   border-bottom: 1px solid #ccc;
 }
 
-
-
-
 .text-normal {
-  color: #ffffff;
+  color: #333;
 }
 
 table a:not(.btn) {
@@ -90,8 +100,16 @@ table a:not(.btn) {
   background-color: inherit;
 }
 
-.info-line {
+.title-line {
   margin-bottom: 5px;
+}
+
+.info-line {
+  margin-bottom: 2px;
+}
+
+.list-inline > li {
+  padding-left: 0px;
 }
 
 .label-nowrap {
@@ -125,7 +143,7 @@ table a:not(.btn) {
   padding: 8px 0;
   /*background-color: #fff; */
   /*for light themes*/
-  background-color: #424242;
+  background-color: #fff;
   /*for dark themes*/
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -138,19 +156,19 @@ table a:not(.btn) {
   font-size: 18px;
   line-height: 24px;
   background-color: none;
-  color: #2A9FD6;
+  color: #7a62d3;
 }
 
 .tt-suggestion.tt-cursor {
-  color: #3FA9DA;
-  background-color: #424242;
-  /*color: #CC33FF;*/
+  /*  color: #3FA9DA;
+  background-color: #424242;*/
+  color: #CC33FF;
   /*background-color: #0097cf;*/
 }
 
 .tt-cursor {
-  color: #FF6666;
-  background-color: #428bca;
+  /* color: #FF6666;
+  background-color: #428bca;*/
 }
 
 .tt-suggestion p {
@@ -166,6 +184,7 @@ table a:not(.btn) {
 .input-group-btn:last-child > .btn-group {
   margin-top: 0px;
   height: 38px;
+  margin-left: 0px;
 }
 
 .rounded-left {
@@ -187,7 +206,7 @@ table a:not(.btn) {
 }
 
 .vertical-line-right {
-  border-right: 1px solid #282828;
+  border-right: 1px solid #eee;
 }
 
 .not-allowed {
@@ -196,10 +215,12 @@ table a:not(.btn) {
 
 .show_expand[aria-expanded="true"]:before {
   content: '[-]';
+  cursor: pointer;
 }
 
 .show_expand[aria-expanded="false"]:before {
   content: '[+]';
+  cursor: pointer;
 }
 
 .list-inline {
@@ -260,19 +281,20 @@ table a:not(.btn) {
   border: 1px solid #282828
 }
 
-.form-control,
+
+/*.form-control,
 .md-header,
 .md-preview,
 .md-editor.md-fullscreen-mod {
   background-color: #000;
   background: #000 !important;
-}
+}*/
 
 .range_vote_table,
 .comment_vote_table {
   position: fixed;
-  /*background-color:#FFF;*/
-  z-index: 51;
+  background-color:#FFF;
+  z-index: 53;
   top: 30%;
   left: 50%;
   margin-top: -50px;
