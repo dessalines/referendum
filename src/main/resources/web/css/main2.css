@@ -78,7 +78,7 @@
 
 
 .text-normal {
-  color: #ffffff;
+  color: #333;
 }
 
 table a:not(.btn) {
@@ -90,8 +90,15 @@ table a:not(.btn) {
   background-color: inherit;
 }
 
-.info-line {
+.title-line {
   margin-bottom: 5px;
+}
+.info-line {
+  margin-bottom: 2px;
+}
+
+.list-inline > li {
+  padding-left: 0px;
 }
 
 .label-nowrap {
@@ -125,7 +132,7 @@ table a:not(.btn) {
   padding: 8px 0;
   /*background-color: #fff; */
   /*for light themes*/
-  background-color: #424242;
+  background-color: #fff;
   /*for dark themes*/
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -138,19 +145,19 @@ table a:not(.btn) {
   font-size: 18px;
   line-height: 24px;
   background-color: none;
-  color: #2A9FD6;
+  color: #7a62d3;
 }
 
 .tt-suggestion.tt-cursor {
-  color: #3FA9DA;
-  background-color: #424242;
-  /*color: #CC33FF;*/
+/*  color: #3FA9DA;
+  background-color: #424242;*/
+  color: #CC33FF;
   /*background-color: #0097cf;*/
 }
 
 .tt-cursor {
-  color: #FF6666;
-  background-color: #428bca;
+ /* color: #FF6666;
+  background-color: #428bca;*/
 }
 
 .tt-suggestion p {
@@ -166,6 +173,7 @@ table a:not(.btn) {
 .input-group-btn:last-child > .btn-group {
   margin-top: 0px;
   height: 38px;
+  margin-left: 0px;
 }
 
 .rounded-left {
@@ -187,7 +195,7 @@ table a:not(.btn) {
 }
 
 .vertical-line-right {
-  border-right: 1px solid #282828;
+  border-right: 1px solid #eee;
 }
 
 .not-allowed {
@@ -260,13 +268,13 @@ table a:not(.btn) {
   border: 1px solid #282828
 }
 
-.form-control,
+/*.form-control,
 .md-header,
 .md-preview,
 .md-editor.md-fullscreen-mod {
   background-color: #000;
   background: #000 !important;
-}
+}*/
 
 .range_vote_table,
 .comment_vote_table {
