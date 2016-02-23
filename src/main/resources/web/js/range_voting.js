@@ -52,7 +52,7 @@ function setupRangeVote(obj, vote) {
 
   // With JQuery
 
-  var slider = $(obj).bootstrapSlider({
+  var slider = $(obj).slider({
       reversed: true,
       tooltip: 'show'
     })
@@ -87,7 +87,7 @@ function slideStopActions(obj, cleared) {
   // set the color and tooltip
   var rank = null;
   if (!cleared) {
-    rank = $(obj).bootstrapSlider('getValue');
+    rank = $(obj).slider('getValue');
     var color = RGBChange(obj);
     $(obj + '_vote').css('color', color);
     $(obj + '_vote_rank').css('background-color', color);
@@ -125,7 +125,7 @@ function slideStopActions(obj, cleared) {
     function() {
       // alert('ballot saved');
       setupResults();
-    }, null, null, null);
+    }, true, null, null);
 
   removeOverlay();
   // recalculate the poll results
@@ -157,7 +157,7 @@ function initializeSlider(obj, vote) {
     var voteNum = parseFloat(vote['rank']) / 10;
 
     // Fill the data
-    $(obj).bootstrapSlider('setValue', voteNum);
+    $(obj).slider('setValue', voteNum);
     var color = RGBChange(obj);
     $(obj + '_vote').css('color', color);
     $(obj + '_vote_rank').css('background-color', color);
@@ -169,7 +169,7 @@ function initializeSlider(obj, vote) {
     $(obj).attr('vote', false);
   }
 
-  $(obj + 'Slider .slider-track-high').css('background', '#BABABA');
+  $(obj + 'Slider .slider-track-high').css('background', '#737373');
 
 
 }
@@ -178,9 +178,9 @@ function RGBChange(obj) {
 
   // convert the value to 0-255
 
-  var val = $(obj).bootstrapSlider('getValue');
-  // $(obj).bootstrapSlider('setAttribute','tooltip','show');
-  // console.log($(obj).bootstrapSlider('getAttribute','tooltip'));
+  var val = $(obj).slider('getValue');
+  // $(obj).slider('setAttribute','tooltip','show');
+  // console.log($(obj).slider('getAttribute','tooltip'));
 
   var correctId = obj + '_slider';
 
@@ -202,8 +202,8 @@ function RGBChange(obj) {
 function setupClearVote(obj) {
   $(obj + '_clear_vote').unbind('click').click(function() {
     console.log(obj);
-    $(obj).bootstrapSlider('setValue', 5);
-    $(obj + '_slider .slider-track-high').css('background', '#BABABA');
+    $(obj).slider('setValue', 5);
+    $(obj + '_slider .slider-track-high').css('background', '#737373');
     $(obj).attr('vote', false);
 
     slideStopActions(obj, true);

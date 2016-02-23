@@ -579,7 +579,7 @@ function addOverlay() {
     "position": "fixed",
     "top": "0",
     "left": "0",
-    "zIndex": "50",
+    "zIndex": "52",
     "MsFilter": "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)",
     "filter": "alpha(opacity=60)",
     "MozOpacity": 0.6,
