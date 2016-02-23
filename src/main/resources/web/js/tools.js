@@ -82,6 +82,7 @@ function fillMustacheWithJson(data, templateHtml, divId, partial, append) {
 
   $.extend(data, standardDateFormatObj);
   $.extend(data, m2htmlObj);
+  $.extend(data, commentToPanelColor);
 
   Mustache.parse(templateHtml); // optional, speeds up future uses
   var rendered;
@@ -431,6 +432,29 @@ var m2htmlObj = {
     return function(text, render) {
       var t = render(text);
       return markdown.toHTML(t);
+    }
+  }
+}
+
+var commentToPanelColor = {
+  "commentToPanelColor": function() {
+    return function(text, render) {
+      var t = render(text);
+      var rem = t.split(/,/).length % 5;
+      var panelType = 'panel-default';
+      if (rem == 0) {
+        panelType = 'panel-success';
+      } else if (rem == 1) {
+        panelType = 'panel-default';
+      } else if (rem == 2) {
+        panelType = 'panel-danger';
+      } else if (rem == 3) {
+        panelType = 'panel-warning';
+      } else if (rem == 4) {
+        panelType = 'panel-info';
+      }
+
+      return panelType;
     }
   }
 }

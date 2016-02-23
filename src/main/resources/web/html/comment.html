@@ -97,7 +97,7 @@
           <div class="row">
             <div class="col-md-12">
               {{#.}}
-              <div id="comment_panel_{{id}}" class="panel panel-default">
+              <div id="comment_panel_{{id}}" class="panel {{#commentToPanelColor}}{{breadCrumbsList}}{{/commentToPanelColor}}">
                 <div class="panel-heading">
                   <ul class="list-inline">
                     <li>
@@ -127,9 +127,9 @@
                           </span>
                     </li>
                     {{^modified}}
-                    <li><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
+                    <li class="text-muted"><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
                     {{/modified}} {{#modified}}
-                    <li><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
+                    <li class="text-muted"><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
                     {{/modified}}
                   </ul>
                 </div>
@@ -171,7 +171,7 @@
         </script>
         <script id="recurse" type="x-tmpl-mustache">
           {{#embedded}}
-          <div id="comment_panel_{{id}}" class="panel panel-default">
+          <div id="comment_panel_{{id}}" class="panel {{#commentToPanelColor}}{{breadCrumbsList}}{{/commentToPanelColor}}">
             <div class="panel-heading">
               <ul class="list-inline">
                 <li>
@@ -201,9 +201,9 @@
                           </span>
                 </li>
                 {{^modified}}
-                <li><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
+                <li class="text-muted"><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
                 {{/modified}} {{#modified}}
-                <li><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
+                <li class="text-muted"><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
                 {{/modified}}
               </ul>
             </div>
