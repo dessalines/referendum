@@ -24,13 +24,15 @@ $(document).ready(function() {
 function setupActiveTabEvents() {
 
   // First do a check to set the correct one
-  activeTab = '#' + $("ul#main_tab_list li.active").attr('name');
-
-  console.log(activeTab);
-  if (activeTab == '#polls_tab') {
+  // 
+  activeTab = window.location.hash;
+  if (activeTab == '') {
+    activeTab = '#' + $("ul#main_tab_list li.active").attr('name');
+  } else {
     bindEvents();
   }
 
+  console.log(activeTab);
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
     activeTab = $(e.target).attr('href');
