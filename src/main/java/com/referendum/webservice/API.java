@@ -180,7 +180,9 @@ public class API {
 				LazyList<CommentView> cvs = Actions.fetchUserMessageList(
 						uv.getInteger("id"), uv.getInteger("id"), null, null, null, false);
 
-				return cvs.size();
+				String size = (cvs.size() > 0) ? String.valueOf(cvs.size()) : "";
+				
+				return size;
 
 			} catch (Exception e) {
 				res.status(666);
@@ -1045,6 +1047,29 @@ public class API {
 				String pollId = ALPHA_ID.decode(req.params(":pollAid")).toString();
 
 				String message = Actions.clearTags(uv.getId().toString(), pollId);
+
+				return message;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+		
+		post("/mark_messages_as_read", (req, res) -> {
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				Tools.dbInit();
+
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
+
+				String message = Actions.markMessagesAsRead(uv.getInteger("id"));
 
 				return message;
 

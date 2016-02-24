@@ -5,6 +5,7 @@ import static com.referendum.tools.Tools.ALPHA_ID;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
@@ -525,6 +527,29 @@ public class Actions {
 		
 		return cvs;
 	}
+	
+	public static String markMessagesAsRead(Integer userId) {
+		
+		// Fetch fetch the user unreadmessage list
+		String joinSQL = fetchUserMessageList(userId, userId, null, null, null, false).toSql(false);
+		joinSQL = joinSQL.substring(0,joinSQL.length()-1); // remove the semicolon;
+		
+		StringBuilder s = new StringBuilder();
+		
+		s.append("update comment a\n");
+		s.append("join (" + joinSQL + ") k \n");
+		s.append("on a.id = k.id \n");
+		s.append("set a.read = 1 \n");
+		
+		String updateSQL = s.toString();
+
+		Base.exec(updateSQL);
+		
+		return "success";
+		
+	}
+	
+	
 
 	public static String commentObjectsToJson(List<CommentView> cvs) {
 		//		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));

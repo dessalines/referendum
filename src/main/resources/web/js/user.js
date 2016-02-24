@@ -27,7 +27,9 @@ function setupActiveTabEvents() {
   activeTab = '#' + $("ul#main_tab_list li.active").attr('name');
 
   console.log(activeTab);
-  bindEvents();
+  if (activeTab == '#polls_tab') {
+    bindEvents();
+  }
 
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
@@ -50,10 +52,12 @@ function bindEvents() {
 }
 
 function markMessagesAsRead() {
-  simplePost('mark_messages_as_read', null, null,
-    function() {
-      setupPollTags();
-    }, null, null, null);
+  if (getCookie('uaid') == userAid) {
+    simplePost('mark_messages_as_read', null, null,
+      function() {
+        fetchUnreadMessages();
+      }, true, null, null);
+  }
 }
 
 var commentsStartIndex = 0;
