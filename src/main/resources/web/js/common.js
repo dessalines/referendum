@@ -1,3 +1,5 @@
+var periodicFetches = null;
+
 $(document).ready(function() {
 
   getAuth();
@@ -150,13 +152,20 @@ function showLoggedIn() {
   $('#login_modal').modal('hide');
   $('.logged-out').addClass('hide');
   $('.logged-in').removeClass('hide');
-  $('#user_dropdown').html(getCookie('username') + ' <span class="caret"></span>');
-  $('#my_user_page').attr('href', '/user/' + getCookie('uaid'));
+  $('#user_dropdown_span').html(getCookie('username'));
+  $('#my_user_page').attr('href', '/user/' + getCookie('uaid') + '#polls_tab');
+  $('#my_messages').attr('href', '/user/' + getCookie('uaid') + '#messages_tab');
+  $('#my_comments').attr('href', '/user/' + getCookie('uaid') + '#comments_tab');
+
+  periodicFetches = periodicFetcher();
+
 }
 
 function showLoggedOut() {
   $('.logged-out').removeClass('hide');
   $('.logged-in').addClass('hide');
+
+  clearInterval(periodicFetches);
 }
 
 function setupLoginForm() {
@@ -180,7 +189,8 @@ function setupLoginForm() {
 
       }, null, null, function() {
         // if it fails, reset the recaptcha
-        grecaptcha.reset();grecaptcha.reset();
+        grecaptcha.reset();
+        grecaptcha.reset();
       });
     });
 
@@ -196,7 +206,8 @@ function setupLoginForm() {
         $('#login_modal').modal('hide');
         showLoggedIn();
       }, null, null, function() {
-        grecaptcha.reset();grecaptcha.reset();
+        grecaptcha.reset();
+        grecaptcha.reset();
       });
     });
 
@@ -212,5 +223,25 @@ function setupCreateEmptyPoll() {
         }, 1000);
 
       }, true, null, null);
+  });
+}
+
+function periodicFetcher() {
+  fetchUnreadMessages();
+
+  return setInterval(function() {
+    fetchUnreadMessages();
+  }, 60000)
+}
+
+function fetchUnreadMessages() {
+  getJson('get_unread_message_count', false).done(function(e) {
+    $('.message_unread_count').text(e);
+    
+    // This sets the messages for the user page
+    if (getLastUrlPath() == getCookie('uaid')) {
+      $('.my_message_unread_count').text(e);
+    }
+      
   });
 }

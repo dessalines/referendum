@@ -16,7 +16,7 @@ public class Main {
 
 	static Logger log = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
-	@Option(name="-uninstall",usage="Uninstall torrenttunes-client.(WARNING, this deletes your library)")
+	@Option(name="-uninstall",usage="Uninstall referendum.(WARNING, this deletes your library)")
 	private boolean uninstall;
 
 	@Option(name="-loglevel", usage="Sets the log level [INFO, DEBUG, etc.]")

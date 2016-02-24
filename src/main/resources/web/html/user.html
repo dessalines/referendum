@@ -28,6 +28,7 @@
   <!-- This main css -->
   <link href="../css/main2.css" rel="stylesheet">
 </head>
+
 <body>
   <div id="wrapper">
     <!-- plug into here -->
@@ -66,10 +67,13 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown hide logged-in">
-              <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
+              <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"><span id="user_dropdown_span">User</span> <span class="message_unread_count badge"></span> <span class="caret"></span> </a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#" id="my_user_page"> My Polls</a></li>
-                <li><a href="#" class="log_out"> Log out</a></li>
+                <li><a href="#" id="my_user_page"> <i class="fa fa-pencil-square-o fa-fw"></i> My Polls</a></li>
+                <li><a href="#" id="my_messages"> <i class="fa fa-envelope-o fa-fw"></i> Messages <span class="message_unread_count badge">4</span></a></li>
+                <li><a href="#" id="my_comments"> <i class="fa fa-comment-o fa-fw"></i> Comments</a></li>
+                <li class="divider"></li>
+                <li><a href="#" class="log_out"> <i class="fa fa-sign-out fa-fw"></i> Log out</a></li>
               </ul>
             </li>
             <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
@@ -81,134 +85,227 @@
     </nav>
     <!--Main Content -->
     <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="text-center">Polls for <span id="user_name"></span></h3>
-          <hr>
-          <div id="polls_div">
-            <script id="polls_template" type="x-tmpl-mustache">
-              {{#records}}
-              <div class="col-md-4">
-                <h4 class="title-line"><a href="/poll/{{aid}}" class="text-normal">{{subject}}</a> <small>{{#private}}[private]{{/private}}{{#full_user_only}}[user-only]{{/full_user_only}}</small></h4>
-                <p class="info-line text-muted">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to
-                  <a href="/tag/{{tag_aid}}" class="label label-default label-nowrap"> {{tag_name}}</a></p>
-                <small>
+      <ul id="main_tab_list" class="nav nav-tabs nav-tabs-left nav-tabs-special nav-justified" role="tablist">
+        <li name="polls_tab" class="active" role="presentation"><a href="#polls_tab" aria-controls="home" role="tab" data-toggle="tab">Polls</a></li>
+        <li name="comments_tab" role="presentation"><a class="text-normal" href="#comments_tab" aria-controls="comments_tab" role="tab" data-toggle="tab">Comments</a></li>
+        <li name="messages_tab" role="presentation"><a class="text-normal" href="#messages_tab" aria-controls="messages_tab" role="tab" data-toggle="tab">Messages <span class="my_message_unread_count badge"></span></a></li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="polls_tab">
+          <div class="row">
+            <div class="col-md-12">
+              <h3 class="text-center">Polls for <span id="user_name"></span></h3>
+              <hr>
+              <div id="polls_div">
+                <script id="polls_template" type="x-tmpl-mustache">
+                  {{#records}}
+                  <div class="col-md-4">
+                    <h4 class="title-line"><a href="/poll/{{aid}}" class="text-normal">{{subject}}</a> <small>{{#private}}[private]{{/private}}{{#full_user_only}}[user-only]{{/full_user_only}}</small></h4>
+                    <p class="info-line text-muted">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to
+                      <a href="/tag/{{tag_aid}}" class="label label-default label-nowrap"> {{tag_name}}</a></p>
+                    <small>
                 <ul class="list-inline">
                   <li><a class="text-normal" href="/poll/{{aid}}">{{number_of_comments}} comments</a></li>
                   <li>{{year_hits}} views</li>
                 </ul>
                 </small>
-              </div>{{/records}}
+                  </div>{{/records}}
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="comments_tab">
+          <div id="comments_div">
+            <script id="comments_template" type="x-tmpl-mustache">
+              <div class="row">
+                <div class="col-md-12">
+                  {{#records}}
+                  <div id="comment_panel_{{id}}" class="panel {{#commentToPanelColor}}{{breadcrumbs}}{{/commentToPanelColor}}">
+                    <div class="panel-heading">
+                      <ul class="list-inline">
+                        <li>
+                          <a class="show_expand" role="button" data-toggle="collapse" data-target="#comment_collapse_{{id}}" aria-expanded="true" aria-controls="comment_collapse_{{id}}">
+                          </a>
+                        </li>
+                        <li>
+                          <table id="comment_vote_table_{{id}}" class="comment_vote_table hide">
+                            <tr>
+                              <td>
+                                <input id="comment_slider_{{id}}" class="comment_vote" data-slider-id='comment_slider_special_{{id}}' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="0.1" data-slider-value="5" user-rank="{{user_rank}}" data-slider-orientation="vertical" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <i id='comment_clear_vote_{{id}}' class="fa fa-minus-circle fa-2 hand unvote" data-toggle="tooltip" data-placement="right" title="Clear Vote"></i>
+                              </td>
+                            </tr>
+                          </table>
+                          <a id='comment_vote_{{id}}' user-id="{{user_id}}" class="text-muted hand" data-toggle="tooltip" data-placement="auto" title="Vote">
+                            <i class="fa fa-fw fa-thumbs-up"></i>
+                          </a>
+                        </li>
+                        <li><a href="/user/{{user_aid}}">{{user_name}}</a></li>
+                        <li><span id="comment_vote_rank_{{id}}" class="label label-default label-as-badge" data-toggle="tooltip" data-placement="auto" title="Average Rank"> 
+                        {{#avg_rank}}{{avg_rank}}{{/avg_rank}}{{^avg_rank}}?{{/avg_rank}}
+                          </span>
+                        </li>
+                        {{^modified}}
+                        <li class="text-muted"><small><i> created {{#dateformat}}{{created}}{{/dateformat}}</i></small></li>
+                        {{/modified}} {{#modified}}
+                        <li class="text-muted"><small><i> {{#deleted}}deleted{{/deleted}}{{^deleted}}modified{{/deleted}} {{#dateformat}}{{modified}}{{/dateformat}}</i></small></li>
+                        {{/modified}}
+                      </ul>
+                    </div>
+                    <div id="comment_collapse_{{id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                      <div class="panel-body">
+                        {{^deleted}}
+                        <span id="comment_text_{{id}}">{{#m2html}}{{{text}}}{{/m2html}}</span>
+                        <form id="comment_edit_form_{{id}}" role="form" class="hide">
+                          <input type="hidden" name="comment_id" value="{{id}}">
+                          <textarea id="comment_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder="">{{text}}</textarea>
+                          <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                          <a id="comment_cancel_save_btn_{{id}}" class="btn btn-danger btn-block">Cancel</a>
+                        </form>
+                        <span class="hide" id="comment_reply_text_{{id}}"></span>
+                        <form id="comment_reply_form_{{id}}" role="form" class="hide">
+                          <input type="hidden" name="discussion_id" value="{{discussionId}}">
+                          <input type="hidden" name="parent_comment_id" value="{{id}}">
+                          <textarea id="comment_reply_edit_text_{{id}}" class="form-control" name="text" data-iconlibrary="fa" data-provide="markdown" rows="2" placeholder=""></textarea>
+                          <button type="submit" class="btn btn-default btn-block">Save Comment</button>
+                        </form>
+                        <small>
+                        <ul class="list-inline">
+                          <li><a href="/comment/{{aid}}" class="text-muted">link</a></li>
+                          <li><a id="comment_source_btn_{{id}}" class="text-muted hand">source</a></li>
+                          <li class="hide"><a id="comment_edit_btn_{{id}}" user-id="{{user_id}}" class="text-muted hand">edit<a/></li>
+                          <li class="hide"><a id="comment_delete_btn_{{id}}" user-id="{{user_id}}" class="text-muted hand">delete<a/></li>
+                          <li class="hide"><a id="comment_delete_sure_yes_btn_{{id}}" class="text-danger hand">(Yes</a> 
+                            <a id="comment_delete_sure_no_btn_{{id}}" class="text-muted hand">/No)</a></li>
+                          <li><a id="comment_reply_btn_{{id}}" class="text-muted hand">reply<a/></li>
+                        </ul>
+                        </small> {{/deleted}}{{#deleted}}
+                        <i>deleted</i> {{/deleted}}{{>recurse}}
+                      </div>
+                    </div>
+                  </div>
+                  {{/records}}
+                </div>
+              </div>
             </script>
           </div>
         </div>
+        <div role="tabpanel" class="tab-pane fade" id="messages_tab">
+          <div id="messages_div">
+          </div>
+        </div>
+        <!-- Footer -->
+        <div class="row-fluid">
+          <hr class="featurette-divider">
+          <footer>
+            <p class="pull-right"><a href="#">back to top</a>
+            </p>
+            <p>&copy; 2016 Referendum, Inc. &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">about</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">contact</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">support</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">github</a>
+              <br>
+            </p>
+          </footer>
+        </div>
       </div>
-      <!-- Footer -->
-      <div class="row-fluid">
-        <hr class="featurette-divider">
-        <footer>
-          <p class="pull-right"><a href="#">back to top</a>
-          </p>
-          <p>&copy; 2016 Referendum, Inc. &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">about</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">contact</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">support</a> &middot; <a href="https://github.com/tchoulihan/referendum" target="_blank">github</a>
-            <br>
-          </p>
-        </footer>
-      </div>
-    </div>
-    <!-- Modals -->
-    <div class="modal fade bs-example-modal-sm" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-6 vertical-line-right">
-                <h4 class="text-center"> Create a new account </h4>
-                <br>
-                <form id="signup_form" class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <input name="username" class="form-control" placeholder="choose a username" minlength="5" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username is required" />
+      <!-- Modals -->
+      <div class="modal fade bs-example-modal-sm" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6 vertical-line-right">
+                  <h4 class="text-center"> Create a new account </h4>
+                  <br>
+                  <form id="signup_form" class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="username" class="form-control" placeholder="choose a username" minlength="5" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username is required" />
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="verifyPassword" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="verifyPassword" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <input name="verifyPassword" type="password" class="form-control" id="inputPassword3" placeholder="verify password" data-bv-notempty="true" data-bv-notempty-message="The confirm password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="password" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="verifyPassword" type="password" class="form-control" id="inputPassword3" placeholder="verify password" data-bv-notempty="true" data-bv-notempty-message="The confirm password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="password" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <input name="email" type="inputEmail3" class="form-control" id="inputEmail3" placeholder="email (optional)" data-bv-emailaddress="true" data-bv-emailaddress-message="The input is not a valid email address" />
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="email" type="inputEmail3" class="form-control" id="inputEmail3" placeholder="email (optional)" data-bv-emailaddress="true" data-bv-emailaddress-message="The input is not a valid email address" />
+                      </div>
                     </div>
-                  </div>
-                  <div id="recaptcha_signup" style="transform:scale(0.8);transform-origin:0 0"></div>
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <button id="signinBtn" type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Sign up</button>
+                    <div id="recaptcha_signup" style="transform:scale(0.8);transform-origin:0 0"></div>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <button id="signinBtn" type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Sign up</button>
+                      </div>
                     </div>
-                  </div>
-                </form>
-              </div>
-              <!-- The sign up tab -->
-              <div class="col-md-6">
-                <h4 class="text-center"> Log in </h4>
-                <br>
-                <form id="login_form" class="form-horizontal">
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <input name="user_or_email" class="form-control" placeholder="username or email" minlength="5" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username or email is required" />
+                  </form>
+                </div>
+                <!-- The sign up tab -->
+                <div class="col-md-6">
+                  <h4 class="text-center"> Log in </h4>
+                  <br>
+                  <form id="login_form" class="form-horizontal">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="user_or_email" class="form-control" placeholder="username or email" minlength="5" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username or email is required" />
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                      </div>
                     </div>
-                  </div>
-                  <div id="recaptcha_login" style="transform:scale(0.8);transform-origin:0 0"></div>
-                  <button type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Log In</button>
-                </form>
+                    <div id="recaptcha_login" style="transform:scale(0.8);transform-origin:0 0"></div>
+                    <button type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Log In</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Bootstrap core JavaScript
+      <!-- Bootstrap core JavaScript
       ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
-    <script src="../bower_components/toastr/toastr.js"></script>
-    <script src="../bower_components/mustache.js/mustache.js"></script>
-    <script src="../bower_components/holderjs/holder.js"></script>
-    <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
-    <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
-    <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
-    <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
-    <script src="../bower_components/d3/d3.min.js"></script>
-    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
-    <script src="../bower_components/moment/min/moment.min.js"></script>
-    <!-- my scripts -->
-    <script src="../js/tools.js"></script>
-    <script src="../js/common.js"></script>
-    <script src="../js/user.js"></script>
-    <!-- Recaptcha -->
-    <script type="text/javascript">
-    var CaptchaCallback = function() {
-      grecaptcha.render('recaptcha_signup', {
-        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
-      });
-      grecaptcha.render('recaptcha_login', {
-        'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
-      });
-    };
-    </script>
-    <script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+      <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+      <script src="../bower_components/toastr/toastr.js"></script>
+      <script src="../bower_components/mustache.js/mustache.js"></script>
+      <script src="../bower_components/holderjs/holder.js"></script>
+      <script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+      <script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
+      <script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
+      <script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+      <script src="../bower_components/d3/d3.min.js"></script>
+      <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
+      <script src="../bower_components/moment/min/moment.min.js"></script>
+      <!-- my scripts -->
+      <script src="../js/tools.js"></script>
+      <script src="../js/common.js"></script>
+      <script src="../js/comment_voting.js"></script>
+      <script src="../js/user.js"></script>
+      <!-- Recaptcha -->
+      <script type="text/javascript">
+      var CaptchaCallback = function() {
+        grecaptcha.render('recaptcha_signup', {
+          'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
+        });
+        grecaptcha.render('recaptcha_login', {
+          'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
+        });
+      };
+      </script>
+      <script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
 </body>
 
 </html>

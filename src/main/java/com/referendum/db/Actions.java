@@ -5,6 +5,7 @@ import static com.referendum.tools.Tools.ALPHA_ID;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
@@ -69,7 +71,7 @@ public class Actions {
 		if (p == null) {
 			throw new NoSuchElementException("Wrong User");
 		}
-		
+
 		String passwordEncrypted = Tools.PASS_ENCRYPT.encryptPassword(password);
 		p.set("private_password", passwordEncrypted,
 				"poll_sum_type_id", pollSumTypeId,
@@ -95,7 +97,7 @@ public class Actions {
 		Poll p = POLL.findFirst("id = ? ", pollId);
 
 		Boolean correctPass = Tools.PASS_ENCRYPT.checkPassword(password, p.getString("private_password"));
-		
+
 		if (correctPass) {
 			res.removeCookie("poll_password_" + pollId);
 			res.cookie("poll_password_" + pollId, password);
@@ -344,7 +346,7 @@ public class Actions {
 		res.cookie("auth",null, 0);
 		res.cookie("uid",null, 0);
 		res.cookie("uaid",null, 0);
-		
+
 		res.cookie("auth", auth, DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uid", user.getId().toString(), DataSources.EXPIRE_SECONDS, secure);
 		res.cookie("uaid", user.getString("aid"), DataSources.EXPIRE_SECONDS, secure);
@@ -353,22 +355,22 @@ public class Actions {
 	}
 
 	public static UserLoginView getUserFromCookie(Request req, Response res) {
-		
+
 		String auth = req.cookie("auth");
-		
+
 		UserLoginView uv = null;
-		
+
 		uv = USER_LOGIN_VIEW.findFirst("auth = ?" , auth);
-		
+
 		return uv;
-		
+
 	}
-	
-	
+
+
 	public static UserLoginView getOrCreateUserFromCookie(Request req, Response res) {
 
 		String auth = req.cookie("auth");
-		
+
 		UserLoginView uv = null;
 
 		// If no cookie, fetch user by ip address
@@ -382,20 +384,20 @@ public class Actions {
 				// See if you have a login that hasn't expired yet
 				Login login = LOGIN.findFirst("user_id = ? and expire_time > ?", user.getId(),
 						Tools.newCurrentTimestamp().toString());
-//								log.info(Tools.newCurrentTimestamp().toString());
-//								log.info(login.toJson(false));
+				//								log.info(Tools.newCurrentTimestamp().toString());
+				//								log.info(login.toJson(false));
 
-			
-				
+
+
 				// It found a login item for that user row, so the cookie, like u shoulda
 				if (login != null) {
 					auth = login.getString("auth");
 					Actions.setCookiesForLogin(user, auth, res);
 				}
-				
+
 				// Need to login for that user and set the cookie
 				else {
-					
+
 					auth = Tools.generateSecureRandom();
 					login = LOGIN.createIt("user_id", user.getId(), 
 							"auth", auth,
@@ -478,32 +480,76 @@ public class Actions {
 	}
 
 
-	public static String fetchDiscussionComments(Integer userId, 
-			Integer discussionId, Integer parentId) {
-		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
-				userId, discussionId, parentId));
-		return commentObjectsToJson(cvs);
-	}
 
-	public static String fetchDiscussionComments(Integer userId, 
-			Integer discussionId, Integer parentId, 
-			Integer minPathLength, Integer maxPathLength) {
-		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
-				userId, discussionId, parentId, minPathLength, maxPathLength));
-		return commentObjectsToJson(cvs);
-	}
+	public static String fetchPollComments(Integer userId, Integer discussionId) {
+		List<CommentView> cvs = COMMENT_VIEW.findBySQL(
+				COMMENT_VIEW_SQL(userId, discussionId, null, null, null, null, null, null, null, null, null));
 
-	public static String fetchDiscussionComments(Integer userId, Integer discussionId) {
-		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
-				userId, discussionId));
 		return commentObjectsToJson(cvs);
 	}
 
 	public static String fetchComments(Integer userId, Integer commentId) {
-		List<CommentView> cvs = COMMENT_VIEW.findBySQL(COMMENT_VIEW_SQL(
-				userId, null, commentId));
+		List<CommentView> cvs = COMMENT_VIEW.findBySQL(
+				COMMENT_VIEW_SQL(userId, null, commentId, null, null, null, null, null, null, null, null));
+
 		return commentObjectsToJson(cvs);
 	}
+
+	public static String fetchUserComments(Integer userId, Integer commentUserId, String orderBy, 
+			Integer pageNum, Integer pageSize) {
+		LazyList<Model> cvs = COMMENT_VIEW.findBySQL(
+				COMMENT_VIEW_SQL(userId, null, null, null, null, orderBy, commentUserId, null, 
+						pageNum, pageSize, null));
+
+		String json = Tools.wrapPaginatorArray(
+				Tools.replaceNewlines(cvs.toJson(false)),
+				Long.valueOf(cvs.size()));
+		
+		return json;
+	}
+	
+	public static String fetchUserMessages(Integer userId, Integer parentUserId, String orderBy,
+			Integer pageNum, Integer pageSize, Boolean read) {
+
+		LazyList<CommentView> cvs = fetchUserMessageList(userId, parentUserId, orderBy, pageNum, pageSize, read);
+		
+		String json = Tools.wrapPaginatorArray(
+				Tools.replaceNewlines(cvs.toJson(false)),
+				Long.valueOf(cvs.size()));
+		
+		return json;
+	}
+	
+	public static LazyList<CommentView> fetchUserMessageList(Integer userId, Integer parentUserId, String orderBy,
+			Integer pageNum, Integer pageSize, Boolean read) {
+		LazyList<CommentView> cvs = COMMENT_VIEW.findBySQL(
+				COMMENT_VIEW_SQL(userId, null, null, 1, 1, orderBy, null, parentUserId, null, null, read));
+		
+		return cvs;
+	}
+	
+	public static String markMessagesAsRead(Integer userId) {
+		
+		// Fetch fetch the user unreadmessage list
+		String joinSQL = fetchUserMessageList(userId, userId, null, null, null, false).toSql(false);
+		joinSQL = joinSQL.substring(0,joinSQL.length()-1); // remove the semicolon;
+		
+		StringBuilder s = new StringBuilder();
+		
+		s.append("update comment a\n");
+		s.append("join (" + joinSQL + ") k \n");
+		s.append("on a.id = k.id \n");
+		s.append("set a.read = 1 \n");
+		
+		String updateSQL = s.toString();
+
+		Base.exec(updateSQL);
+		
+		return "success";
+		
+	}
+	
+	
 
 	public static String commentObjectsToJson(List<CommentView> cvs) {
 		//		return Tools.GSON.toJson(Transformations.convertCommentsToEmbeddedObjects(cvs));
@@ -520,11 +566,11 @@ public class Actions {
 
 		// First verify the recaptchaResponse
 		Boolean recaptchaPassed = Tools.verifyRecaptcha(recaptchaResponse, req.ip());
-		
+
 		if (!recaptchaPassed) {
 			throw new NoSuchElementException("Recaptcha failed");
 		}
-		
+
 		// Find the user, then create a login for them
 
 		FullUser fu = FULL_USER.findFirst("name = ? or email = ?", userOrEmail, userOrEmail);
@@ -557,11 +603,11 @@ public class Actions {
 
 		// First verify the recaptchaResponse
 		Boolean recaptchaPassed = Tools.verifyRecaptcha(recaptchaResponse, req.ip());
-		
+
 		if (!recaptchaPassed) {
 			throw new NoSuchElementException("Recaptcha failed");
 		}
-		
+
 		// Find the user, then create a login for them
 
 		FullUser fu = FULL_USER.findFirst("name = ? or email = ?", userName, userName);
@@ -625,9 +671,9 @@ public class Actions {
 						"modified", "0000-00-00 00:00:00").saveIt();
 				message = "New tag added";
 			}
-			
+
 			tagId = tag.getId().toString();
-			
+
 		} else {
 			message = "Tag added";
 		}
@@ -642,19 +688,19 @@ public class Actions {
 
 		return message;
 	}
-	
+
 	public static String clearTags(String userId, String pollId) {
-		
+
 		// Make sure its the correct user
 		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
-		
+
 		if (p == null) {
 			throw new NoSuchElementException("Wrong user");
 		}
-		
-		
+
+
 		POLL_TAG.delete("poll_id = ?", pollId);
-		
+
 		return "Tags deleted";
 	}
 

@@ -80,6 +80,7 @@ public class Transformations {
 					cv.getString("user_aid"),
 					cv.getString("user_name"),
 					cv.getBoolean("deleted"),
+					cv.getBoolean("read"), 
 					cv.getDouble("avg_rank"),
 					cv.getInteger("user_rank"), 
 					cv.getString("text"), 
@@ -130,13 +131,13 @@ public class Transformations {
 		private String aid, pollAid, userAid, text, userName;
 		private Timestamp created, modified;
 		private List<CommentObj> embedded;
-		private Boolean deleted;
+		private Boolean deleted, read;
 
 		private List<Integer> breadCrumbsList;
 
 		public CommentObj(Integer id, String aid, Integer discussionId, 
 				Integer pollId, String pollAid, Integer userId, String userAid, 
-				String userName, Boolean deleted,
+				String userName, Boolean deleted, Boolean read,
 				Double avgRank, Integer userRank, String text, String breadCrumbs,
 				Timestamp created, Timestamp modified) {
 			this.id = id;
@@ -148,6 +149,7 @@ public class Transformations {
 			this.userAid = userAid;
 			this.userName = userName;
 			this.deleted = deleted;
+			this.read = read;
 			this.avgRank = avgRank;
 			this.userRank = userRank;
 			if (this.userRank == null) {
@@ -285,6 +287,10 @@ public class Transformations {
 		
 		public Boolean getDeleted() {
 			return deleted;
+		}
+		
+		public Boolean getRead() {
+			return read;
 		}
 		
 		public String getAid() {
