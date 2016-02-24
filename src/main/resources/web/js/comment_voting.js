@@ -299,6 +299,8 @@ function setupCommentReply(commentId) {
         // Need to refetch the comment, for stuff like permalinks, and correct threading.
         if (typeof(setupComments) == "function") {
           setupComments();
+        } else {
+          commentReplyForm.addClass('hide');
         }
 
         // // Change the text

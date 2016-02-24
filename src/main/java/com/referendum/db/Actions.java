@@ -191,7 +191,8 @@ public class Actions {
 			throw new NoSuchElementException("Wrong User");
 		}
 
-		c.set("text", Tools.replaceQuotes(text)).saveIt();
+		c.set("text", Tools.replaceQuotes(text),
+				"modified", new Timestamp(new Date().getTime())).saveIt();
 
 
 		return "Comment updated";
