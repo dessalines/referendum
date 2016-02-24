@@ -13,7 +13,7 @@ function initializeAllCommentVotes(data) {
   $('.comment_vote').each(function() {
     var commentId = this.id.split("_").slice(-1)[0];
 
-    var searchId = '#comment_slider_special_' + commentId +  ' .slider-track-high';
+    var searchId = '#comment_slider_special_' + commentId + ' .slider-track-high';
     var alreadyExists = ($(searchId).length);
 
     // console.log(searchId);
@@ -297,7 +297,9 @@ function setupCommentReply(commentId) {
       standardFormPost('create_comment', commentReplyForm, null, null, function() {
 
         // Need to refetch the comment, for stuff like permalinks, and correct threading.
-        setupComments();
+        if (typeof(setupComments) == "function") {
+          setupComments();
+        }
 
         // // Change the text
         // var md = commentEditTextArea.data('markdown').getContent().replace(/(\r\n|\n|\r)/gm, "--lb--");
