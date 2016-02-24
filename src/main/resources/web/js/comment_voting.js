@@ -310,8 +310,10 @@ function setupCommentAverages(commentId) {
   // format and divide by 10
   var voteText = commentRankObj.text().trim();
 
+  console.log(voteText);
+
   // console.log(voteText);
-  if (voteText != '-1') {
+  if (voteText != '?' && voteText != '-1') {
     var avgRank = parseFloat(commentRankObj.text()) / 10;
     var adjRank = avgRank.toFixed(1);
 

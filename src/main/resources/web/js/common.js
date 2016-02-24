@@ -151,7 +151,10 @@ function showLoggedIn() {
   $('.logged-out').addClass('hide');
   $('.logged-in').removeClass('hide');
   $('#user_dropdown').html(getCookie('username') + ' <span class="caret"></span>');
-  $('#my_user_page').attr('href', '/user/' + getCookie('uaid'));
+  $('#my_user_page').attr('href', '/user/' + getCookie('uaid') + '#polls_tab');
+  $('#my_messages').attr('href', '/user/' + getCookie('uaid') + '#messages_tab');
+  $('#my_comments').attr('href', '/user/' + getCookie('uaid') + '#comments_tab');
+
 }
 
 function showLoggedOut() {
@@ -180,7 +183,8 @@ function setupLoginForm() {
 
       }, null, null, function() {
         // if it fails, reset the recaptcha
-        grecaptcha.reset();grecaptcha.reset();
+        grecaptcha.reset();
+        grecaptcha.reset();
       });
     });
 
@@ -196,7 +200,8 @@ function setupLoginForm() {
         $('#login_modal').modal('hide');
         showLoggedIn();
       }, null, null, function() {
-        grecaptcha.reset();grecaptcha.reset();
+        grecaptcha.reset();
+        grecaptcha.reset();
       });
     });
 

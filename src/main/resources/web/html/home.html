@@ -69,8 +69,11 @@
             <li class="dropdown hide logged-in">
               <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"> User <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#" id="my_user_page"> My Polls</a></li>
-                <li><a href="#" class="log_out"> Log out</a></li>
+                <li><a href="#" id="my_user_page"> <i class="fa fa-pencil-square-o fa-fw"></i> My Polls</a></li>
+                <li><a href="#" id="my_messages"> <i class="fa fa-envelope-o fa-fw"></i> Messages <span class="message_unread_count badge">4</span></a></li>
+                <li><a href="#" id="my_comments"> <i class="fa fa-comment-o fa-fw"></i> Comments</a></li>
+                <li class="divider"></li>
+                <li><a href="#" class="log_out"> <i class="fa fa-sign-out fa-fw"></i> Log out</a></li>
               </ul>
             </li>
             <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
@@ -117,6 +120,7 @@
               </small> {{/records}}
             </script>
           </div>
+          <br>
           <p><a href="/trending_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
           <div id="trending_tags_div">
             <script id="trending_tags_template" type="x-tmpl-mustache">

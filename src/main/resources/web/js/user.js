@@ -1,12 +1,11 @@
 var pollsTemplate = $('#polls_template').html();
+var commentsTemplate = $('#comments_template').html();
 
 var userAid = getLastUrlPath();
 
+var activeTab = null;
 
-var startIndex = 0;
-var browsePageSize = 12;
-var fetchAmount = 12;
-var recordCount = 1000;
+
 
 $(document).ready(function() {
 
@@ -14,35 +13,84 @@ $(document).ready(function() {
 
   setupTrendingPolls();
 
+  setupUserComments();
+
 });
 
-function setupWindowScrolling() {
+var commentsStartIndex = 0;
+var commentsBrowsePageSize = 15;
+var commentsRecordCount = 1000;
+
+
+
+function setupUserComments() {
+
+  var keepFetching = (commentsStartIndex <= commentsRecordCount);
+
+  console.log(keepFetching);
+
+  if (keepFetching) {
+    getJson('get_user_comments/' + userAid + '/' + commentsBrowsePageSize + '/' + commentsStartIndex).done(function(e) {
+      var data = JSON.parse(replaceNewlines(e));
+      console.log(data);
+      commentsRecordCount = data['record_count'];
+
+      if (commentsStartIndex == 0) {
+        $('#comments_div').empty();
+        // $('#candidates_div').empty();
+        fillMustacheWithJson(data, commentsTemplate, '#comments_div');
+      } else {
+        // appending version
+        fillMustacheWithJson(data, commentsTemplate, '#comments_div', null, true);
+      }
+      initializeAllCommentVotes(data);
+
+    });
+  }
+
+}
+
+
+
+var pollsStartIndex = 0;
+var pollsBrowsePageSize = 15;
+var pollsRecordCount = 1000;
+
+function setupPollsWindowScrolling() {
+
+  $(window).unbind('scroll');
   $(window).scroll(function() {
     if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
       $(window).unbind('scroll');
       console.log('near bottom');
-      // startIndex += browsePageSize;
-      browsePageSize += fetchAmount;
+      pollsStartIndex += pollsBrowsePageSize;
       setupTrendingPolls();
     }
   });
 }
 
+
 function setupTrendingPolls() {
 
-  var fromHomeScreen = (window.location.pathname == "/");
+  var keepFetching = (pollsStartIndex <= pollsRecordCount);
 
-  var pageSize = fromHomeScreen ? 4 : browsePageSize;
+  console.log(keepFetching);
 
-  if ((pageSize <= recordCount)) {
-    getJson('get_trending_polls/all/' + userAid + '/created/' + pageSize + '/' + startIndex).done(function(e) {
+  if (keepFetching) {
+    getJson('get_trending_polls/all/' + userAid + '/created/' + pollsBrowsePageSize + '/' + pollsStartIndex).done(function(e) {
       var data = JSON.parse(replaceNewlines(e));
       console.log(data);
-      recordCount = data['record_count'];
-      fillMustacheWithJson(data, pollsTemplate, '#polls_div');
-      if (!fromHomeScreen) {
-        setupWindowScrolling();
+      pollsRecordCount = data['record_count'];
+
+      if (pollsStartIndex == 0) {
+        $('#polls_div').empty();
+        // $('#candidates_div').empty();
+        fillMustacheWithJson(data, pollsTemplate, '#polls_div');
+      } else {
+        // appending version
+        fillMustacheWithJson(data, pollsTemplate, '#polls_div', null, true);
       }
+
     });
   }
 }

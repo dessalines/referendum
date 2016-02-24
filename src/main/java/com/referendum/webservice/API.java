@@ -88,6 +88,42 @@ public class API {
 			}
 
 		});
+		
+		get("get_user_comments/:userAid/:pageSize/:startIndex", (req, res) -> {
+
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+
+				Integer userId = ALPHA_ID.decode(req.params(":userAid")).intValue();
+				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
+				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
+
+				Tools.dbInit();
+				
+				Paginator comments = 
+						new Paginator<CommentView>(CommentView.class,
+								pageSize,
+								"user_id = ?", userId).orderBy("created desc");
+
+				Integer pageNum = (startIndex/pageSize)+1;
+
+				String json = Tools.wrapPaginatorArray(
+						Tools.replaceNewlines(comments.getPage(pageNum).toJson(false)),
+						comments.getCount());
+
+				return json;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
 
 
 

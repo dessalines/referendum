@@ -448,6 +448,7 @@ public class Tools {
 		}
 		return true;
 	}
+	
 	public static HttpServletResponse writeFileToResponse2(String path, Response res) {
 
 		byte[] encoded;

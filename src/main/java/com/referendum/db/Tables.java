@@ -104,7 +104,8 @@ public class Tables {
 	public static final Login LOGIN = new Login();
 
 	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, 
-			Integer parentId, Integer minPathLength, Integer maxPathLength) {
+			Integer parentId, Integer minPathLength, Integer maxPathLength, 
+			String orderBy, Boolean onlyUser) {
 		StringBuilder s = new StringBuilder("select \n"+
 				"comment.id,\n"+
 				"comment.aid,\n"+
@@ -156,9 +157,18 @@ public class Tables {
 		if (maxPathLength != null) {
 			s.append("and a.path_length <= " + maxPathLength + " \n");
 		}
+		
+		if (onlyUser != null) {
+			s.append("and comment.user_id = " + userId + " \n");
+		}
 
-
-		s.append("GROUP BY a.child_id;");
+		s.append("GROUP BY a.child_id \n");
+		
+		if (orderBy != null) {
+			s.append("order by " + orderBy + " \n");
+		}
+		
+		s.append(";");
 		
 //		System.out.println(s.toString());
 
@@ -166,11 +176,12 @@ public class Tables {
 	}
 
 	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId) {
-		return COMMENT_VIEW_SQL(userId, discussionId, null, null, null);
+		return COMMENT_VIEW_SQL(userId, discussionId, null, null, null, null, null);
 	}
 
-	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, Integer parentId) {
-		return COMMENT_VIEW_SQL(userId, discussionId, parentId, null, null);
+	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, Integer parentId, 
+			String orderBy, Boolean onlyUser) {
+		return COMMENT_VIEW_SQL(userId, discussionId, parentId, null, null, orderBy, onlyUser);
 	}
 
 
