@@ -301,6 +301,7 @@ function setupCommentReply(commentId) {
           setupComments();
         } else {
           commentReplyForm.addClass('hide');
+          // toastr.success('Comment saved');
         }
 
         // // Change the text
