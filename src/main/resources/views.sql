@@ -259,12 +259,16 @@ create view comment_view as
 select 
 comment.id,
 comment.aid,
+b.parent_id as parent_comment_id,
+parent_comment.aid as parent_comment_aid,
 comment.discussion_id,
 poll.id as poll_id,
 poll.aid as poll_aid,
-text,
+comment.text,
 comment.user_id,
 user.aid as user_aid,
+parent_user.id as parent_user_id,
+parent_user.aid as parent_user_aid,
 coalesce(full_user.name, concat('user_',user.aid)) as user_name,
 -- min(a.path_length,b.path_length),
 AVG(c.rank) as avg_rank,
@@ -272,6 +276,7 @@ d.rank as user_rank,
 GROUP_CONCAT(distinct b.parent_id order by b.path_length desc) AS breadcrumbs,
 count(distinct b.parent_id) as derp,
 comment.deleted,
+comment.read, 
 comment.created,
 comment.modified
 from comment
@@ -288,6 +293,14 @@ left join full_user
 on comment.user_id = full_user.user_id
 left join user
 on comment.user_id = user.id
+left join comment parent_comment
+on b.parent_id = parent_comment.id
+left join user parent_user
+on parent_comment.user_id = parent_user.id
+-- These two for fetching messages(fetch by parent)
+-- where parent_user.id = 1
+-- and b.path_length = 1
+
 -- where comment.discussion_id >= 0
 -- and a.parent_id = 3 
 -- and b.parent_id >= 10
@@ -296,6 +309,8 @@ on comment.user_id = user.id
 -- and a.path_length = 1
 -- where d.user_id = 2
 GROUP BY a.child_id;
+
+
 
 
 

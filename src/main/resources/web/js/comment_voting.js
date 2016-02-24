@@ -12,11 +12,22 @@ function initializeAllCommentVotes(data) {
 
   $('.comment_vote').each(function() {
     var commentId = this.id.split("_").slice(-1)[0];
-    setupCommentVote(commentId);
+
+    var searchId = '#comment_slider_special_' + commentId +  ' .slider-track-high';
+    var alreadyExists = ($(searchId).length);
+
+    // console.log(searchId);
+    // console.log(alreadyExists);
+    if (!alreadyExists) {
+      setupCommentVote(commentId);
+    }
   });
 
 
-  setupCommentTop();
+  if ($('#comment_top_form').length) {
+    setupCommentTop();
+  }
+
 
   setupToolTips();
 }
@@ -52,7 +63,7 @@ function setupCommentTop() {
     commentReplyForm.removeClass('hide');
     commentReplyBtn.addClass('hide');
 
-     setTimeout("$('#comment_top_form [name=text]').focus();", 0);
+    setTimeout("$('#comment_top_form [name=text]').focus();", 0);
   });
 
 
@@ -272,7 +283,7 @@ function setupCommentReply(commentId) {
   commentReplyBtn.click(function() {
     commentReplyForm.removeClass('hide');
 
-    setTimeout("$('#comment_reply_form_" + commentId  + " [name=text]').focus();", 0);
+    setTimeout("$('#comment_reply_form_" + commentId + " [name=text]').focus();", 0);
   });
 
 
@@ -310,7 +321,7 @@ function setupCommentAverages(commentId) {
   // format and divide by 10
   var voteText = commentRankObj.text().trim();
 
-  console.log(voteText);
+  // console.log(voteText);
 
   // console.log(voteText);
   if (voteText != '?' && voteText != '-1') {
@@ -416,10 +427,10 @@ function initializeCommentSlider(commentId) {
 
   var commentSliderObj = $('#comment_slider_' + commentId);
   var vote = commentSliderObj.attr('user-rank');
-  console.log(vote);
+  // console.log(vote);
   if (vote != '-1' && vote != '') {
     // console.log(vote);
-    var voteNum = parseFloat(vote/10);
+    var voteNum = parseFloat(vote / 10);
 
     // Fill the data
     commentSliderObj.slider('setValue', voteNum);

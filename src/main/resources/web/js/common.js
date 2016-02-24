@@ -150,7 +150,7 @@ function showLoggedIn() {
   $('#login_modal').modal('hide');
   $('.logged-out').addClass('hide');
   $('.logged-in').removeClass('hide');
-  $('#user_dropdown').html(getCookie('username') + ' <span class="caret"></span>');
+  $('#user_dropdown_span').html(getCookie('username'));
   $('#my_user_page').attr('href', '/user/' + getCookie('uaid') + '#polls_tab');
   $('#my_messages').attr('href', '/user/' + getCookie('uaid') + '#messages_tab');
   $('#my_comments').attr('href', '/user/' + getCookie('uaid') + '#comments_tab');
@@ -217,5 +217,15 @@ function setupCreateEmptyPoll() {
         }, 1000);
 
       }, true, null, null);
+  });
+}
+
+function periodicFetches() {
+
+}
+
+function fetchUnreadMessages() {
+  getJson('get_unread_message_count', false).done(function(e) {
+    $('.message_unread_count').text(e);
   });
 }

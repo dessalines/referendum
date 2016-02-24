@@ -4,6 +4,7 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.before;
 
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -12,15 +13,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import spark.Response;
 
+
 import com.referendum.db.Actions;
+import com.referendum.db.Tables.CommentView;
 import com.referendum.db.Tables.Poll;
 import com.referendum.db.Tables.User;
 import com.referendum.db.Tables.UserLoginView;
@@ -30,6 +35,7 @@ import com.referendum.voting.ballot.RankedBallot;
 import com.referendum.voting.election.ElectionRound;
 import com.referendum.voting.election.STVElection;
 import com.referendum.voting.election.STVElection.Quota;
+
 
 import static com.referendum.db.Tables.*;
 import static com.referendum.tools.Tools.ALPHA_ID;
@@ -77,6 +83,9 @@ public class API {
 
 				String json = USER_VIEW.findFirst("id = ?", userId).toJson(false);
 
+
+
+
 				return json;
 
 			} catch (Exception e) {
@@ -88,7 +97,7 @@ public class API {
 			}
 
 		});
-		
+
 		get("get_user_comments/:userAid/:pageSize/:startIndex", (req, res) -> {
 
 			try {
@@ -96,24 +105,82 @@ public class API {
 				Tools.logRequestInfo(req);
 
 
-				Integer userId = ALPHA_ID.decode(req.params(":userAid")).intValue();
+
+
+				Integer commentUserId = ALPHA_ID.decode(req.params(":userAid")).intValue();
 				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
 				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
 
 				Tools.dbInit();
-				
-				Paginator comments = 
-						new Paginator<CommentView>(CommentView.class,
-								pageSize,
-								"user_id = ?", userId).orderBy("created desc");
+
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
+
 
 				Integer pageNum = (startIndex/pageSize)+1;
 
-				String json = Tools.wrapPaginatorArray(
-						Tools.replaceNewlines(comments.getPage(pageNum).toJson(false)),
-						comments.getCount());
+				String json = Actions.fetchUserComments(uv.getInteger("id"),
+						commentUserId, "created desc", pageNum, pageSize);
 
 				return json;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+
+		get("get_user_messages/:userAid/:pageSize/:startIndex", (req, res) -> {
+
+			// TODO needs a lot of work, no pagination...
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+
+				Integer parentUserId = ALPHA_ID.decode(req.params(":userAid")).intValue();
+				Integer pageSize = Integer.valueOf(req.params(":pageSize"));
+				Integer startIndex = Integer.valueOf(req.params(":startIndex"));
+
+				Tools.dbInit();
+
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
+
+				Integer pageNum = (startIndex/pageSize)+1;
+
+				String json = Actions.fetchUserMessages(
+						uv.getInteger("id"), parentUserId, "created desc", pageNum, pageSize, null);
+
+				return json;
+
+			} catch (Exception e) {
+				res.status(666);
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				Tools.dbClose();
+			}
+
+		});
+
+		// Get the user id
+		get("get_unread_message_count", (req, res) -> {
+
+			try {
+				Tools.allowAllHeaders(req, res);
+				Tools.logRequestInfo(req);
+
+				Tools.dbInit();
+
+				UserLoginView uv = Actions.getUserFromCookie(req, res);
+				
+				LazyList<CommentView> cvs = Actions.fetchUserMessageList(
+						uv.getInteger("id"), uv.getInteger("id"), null, null, null, false);
+
+				return cvs.size();
 
 			} catch (Exception e) {
 				res.status(666);
@@ -572,7 +639,7 @@ public class API {
 
 				Integer discussionId = POLL.findFirst("id = ?", pollId).getInteger("discussion_id");
 
-				String json = Actions.fetchDiscussionComments(uv.getInteger("id"), discussionId);
+				String json = Actions.fetchPollComments(uv.getInteger("id"), discussionId);
 
 				return json;
 			} catch (Exception e) {
@@ -882,7 +949,7 @@ public class API {
 
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				String query = req.params(":query");
@@ -913,7 +980,7 @@ public class API {
 
 				Tools.allowAllHeaders(req, res);
 				Tools.logRequestInfo(req);
-				
+
 				Tools.dbInit();
 
 				String query = req.params(":query");

@@ -9,19 +9,69 @@ var activeTab = null;
 
 $(document).ready(function() {
 
+  setupActiveTabEvents();
+
   setupTitle();
 
   setupTrendingPolls();
 
   setupUserComments();
 
+  setupUserMessages();
+
 });
+
+function setupActiveTabEvents() {
+
+  // First do a check to set the correct one
+  activeTab = '#' + $("ul#main_tab_list li.active").attr('name');
+
+  console.log(activeTab);
+  bindEvents();
+
+
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    activeTab = $(e.target).attr('href');
+    console.log(activeTab);
+    bindEvents();
+  });
+}
+
+function bindEvents() {
+  $(window).unbind('scroll');
+  if (activeTab == '#polls_tab') {
+    setupPollsWindowScrolling();
+  } else if (activeTab == '#comments_tab') {
+    setupCommentsWindowScrolling();
+  } else if (activeTab == '#messages_tab') {
+    setupMessagesWindowScrolling();
+    markMessagesAsRead();
+  }
+}
+
+function markMessagesAsRead() {
+  simplePost('mark_messages_as_read', null, null,
+    function() {
+      setupPollTags();
+    }, null, null, null);
+}
 
 var commentsStartIndex = 0;
 var commentsBrowsePageSize = 15;
 var commentsRecordCount = 1000;
 
+function setupCommentsWindowScrolling() {
 
+  $(window).unbind('scroll');
+  $(window).scroll(function() {
+    if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+      $(window).unbind('scroll');
+      console.log('near bottom');
+      commentsStartIndex += commentsBrowsePageSize;
+      setupUserComments();
+    }
+  });
+}
 
 function setupUserComments() {
 
@@ -42,6 +92,52 @@ function setupUserComments() {
       } else {
         // appending version
         fillMustacheWithJson(data, commentsTemplate, '#comments_div', null, true);
+      }
+      initializeAllCommentVotes(data);
+
+    });
+  }
+
+}
+
+var messagesStartIndex = 0;
+var messagesBrowsePageSize = 15;
+var messagesRecordCount = 1000;
+
+function setupMessagesWindowScrolling() {
+
+  $(window).unbind('scroll');
+  $(window).scroll(function() {
+    if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+      $(window).unbind('scroll');
+      console.log('near bottom');
+      messagesStartIndex += messagesBrowsePageSize;
+      setupUserMessages();
+    }
+  });
+}
+
+
+
+function setupUserMessages() {
+
+  var keepFetching = (messagesStartIndex <= messagesRecordCount);
+
+  console.log(keepFetching);
+
+  if (keepFetching) {
+    getJson('get_user_messages/' + userAid + '/' + messagesBrowsePageSize + '/' + messagesStartIndex).done(function(e) {
+      var data = JSON.parse(replaceNewlines(e));
+      console.log(data);
+      messagesRecordCount = data['record_count'];
+
+      if (messagesStartIndex == 0) {
+        $('#messages_div').empty();
+        // $('#candidates_div').empty();
+        fillMustacheWithJson(data, commentsTemplate, '#messages_div');
+      } else {
+        // appending version
+        fillMustacheWithJson(data, commentsTemplate, '#messages_div', null, true);
       }
       initializeAllCommentVotes(data);
 

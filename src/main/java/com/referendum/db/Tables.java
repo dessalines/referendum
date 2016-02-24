@@ -105,18 +105,24 @@ public class Tables {
 
 	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, 
 			Integer parentId, Integer minPathLength, Integer maxPathLength, 
-			String orderBy, Boolean onlyUser) {
+			String orderBy, Integer commentUserId, Integer parentUserId, 
+			Integer pageNum, Integer pageSize, Boolean read) {
 		StringBuilder s = new StringBuilder("select \n"+
 				"comment.id,\n"+
 				"comment.aid,\n"+
+				"b.parent_id as parent_comment_id, \n"+ 
+				"parent_comment.aid as parent_comment_aid, \n"+
 				"comment.discussion_id,\n"+
 				"poll.id as poll_id,\n"+
 				"poll.aid as poll_aid,\n"+
-				"text,\n"+
+				"comment.text,\n"+
 				"comment.user_id,\n"+
 				"user.aid as user_aid,\n"+
+				"parent_user.id as parent_user_id,\n"+
+				"parent_user.aid as parent_user_aid,\n"+
 				"coalesce(full_user.name, concat('user_',user.aid)) as user_name,\n"+
 				"comment.deleted,\n"+
+				"comment.read,\n"+
 				"-- min(a.path_length,b.path_length),\n"+
 				"AVG(c.rank) as avg_rank,\n"+
 				"d.rank as user_rank,\n"+
@@ -138,12 +144,17 @@ public class Tables {
 				"left join full_user \n"+
 				"on comment.user_id = full_user.user_id \n"+
 				"left join user \n"+
-				"on comment.user_id = user.id \n");
+				"on comment.user_id = user.id \n"+
+				"left join comment parent_comment \n"+
+				"on b.parent_id = parent_comment.id \n"+
+				"left join user parent_user \n"+
+				"on parent_comment.user_id = parent_user.id \n"
+				);
 
 		if (discussionId != null) {
 			s.append("WHERE comment.discussion_id = " + discussionId + "\n");
 		} else {
-			s.append("WHERE comment.discussion_id >= 0\n");
+			s.append("WHERE comment.discussion_id >= 0 \n");
 		}
 
 		if (parentId != null) {
@@ -152,14 +163,23 @@ public class Tables {
 		}
 
 		if (minPathLength != null) {
-			s.append("and a.path_length >= " + minPathLength + " \n");
-		}
-		if (maxPathLength != null) {
-			s.append("and a.path_length <= " + maxPathLength + " \n");
+			s.append("and b.path_length >= " + minPathLength + " \n");
 		}
 		
-		if (onlyUser != null) {
-			s.append("and comment.user_id = " + userId + " \n");
+		if (maxPathLength != null) {
+			s.append("and b.path_length <= " + maxPathLength + " \n");
+		}
+		
+		if (commentUserId != null) {
+			s.append("and comment.user_id = " + commentUserId + " \n");
+		}
+		
+		if (parentUserId != null) {
+			s.append("and parent_user.id = " + parentUserId + " \n");
+		}
+		
+		if (read != null) {
+			s.append("and comment.read = " + read + " \n");
 		}
 
 		s.append("GROUP BY a.child_id \n");
@@ -168,20 +188,21 @@ public class Tables {
 			s.append("order by " + orderBy + " \n");
 		}
 		
+		if (pageSize != null) {
+			s.append("limit " + pageSize + " \n");
+		}
+		
+		if (pageNum != null) {
+			s.append("offset " + ((pageNum - 1) * pageSize) + " \n");
+		}
+		
+
+		
 		s.append(";");
 		
-//		System.out.println(s.toString());
+		System.out.println(s.toString());
 
 		return s.toString();
-	}
-
-	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId) {
-		return COMMENT_VIEW_SQL(userId, discussionId, null, null, null, null, null);
-	}
-
-	public static final String COMMENT_VIEW_SQL(Integer userId, Integer discussionId, Integer parentId, 
-			String orderBy, Boolean onlyUser) {
-		return COMMENT_VIEW_SQL(userId, discussionId, parentId, null, null, orderBy, onlyUser);
 	}
 
 
