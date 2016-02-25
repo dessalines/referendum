@@ -13,7 +13,9 @@ It features threaded discussion before voting, a key feature in collaborative sy
 
 Polls can be private, open to the public, or limited to users who have to pass captchas.
 
-Check out a sample poll [here](https://referendum.ml/poll/1)
+Check out a sample poll [here](https://referendum.ml/poll/1).
+
+Join the subreddit: [/r/referendum_](https://www.reddit.com/r/referendum_/)
 
 [Change log](https://github.com/tchoulihan/referendum/releases)
 
