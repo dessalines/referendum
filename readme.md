@@ -1,6 +1,6 @@
 [Referendum](https://referendum.ml) &mdash; A group decision-making and polling platform.
 ==========
-![](http://img.shields.io/version/0.1.0.png?color=green)
+![](http://img.shields.io/version/0.1.1.png?color=green)
 
 
 [Referendum](https://referendum.ml) is a simple, open-source, discussion-based direct democracy platform.

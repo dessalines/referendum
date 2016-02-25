@@ -443,8 +443,7 @@ public class Tools {
 			
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 		return true;
 	}
