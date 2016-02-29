@@ -2,7 +2,7 @@ var trendingTagsTemplate = $('#trending_tags_template').html();
 
 
 $(document).ready(function() {
-  setupTrendingTags('day');
+  setupTrendingTags('hour');
   setupTrendingTagsBtns();
 });
 

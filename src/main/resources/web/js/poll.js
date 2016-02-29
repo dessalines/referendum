@@ -537,7 +537,7 @@ function graphResults() {
     .attr("data-container", "body")
     .attr("data-trigger", "hover")
     .attr("title", function(d) {
-      return d.candidate_obj.subject + ' <small>' + 
+      return d.candidate_obj.subject.replace(/&dblq;/g, '\"'); + ' <small>' + 
       'score: ' + scoreFix(d) +
         ' | votes: ' + d.count +
         ' | submitter: ' + d.candidate_obj.user_name +

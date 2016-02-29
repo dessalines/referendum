@@ -81,8 +81,9 @@ CREATE TABLE `comment` (
   `text` MEDIUMTEXT NULL DEFAULT NULL,
   `user_id` INTEGER NULL DEFAULT NULL,
   `deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `read` TINYINT(1) NOT NULL DEFAULT 0,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY (`aid`)
 );
@@ -393,7 +394,7 @@ CREATE TABLE `poll_visit_trending_hour` (
   PRIMARY KEY (`poll_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `poll_visit_trending_hour` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `poll_visit_trending_hour` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `poll_visit_trending_day`;
 CREATE TABLE `poll_visit_trending_day` (
@@ -405,7 +406,7 @@ CREATE TABLE `poll_visit_trending_day` (
   PRIMARY KEY (`poll_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `poll_visit_trending_day` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `poll_visit_trending_day` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `poll_visit_trending_week`;
 CREATE TABLE `poll_visit_trending_week` (
@@ -417,7 +418,7 @@ CREATE TABLE `poll_visit_trending_week` (
   PRIMARY KEY (`poll_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `poll_visit_trending_week` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `poll_visit_trending_week` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `poll_visit_trending_month`;
 CREATE TABLE `poll_visit_trending_month` (
@@ -429,7 +430,7 @@ CREATE TABLE `poll_visit_trending_month` (
   PRIMARY KEY (`poll_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `poll_visit_trending_month` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `poll_visit_trending_month` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `poll_visit_trending_year`;
 CREATE TABLE `poll_visit_trending_year` (
@@ -441,7 +442,7 @@ CREATE TABLE `poll_visit_trending_year` (
   PRIMARY KEY (`poll_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `poll_visit_trending_year` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`);
+ALTER TABLE `poll_visit_trending_year` ADD FOREIGN KEY (poll_id) REFERENCES `poll` (`id`) ON DELETE CASCADE;
 
 -- the tag tables:
 
@@ -456,7 +457,7 @@ CREATE TABLE `tag_visit_trending_hour` (
   PRIMARY KEY (`tag_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `tag_visit_trending_hour` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+ALTER TABLE `tag_visit_trending_hour` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `tag_visit_trending_day`;
 CREATE TABLE `tag_visit_trending_day` (
@@ -468,7 +469,7 @@ CREATE TABLE `tag_visit_trending_day` (
   PRIMARY KEY (`tag_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `tag_visit_trending_day` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+ALTER TABLE `tag_visit_trending_day` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `tag_visit_trending_week`;
 CREATE TABLE `tag_visit_trending_week` (
@@ -480,7 +481,7 @@ CREATE TABLE `tag_visit_trending_week` (
   PRIMARY KEY (`tag_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `tag_visit_trending_week` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+ALTER TABLE `tag_visit_trending_week` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `tag_visit_trending_month`;
 CREATE TABLE `tag_visit_trending_month` (
@@ -492,7 +493,7 @@ CREATE TABLE `tag_visit_trending_month` (
   PRIMARY KEY (`tag_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `tag_visit_trending_month` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+ALTER TABLE `tag_visit_trending_month` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`) ON DELETE CASCADE;
 
 DROP TABLE IF EXISTS `tag_visit_trending_year`;
 CREATE TABLE `tag_visit_trending_year` (
@@ -504,7 +505,7 @@ CREATE TABLE `tag_visit_trending_year` (
   PRIMARY KEY (`tag_id`),
   INDEX(`z_score`)
 );
-ALTER TABLE `tag_visit_trending_year` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`);
+ALTER TABLE `tag_visit_trending_year` ADD FOREIGN KEY (tag_id) REFERENCES `tag` (`id`) ON DELETE CASCADE;
 
 
 SET FOREIGN_KEY_CHECKS=1;
