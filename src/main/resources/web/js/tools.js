@@ -539,6 +539,8 @@ function replaceNewlines(e, single, two) {
 
 }
 
+
+
 function replaceNewlinesV2(e) {
   return e.replace(/--lb--/g, "<br>");
 }
