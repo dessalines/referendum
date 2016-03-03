@@ -1,9 +1,9 @@
 /*! =======================================================
-                      VERSION  6.0.6              
+                      VERSION  6.0.17              
 ========================================================= */
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 /*! =========================================================
  * bootstrap-slider.js
@@ -294,7 +294,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		/*************************************************
   						CONSTRUCTOR
   	**************************************************/
-		Slider = function Slider(element, options) {
+		Slider = function (element, options) {
 			createNewSlider.call(this, element, options);
 			return this;
 		};
@@ -570,7 +570,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			if (this.options.orientation === 'vertical') {
 				this._addClass(this.sliderElem, 'slider-vertical');
 				this.stylePos = 'top';
-				this.mousePos = 'clientY';
+				this.mousePos = 'pageY';
 				this.sizePos = 'offsetHeight';
 			} else {
 				this._addClass(this.sliderElem, 'slider-horizontal');
@@ -775,6 +775,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				this._layout();
 				var newValue = this.options.range ? this._state.value : this._state.value[0];
 
+				this._setDataVal(newValue);
 				if (triggerSlideEvent === true) {
 					this._trigger('slide', newValue);
 				}
@@ -784,7 +785,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 						newValue: newValue
 					});
 				}
-				this._setDataVal(newValue);
 
 				return this;
 			},
@@ -1116,14 +1116,28 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 					var offset_min = this.tooltip_min.getBoundingClientRect();
 					var offset_max = this.tooltip_max.getBoundingClientRect();
 
-					if (offset_min.right > offset_max.left) {
-						this._removeClass(this.tooltip_max, 'top');
-						this._addClass(this.tooltip_max, 'bottom');
-						this.tooltip_max.style.top = 18 + 'px';
+					if (this.options.tooltip_position === 'bottom') {
+						if (offset_min.right > offset_max.left) {
+							this._removeClass(this.tooltip_max, 'bottom');
+							this._addClass(this.tooltip_max, 'top');
+							this.tooltip_max.style.top = '';
+							this.tooltip_max.style.bottom = 22 + 'px';
+						} else {
+							this._removeClass(this.tooltip_max, 'top');
+							this._addClass(this.tooltip_max, 'bottom');
+							this.tooltip_max.style.top = this.tooltip_min.style.top;
+							this.tooltip_max.style.bottom = '';
+						}
 					} else {
-						this._removeClass(this.tooltip_max, 'bottom');
-						this._addClass(this.tooltip_max, 'top');
-						this.tooltip_max.style.top = this.tooltip_min.style.top;
+						if (offset_min.right > offset_max.left) {
+							this._removeClass(this.tooltip_max, 'top');
+							this._addClass(this.tooltip_max, 'bottom');
+							this.tooltip_max.style.top = 18 + 'px';
+						} else {
+							this._removeClass(this.tooltip_max, 'bottom');
+							this._addClass(this.tooltip_max, 'top');
+							this.tooltip_max.style.top = this.tooltip_min.style.top;
+						}
 					}
 				}
 			},
@@ -1446,10 +1460,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				this.$sliderElem.off();
 			},
 			_setText: function _setText(element, text) {
-				if (typeof element.innerText !== "undefined") {
-					element.innerText = text;
-				} else if (typeof element.textContent !== "undefined") {
+				if (typeof element.textContent !== "undefined") {
 					element.textContent = text;
+				} else if (typeof element.innerText !== "undefined") {
+					element.innerText = text;
 				}
 			},
 			_removeClass: function _removeClass(element, classString) {
@@ -1486,7 +1500,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			_offsetTop: function _offsetTop(obj) {
 				var offsetTop = obj.offsetTop;
 				while ((obj = obj.offsetParent) && !isNaN(obj.offsetTop)) {
-					offsetTop += obj.offsetTop - obj.scrollTop;
+					offsetTop += obj.offsetTop;
+					if (obj.tagName !== 'BODY') {
+						offsetTop -= obj.scrollTop;
+					}
 				}
 				return offsetTop;
 			},
@@ -1517,20 +1534,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				if (this.options.orientation === 'vertical') {
 					var tooltipPos = this.options.tooltip_position || 'right';
 					var oppositeSide = tooltipPos === 'left' ? 'right' : 'left';
-					tooltips.forEach(function (tooltip) {
+					tooltips.forEach((function (tooltip) {
 						this._addClass(tooltip, tooltipPos);
 						tooltip.style[oppositeSide] = '100%';
-					}.bind(this));
+					}).bind(this));
 				} else if (this.options.tooltip_position === 'bottom') {
-					tooltips.forEach(function (tooltip) {
+					tooltips.forEach((function (tooltip) {
 						this._addClass(tooltip, 'bottom');
 						tooltip.style.top = 22 + 'px';
-					}.bind(this));
+					}).bind(this));
 				} else {
-					tooltips.forEach(function (tooltip) {
+					tooltips.forEach((function (tooltip) {
 						this._addClass(tooltip, 'top');
 						tooltip.style.top = -this.tooltip.outerHeight - 14 + 'px';
-					}.bind(this));
+					}).bind(this));
 				}
 			}
 		};

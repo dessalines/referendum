@@ -284,7 +284,13 @@ function parseURL(url, instanceOptions) {
         instanceOptions: instanceOptions
     };
 
-    var parts = url.split('?');
+    var firstQuestionMark = url.indexOf('?');
+    var parts = [url];
+
+    if (firstQuestionMark !== -1) {
+        parts = [url.slice(0, firstQuestionMark), url.slice(firstQuestionMark + 1)];
+    }
+
     var basics = parts[0].split('/');
 
     holder.holderURL = url;
@@ -478,7 +484,7 @@ function prepareDOMElement(prepSettings) {
         }
 
         if (engineSettings.renderer == 'html') {
-            el.style.backgroundColor = theme.background;
+            el.style.backgroundColor = theme.bg;
         } else {
             render(renderSettings);
 
@@ -510,7 +516,7 @@ function prepareDOMElement(prepSettings) {
         setInitialDimensions(el);
 
         if (engineSettings.renderer == 'html') {
-            el.style.backgroundColor = theme.background;
+            el.style.backgroundColor = theme.bg;
         } else {
             App.vars.resizableImages.push(el);
             updateResizableElements(el);
