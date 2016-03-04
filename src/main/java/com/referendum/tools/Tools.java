@@ -86,7 +86,9 @@ public class Tools {
 
 	public static final SimpleDateFormat RESPONSE_HEADER_DATE_FORMAT = 
 			new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
-
+	
+	public static final SimpleDateFormat DATE_PICKER_FORMAT = 
+			new SimpleDateFormat("MM/dd/yyyy h:mm a");
 	public static final BaseX ALPHA_ID = new BaseX();
 
 	private static final SecureRandom RANDOM = new SecureRandom();

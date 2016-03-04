@@ -4,15 +4,14 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.before;
 
-
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
@@ -20,9 +19,7 @@ import org.javalite.activejdbc.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import spark.Response;
-
 
 import com.referendum.db.Actions;
 import com.referendum.db.Tables.CommentView;
@@ -35,7 +32,6 @@ import com.referendum.voting.ballot.RankedBallot;
 import com.referendum.voting.election.ElectionRound;
 import com.referendum.voting.election.STVElection;
 import com.referendum.voting.election.STVElection.Quota;
-
 
 import static com.referendum.db.Tables.*;
 import static com.referendum.tools.Tools.ALPHA_ID;
@@ -176,12 +172,12 @@ public class API {
 				Tools.dbInit();
 
 				UserLoginView uv = Actions.getUserFromCookie(req, res);
-				
+
 				LazyList<CommentView> cvs = Actions.fetchUserMessageList(
 						uv.getInteger("id"), uv.getInteger("id"), null, null, null, false);
 
 				String size = (cvs.size() > 0) ? String.valueOf(cvs.size()) : "";
-				
+
 				return size;
 
 			} catch (Exception e) {
@@ -248,9 +244,12 @@ public class API {
 				String password = (private_) ? vars.get("private_password") : null;
 				String pollSumTypeId = vars.get("sum_type_radio");
 				Boolean fullUsersOnly = (vars.get("full_users_only") != null) ? true : false;
+				Timestamp expireTime = (vars.get("expire_time") != null) ? new Timestamp(Tools.DATE_PICKER_FORMAT.parse(vars.get("expire_time")).getTime()) : null ;
+				Timestamp addCandidatesExpireTime = (vars.get("add_candidates_expire_time") != null) ? new Timestamp(Tools.DATE_PICKER_FORMAT.parse(vars.get("add_candidates_expire_time")).getTime()) : null;
 
 				String message = Actions.savePoll(uv.getId().toString(), pollId, 
-						subject, text, password, pollSumTypeId, fullUsersOnly, res);
+						subject, text, password, pollSumTypeId, fullUsersOnly, 
+						expireTime, addCandidatesExpireTime, res);
 
 				return message;
 
@@ -1059,7 +1058,7 @@ public class API {
 			}
 
 		});
-		
+
 		post("/mark_messages_as_read", (req, res) -> {
 			try {
 				Tools.allowAllHeaders(req, res);

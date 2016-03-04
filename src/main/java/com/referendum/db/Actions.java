@@ -64,7 +64,8 @@ public class Actions {
 
 	public static String savePoll(String userId, String pollId, 
 			String subject, String text, String password,
-			String pollSumTypeId, Boolean fullUsersOnly, Response res) {
+			String pollSumTypeId, Boolean fullUsersOnly, 
+			Timestamp expireTime, Timestamp addCandidatesExpireTime, Response res) {
 
 		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
 
@@ -75,7 +76,9 @@ public class Actions {
 		String passwordEncrypted = Tools.PASS_ENCRYPT.encryptPassword(password);
 		p.set("private_password", passwordEncrypted,
 				"poll_sum_type_id", pollSumTypeId,
-				"full_user_only", fullUsersOnly).saveIt();
+				"full_user_only", fullUsersOnly,
+				"expire_time", expireTime,
+				"add_candidates_expire_time", addCandidatesExpireTime).saveIt();
 
 
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
@@ -150,6 +153,22 @@ public class Actions {
 
 	public static String createCandidate(String userId, String pollId, String subject, String text) {
 
+		
+		Poll p = POLL.findFirst("id = ?",  pollId);
+		
+		Date now = new Date();
+		
+		// Make sure the poll isn't expired
+		if (p.getTimestamp("add_candidates_expire_time") != null && 
+				p.getTimestamp("add_candidates_expire_time").before(now)) {
+			throw new NoSuchElementException("Adding candidates time period has expired");
+		}
+		
+		if (p.getTimestamp("expire_time") != null &&
+				p.getTimestamp("expire_time").before(now)) {
+			throw new NoSuchElementException("Candidate not saved, poll has expired");
+		}
+		
 		// First create a discussion
 		Discussion d = DISCUSSION.createIt("subject", Tools.replaceQuotes(subject),
 				"text", Tools.replaceQuotes(text));
@@ -264,6 +283,14 @@ public class Actions {
 				pollId, 
 				userId,
 				candidateId);
+		
+		Poll p = POLL.findFirst("id = ?",  pollId);
+		
+		// Make sure the poll isn't expired
+		if (p.getTimestamp("expire_time") != null && 
+				p.getTimestamp("expire_time").before(new Date())) {
+			throw new NoSuchElementException("Vote not saved, poll has expired");
+		}
 
 		if (b == null) {
 			if (rank != null) {

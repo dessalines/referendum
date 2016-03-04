@@ -10,7 +10,7 @@ var localSparkService = "http://127.0.0.1:4567/"
 
 function getJson(shortUrl, async) {
 
-  async = (typeof async === "undefined") ? true : async;
+  async = (typeof async === "undefined") ? true: async;
   var url = sparkService + shortUrl; // the script where you handle the form input.
   return $.ajax({
     type: "GET",
@@ -391,9 +391,9 @@ function simplePost(shortUrl, postData, reload, successFunctions, noToast, exter
 
     },
     error: function(request, status, error) {
-      if (!noToast) {
-        toastr.error(request.responseText);
-      }
+      // if (!noToast) {
+      toastr.error(request.responseText);
+      // }
       btn.button('reset');
     }
   });
