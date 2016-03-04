@@ -678,9 +678,11 @@ function fillPollForm(data) {
 
   var fmt = 'MM/DD/YYYY h:mm a';
   if (data['expire_time'] != null) {
+    $('#advanced_options').collapse('show');
     $('input[name="expire_time"]').val(moment(data['expire_time']).format(fmt));
   }
   if (data['add_candidates_expire_time'] != null) {
+    $('#advanced_options').collapse('show');
     $('input[name="add_candidates_expire_time"]').val(moment(data['add_candidates_expire_time']).format(fmt));
   }
 
