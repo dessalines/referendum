@@ -108,7 +108,9 @@
                 <script id="poll_template" type="x-tmpl-mustache">
                   <h2> {{subject}} <small>{{#private}}[private]{{/private}}{{#full_user_only}}[user-only]{{/full_user_only}}</small></h2>
                   <p class="info-line text-muted">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a></p>
-                  {{#text}}
+                  {{#expire_time}}
+                  <p class="info-line text-muted">expires {{#dateformat}}{{expire_time}}{{/dateformat}}</p>{{/expire_time}} {{#add_candidates_expire_time}}
+                  <p class="info-line text-muted">add new candidates window closes {{#dateformat}}{{add_candidates_expire_time}}{{/dateformat}}</p>{{/add_candidates_expire_time}} {{#text}}
                   <div class="panel panel-info">
                     <div class="panel-body">
                       <div id="poll_text">
