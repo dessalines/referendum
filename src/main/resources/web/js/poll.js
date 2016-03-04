@@ -537,8 +537,8 @@ function graphResults() {
     .attr("data-container", "body")
     .attr("data-trigger", "hover")
     .attr("title", function(d) {
-      return d.candidate_obj.subject.replace(/&dblq;/g, '\"') + ' <small>' + 
-      'score: ' + scoreFix(d) +
+      return d.candidate_obj.subject.replace(/&dblq;/g, '\"') + ' <small>' +
+        'score: ' + scoreFix(d) +
         ' | votes: ' + d.count +
         ' | submitter: ' + d.candidate_obj.user_name +
         '</small>';
@@ -599,6 +599,24 @@ function scoreFix(d, text) {
 
 
 function setupPollForm() {
+  // $('.datepicker').data("DateTimePicker").destroy();
+  $('.datepicker').datetimepicker({
+    // options: {
+    //   format: 'x',
+    // },
+    // format: 'x',
+    icons: {
+      time: 'fa fa-clock-o',
+      date: 'fa fa-calendar',
+      up: 'fa fa-chevron-up',
+      down: 'fa fa-chevron-down',
+      previous: 'fa fa-angle-double-left',
+      next: 'fa fa-angle-double-right',
+      today: 'fa fa-dot-circle-o',
+      clear: 'fa fa-trash',
+      close: 'fa fa-times'
+    }
+  });
 
   setTimeout("$('#poll_form [name=subject]').focus();", 0);
 
@@ -658,6 +676,12 @@ function fillPollForm(data) {
     $("input[name=public_radio][value='public']").prop("checked", true);
   }
 
-
+  var fmt = 'MM/DD/YYYY h:mm a';
+  if (data['expire_time'] != null) {
+    $('input[name="expire_time"]').val(moment(data['expire_time']).format(fmt));
+  }
+  if (data['add_candidates_expire_time'] != null) {
+    $('input[name="add_candidates_expire_time"]').val(moment(data['add_candidates_expire_time']).format(fmt));
+  }
 
 }

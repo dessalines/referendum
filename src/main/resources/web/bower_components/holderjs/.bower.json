@@ -3,15 +3,14 @@
   "main": "holder.js",
   "license": "MIT",
   "homepage": "https://github.com/imsky/holder",
-  "version": "2.9.0",
-  "_release": "2.9.0",
+  "version": "2.9.3",
+  "_release": "2.9.3",
   "_resolution": {
     "type": "version",
-    "tag": "v2.9.0",
-    "commit": "82208988fd7fc9711285111dfc0c76735ed10383"
+    "tag": "v2.9.3",
+    "commit": "7cd75ca5c8169c5173dcab4f195e56ff5f75657a"
   },
   "_source": "git://github.com/imsky/holder.git",
   "_target": "~2.9.0",
-  "_originalSource": "holderjs",
-  "_direct": true
+  "_originalSource": "holderjs"
 }

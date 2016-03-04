@@ -34,7 +34,7 @@
         <type label="SET" length="1" sql="SET" quote=""/>
         <type label="Bit" length="0" sql="bit" quote=""/>
       </group>
-    </datatypes><table x="246" y="370" name="poll">
+    </datatypes><table x="235" y="369" name="poll">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -63,6 +63,12 @@
 <row name="full_user_only" null="0" autoincrement="0">
 <datatype>TINYINT(1)</datatype>
 <default>0</default></row>
+<row name="expire_time" null="1" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+<default>NULL</default></row>
+<row name="add_candidates_expire_time" null="1" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+<default>NULL</default></row>
 <row name="created" null="0" autoincrement="0">
 <datatype>TIMESTAMP</datatype>
 <default>CURRENT_TIMESTAMP</default></row>
@@ -108,7 +114,7 @@
 <part>discussion_id</part>
 </key>
 </table>
-<table x="246" y="659" name="discussion">
+<table x="249" y="721" name="discussion">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -128,7 +134,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="455" y="610" name="comment">
+<table x="465" y="601" name="comment">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -147,6 +153,9 @@
 <default>NULL</default><relation table="user" row="id" />
 </row>
 <row name="deleted" null="0" autoincrement="0">
+<datatype>TINYINT(1)</datatype>
+<default>0</default></row>
+<row name="read" null="0" autoincrement="0">
 <datatype>TINYINT(1)</datatype>
 <default>0</default></row>
 <row name="created" null="0" autoincrement="0">
@@ -211,9 +220,12 @@
 <part>name</part>
 </key>
 </table>
-<table x="57" y="215" name="tag">
+<table x="60" y="203" name="tag">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="aid" null="1" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
 <row name="user_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -236,6 +248,9 @@
 </key>
 <key type="INDEX" name="">
 <part>name</part>
+</key>
+<key type="INDEX" name="">
+<part>aid</part>
 </key>
 </table>
 <table x="250" y="206" name="poll_tag">

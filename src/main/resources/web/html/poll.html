@@ -25,9 +25,12 @@
   <link rel="stylesheet" href="../bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css">
   <!-- Bootstrap slider css -->
   <link rel="stylesheet" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
+  <!-- Bootstrap datetimepicker -->
+  <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
   <!-- This main css -->
   <link href="../css/main2.css" rel="stylesheet">
 </head>
+
 <body>
   <div id="wrapper">
     <!-- plug into here -->
@@ -68,11 +71,19 @@
             <li class="dropdown hide logged-in">
               <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#"><span id="user_dropdown_span">User</span> <span class="message_unread_count badge"></span> <span class="caret"></span> </a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#" id="my_user_page"> <i class="fa fa-pencil-square-o fa-fw"></i> My Polls</a></li>
-                <li><a href="#" id="my_messages"> <i class="fa fa-envelope-o fa-fw"></i> Messages <span class="message_unread_count badge">4</span></a></li>
-                <li><a href="#" id="my_comments"> <i class="fa fa-comment-o fa-fw"></i> Comments</a></li>
+                <li>
+                  <a href="#" id="my_user_page"> <i class="fa fa-pencil-square-o fa-fw"></i> My Polls</a>
+                </li>
+                <li>
+                  <a href="#" id="my_messages"> <i class="fa fa-envelope-o fa-fw"></i> Messages <span class="message_unread_count badge">4</span></a>
+                </li>
+                <li>
+                  <a href="#" id="my_comments"> <i class="fa fa-comment-o fa-fw"></i> Comments</a>
+                </li>
                 <li class="divider"></li>
-                <li><a href="#" class="log_out"> <i class="fa fa-sign-out fa-fw"></i> Log out</a></li>
+                <li>
+                  <a href="#" class="log_out"> <i class="fa fa-sign-out fa-fw"></i> Log out</a>
+                </li>
               </ul>
             </li>
             <li class="logged-out"><a href="#" data-toggle="modal" data-target="#login_modal">log in or sign up</a></li>
@@ -164,6 +175,21 @@
                             <label class="radio-inline">
                               <input type="radio" name="sum_type_radio" value="2"> Median
                             </label>
+                          </div>
+                        </div>
+                        <h5> Expiration</h5>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class='input-group date datepicker'>
+                              <input name="expire_time" type='text' class="form-control" placeholder="Poll Expires at (optional)" />
+                              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class='input-group date datepicker'>
+                              <input name="add_candidates_expire_time" type='text' class="form-control" placeholder="No new candidates after (optional)" />
+                              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -571,6 +597,7 @@
     <script src="../bower_components/d3/d3.min.js"></script>
     <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
     <script src="../bower_components/moment/min/moment.min.js"></script>
+    <script src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <!-- my scripts -->
     <script src="../js/tools.js"></script>
     <script src="../js/common.js"></script>

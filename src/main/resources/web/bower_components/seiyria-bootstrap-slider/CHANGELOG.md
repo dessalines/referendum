@@ -1,3 +1,32 @@
+6.0.16 / 2016-02-04
+==================
+* Bug Fix: Attempted Bug fix from 6.0.11 was refined to ensure so side effects.
+
+6.0.15 / 2016-02-04
+==================
+* Bug Fix: _setText() defaults to `.textContent` vs `.innerHTML`. Thanks to [gio-js](https://github.com/gio-js)
+
+6.0.13 / 2016-01-31
+==================
+* Reverted Bug fix from prior release
+
+6.0.11 / 2016-01-31
+==================
+* Bug fix: Slider was not scrolling properly when nested inside of scrollable container. Thanks to [serbiant](https://github.com/serbiant)
+
+
+6.0.9 / 2016-01-26
+==================
+* Bug fix: Race condition in `setValue()` where slider value was being set after `change` and `slide` events were being triggered. Thanks to [glaszig](https://github.com/glaszig)
+
+6.0.7 / 2016-01-22
+==================
+* Bug fix: When `tooltip_position` option is set to `"bottom"` on a slider with multiple split handles, position both tooltips below the slider. Thanks to [Martin Hesslund](https://github.com/kesse)
+
+6.0.5 / 2016-01-20
+==================
+* bower.json: changing "main" to reference /dist/bootstrap-slider.js
+
 6.0.2 / 2015-12-31
 ==================
 * package.json: changing "main" to point at proper file path

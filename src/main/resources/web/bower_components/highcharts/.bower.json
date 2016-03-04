@@ -1,49 +1,19 @@
 {
   "name": "highcharts",
-  "version": "4.2.0",
-  "description": "JavaScript charting framework",
-  "main": "lib/highcharts",
-  "authors": [
-    "Highsoft AS <support@highcharts.com> (http://www.highcharts.com/about)"
+  "version": "4.2.3",
+  "main": [
+    "highcharts.js",
+    "highcharts-more.js",
+    "modules/exporting.js"
   ],
-  "keywords": [
-    "charts",
-    "graphs",
-    "visualization",
-    "data",
-    "browserify",
-    "webpack"
-  ],
-  "ignore": [
-    "build",
-    "copy-release.js",
-    "errors",
-    "exporting-server",
-    "generate-changelog.js",
-    "grunt-tasks",
-    "gruntfile.js",
-    "js",
-    "vendor",
-    "samples",
-    "studies",
-    "test",
-    "tools",
-    "utils",
-    ".gitignore",
-    "ant",
-    "build.md",
-    "build.properties",
-    "build.xml"
-  ],
-  "homepage": "https://github.com/highcharts/highcharts",
-  "_release": "4.2.0",
+  "homepage": "https://github.com/highcharts/highcharts-dist",
+  "_release": "4.2.3",
   "_resolution": {
     "type": "version",
-    "tag": "v4.2.0",
-    "commit": "83c55972af6f5af78af613342c11b5b708687407"
+    "tag": "v4.2.3",
+    "commit": "58bc6956f6febf2c05fcc320466f3965873a6e8e"
   },
-  "_source": "git://github.com/highcharts/highcharts.git",
+  "_source": "git://github.com/highcharts/highcharts-dist.git",
   "_target": "~4.2.0",
-  "_originalSource": "highcharts",
-  "_direct": true
+  "_originalSource": "highcharts"
 }
