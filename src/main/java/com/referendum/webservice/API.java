@@ -238,7 +238,7 @@ public class API {
 
 
 				String subject = vars.get("subject").trim();
-				String text = vars.get("poll_text").trim();
+				String text = (vars.get("poll_text") != null) ? vars.get("poll_text").trim() : null;
 				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
 				Boolean private_ = vars.get("public_radio").equals("private");
 				String password = (private_) ? vars.get("private_password") : null;
@@ -333,7 +333,7 @@ public class API {
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
 				String subject = vars.get("subject").trim();
-				String text = vars.get("text").trim();
+				String text = (vars.get("text") != null) ? vars.get("text").trim() : null;
 				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
 				String candidateId = vars.get("candidate_id");
 
@@ -431,7 +431,7 @@ public class API {
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				String text = vars.get("text").trim();
+				String text = (vars.get("text") != null) ? vars.get("text").trim() : null;
 				String commentId = vars.get("comment_id");
 
 
