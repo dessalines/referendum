@@ -237,8 +237,8 @@ public class API {
 
 
 
-				String subject = vars.get("subject");
-				String text = vars.get("poll_text");
+				String subject = vars.get("subject").trim();
+				String text = vars.get("poll_text").trim();
 				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
 				Boolean private_ = vars.get("public_radio").equals("private");
 				String password = (private_) ? vars.get("private_password") : null;
@@ -332,8 +332,8 @@ public class API {
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				String subject = vars.get("subject");
-				String text = vars.get("text");
+				String subject = vars.get("subject").trim();
+				String text = vars.get("text").trim();
 				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
 				String candidateId = vars.get("candidate_id");
 
@@ -431,7 +431,7 @@ public class API {
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				String text = vars.get("text");
+				String text = vars.get("text").trim();
 				String commentId = vars.get("comment_id");
 
 
@@ -490,7 +490,7 @@ public class API {
 
 				Map<String, String> vars = Tools.createMapFromAjaxPost(req.body());
 
-				String text = vars.get("text");
+				String text = vars.get("text").trim();
 				String discussionId = vars.get("discussion_id");
 				String parentCommentId = vars.get("parent_comment_id");
 
@@ -1019,7 +1019,7 @@ public class API {
 
 				String pollId = ALPHA_ID.decode(vars.get("poll_id")).toString();
 				String tagId = vars.get("tag_id");
-				String tagName = vars.get("tag_name");
+				String tagName = vars.get("tag_name").trim();
 
 				String message = Actions.savePollTag(uv.getId().toString(), pollId, tagId, tagName);
 
