@@ -5,7 +5,7 @@ var startIndex = 0;
 var browsePageSize = 15;
 var recordCount = 1000;
 
-var trendingPollsType = 'hour';
+var trendingPollsType = 'day';
 
 $(document).ready(function() {
 
