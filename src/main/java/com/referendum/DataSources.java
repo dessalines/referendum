@@ -1,7 +1,12 @@
 package com.referendum;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.referendum.tools.Tools;
@@ -84,6 +89,27 @@ public class DataSources {
 	public static final String PAGES(String pageName) {
 		return WEB_HTML() + "/" + pageName + ".html";
 	}
+	
+	public static final String TEMPLATES(String pageName) {
+		return WEB_HTML() + "/" + pageName + ".template";
+	}
+	
+	public static final List<String> HEAD_TEMPLATES = new ArrayList<>(Arrays.asList(
+			"home",
+			"tag",
+			"private_poll",
+			"poll",
+			"trending_polls",
+			"trending_tags",
+			"user",
+			"comment"));
+	
+	public static final List<String> SUB_TEMPLATES = new ArrayList<>(Arrays.asList(
+			"header",
+			"navbar",
+			"footer",
+			"modals",
+			"scripts"));
 	
 	public static final Date APP_START_DATE = new Date();
 	

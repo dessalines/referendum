@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+{{{header}}} {{{navbar}}} {{=[[ ]]=}}
+
+<body>
+  <div id="wrapper">
+    <!--Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="text-center">Trending Tags</h3>
+          <hr>
+          <div class="text-center">
+            <ul id="tag_trending_ul" class="pagination pagination-sm">
+              <li><a class="text-muted hand" data-type="hour">hour</a></li>
+              <li class="active"><a class="text-muted hand" data-type="day">day</a></li>
+              <li><a class="text-muted hand" data-type="week">week</a></li>
+              <li><a class="text-muted hand" data-type="month">month</a></li>
+              <li><a class="text-muted hand" data-type="year">year</a></li>
+            </ul>
+          </div>
+          <div id="trending_tags_div">
+            <script id="trending_tags_template" type="x-tmpl-mustache">
+              {{#.}} <a href="/tag/{{aid}}" class="label label-default">{{name}}</a> {{/.}}
+            </script>
+          </div>
+        </div>
+      </div>
+      [[={{ }}=]] {{{footer}}}
+    </div>
+    {{{modals}}}
+  </div>
+</body>
+{{{scripts}}}
+<script src="../js/trending_tags.js"></script>
+
+</html>

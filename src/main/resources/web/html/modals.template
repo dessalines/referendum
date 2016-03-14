@@ -1,0 +1,62 @@
+    <!-- Modals -->
+    <div class="modal fade bs-example-modal-sm" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 vertical-line-right">
+                <h4 class="text-center"> Create a new account </h4>
+                <br>
+                <form id="signup_form" class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="username" class="form-control" placeholder="choose a username" minlength="5" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username is required" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="verifyPassword" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="verifyPassword" type="password" class="form-control" id="inputPassword3" placeholder="verify password" data-bv-notempty="true" data-bv-notempty-message="The confirm password is required and cannot be empty" data-bv-identical="true" data-bv-identical-field="password" data-bv-identical-message="The password and its confirm are not the same" data-bv-different="true" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="email" type="inputEmail3" class="form-control" id="inputEmail3" placeholder="email (optional)" data-bv-emailaddress="true" data-bv-emailaddress-message="The input is not a valid email address" />
+                    </div>
+                  </div>
+                  <div id="recaptcha_signup" style="transform:scale(0.8);transform-origin:0 0"></div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <button id="signinBtn" type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Sign up</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- The sign up tab -->
+              <div class="col-md-6">
+                <h4 class="text-center"> Log in </h4>
+                <br>
+                <form id="login_form" class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="user_or_email" class="form-control" placeholder="username or email" minlength="5" maxlength="140" data-bv-notempty="true" data-bv-notempty-message="A username or email is required" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="password" data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty" data-bv-different-field="username" data-bv-different-message="The password cannot be the same as username" />
+                    </div>
+                  </div>
+                  <div id="recaptcha_login" style="transform:scale(0.8);transform-origin:0 0"></div>
+                  <button type="submit" class="btn btn-default btn-lg btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Log In</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
