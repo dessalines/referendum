@@ -9,7 +9,6 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +75,7 @@ public class WriteHTMLFiles {
 
 			Reader reader = new FileReader(new File(headTemplateFile));
 
-			log.info(headTemplateFile);
+			log.debug(headTemplateFile);
 			File outputFile = new File(headTemplateFile.split("template")[0] + "html");
 
 			Writer writer = new FileWriter(outputFile);
@@ -86,7 +85,7 @@ public class WriteHTMLFiles {
 			mustache.execute(writer, templates);
 			writer.flush();
 
-			log.info(Tools.readFile(outputFile.getAbsolutePath()));
+			log.debug(Tools.readFile(outputFile.getAbsolutePath()));
 
 		} catch (IOException e) {
 			e.printStackTrace();
