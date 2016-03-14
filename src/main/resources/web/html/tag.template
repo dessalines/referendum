@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+{{{header}}} {{{navbar}}} {{=[[ ]]=}}
+
+<body>
+  <div id="wrapper">
+    <!--Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="text-center">Trending Polls for <span id="tag_name"></span></h3>
+          <hr>
+          <div class="text-center">
+            <ul id="poll_trending_ul" class="pagination pagination-sm">
+              <li class="active"><a class="text-muted hand" data-type="hour">hour</a></li>
+              <li><a class="text-muted hand" data-type="day">day</a></li>
+              <li><a class="text-muted hand" data-type="week">week</a></li>
+              <li><a class="text-muted hand" data-type="month">month</a></li>
+              <li><a class="text-muted hand" data-type="year">year</a></li>
+            </ul>
+          </div>
+          <div id="trending_polls_div">
+            <script id="trending_polls_template" type="x-tmpl-mustache">
+              {{#records}}
+              <div class="col-md-4">
+                <h4 class="title-line"><a href="/poll/{{aid}}" class="text-normal">{{subject}}</a> <small>{{#private}}[private]{{/private}}{{#full_user_only}}[user-only]{{/full_user_only}}</small></h4>
+                <p class="info-line text-muted">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to
+                  <a href="/tag/{{tag_aid}}" class="label label-default label-nowrap"> {{tag_name}}</a></p>
+                <small>
+                <ul class="list-inline">
+                  <li><a class="text-normal" href="/poll/{{aid}}">{{number_of_comments}} comments</a></li>
+                  <li>{{year_hits}} views</li>
+                </ul>
+                </small>
+              </div>{{/records}}
+            </script>
+          </div>
+        </div>
+      </div>
+      [[={{ }}=]] {{{footer}}}
+    </div>
+    {{{modals}}}
+  </div>
+</body>
+{{{scripts}}}
+<script src="../js/tag.js"></script>
+
+</html>

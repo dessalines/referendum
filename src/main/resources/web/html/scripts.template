@@ -1,0 +1,32 @@
+<!-- Bootstrap core JavaScript
+      ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+<script src="../bower_components/toastr/toastr.js"></script>
+<script src="../bower_components/mustache.js/mustache.js"></script>
+<script src="../bower_components/holderjs/holder.js"></script>
+<script src="../bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+<script src="../bower_components/markdown-js/dist/markdown.min.js"></script>
+<script src="../bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
+<script src="../bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+<script src="../bower_components/d3/d3.min.js"></script>
+<script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
+<script src="../bower_components/moment/min/moment.min.js"></script>
+<script src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<!-- my scripts -->
+<script src="../js/tools.js"></script>
+<script src="../js/common.js"></script>
+<!-- Recaptcha -->
+<script type="text/javascript">
+var CaptchaCallback = function() {
+  grecaptcha.render('recaptcha_signup', {
+    'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
+  });
+  grecaptcha.render('recaptcha_login', {
+    'sitekey': '6Lc_EhgTAAAAAGmog3R4i47mlVUCzj68yaMJs_7T'
+  });
+};
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>

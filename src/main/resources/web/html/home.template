@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+{{{header}}} {{{navbar}}} {{=[[ ]]=}}
+
+<body>
+  <div id="wrapper">
+    <!--Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 vertical-line-right">
+          <h3><a href="https://github.com/tchoulihan/referendum">Referendum</a> <small>beta</small></h3>
+          <p>A group decision-making and polling platform</p>
+          <hr>
+          <p><a href="https://en.wikipedia.org/wiki/Direct_democracy">Direct democracy</a> is the future, but <i>how might it work in practice?</i>
+          </p>
+          <p> How can increasingly larger groups of people come to a <a href="https://en.wikipedia.org/wiki/Consensus_decision-making">consensus</a>, when there are <i>too many of them to fit into one room?</i>
+          </p>
+          <p><a href="https://github.com/tchoulihan/referendum">Referendum</a> is a simple, <a href="https://github.com/tchoulihan/referendum">open-source</a> platform, created out of a desire to answer those questions. <i>So what makes referendum different?</i></p>
+          <p>It uses the best voting method available, <a href="http://rangevoting.org/">range voting</a> (also known as <a href="https://en.wikipedia.org/wiki/Range_voting">olympic score voting</a>), for both comments and polls. Range voting beats out <a href="http://rangevoting.org/AppExec.html">approval voting</a>, <a href="http://rangevoting.org/rangeVirv.html">IRV</a>, and <a href="http://rangevoting.org/Plurality.html">FPTP</a> for <a href="http://rangevoting.org/UniqBest.html">minimizing voter regret</a>.</p>
+          <p>All polls are <a href="/poll/1#vote_tab">dynamic polls</a>, where users can contribute options or candidates themselves.</p>
+          <p>It features threaded <b>discussion before voting</b>, a key feature in <a href="https://en.wikipedia.org/wiki/Consensus_decision-making#Objectives">collaborative systems</a>. </p>
+          <p>Polls can be private, open to the public, or limited to users who have to pass captchas.</p>
+          <p> Check out a sample poll <a href="/poll/1">here</a>. subreddit: <a href="https://www.reddit.com/r/referendum_/">/r/referendum_</a>
+          </p>
+          <button class="btn btn-default btn-block create_empty_poll"> Create a poll</button>
+        </div>
+        <div class="col-md-6">
+          <h3 class="text-center"><a class="text-normal" href="/trending_polls">Trending Polls</a></h3>
+          <hr>
+          <div id="trending_polls_div">
+            <script id="trending_polls_template" type="x-tmpl-mustache">
+              {{#records}}
+              <h4 class="title-line"><a href="/poll/{{aid}}" class="text-normal">{{subject}}</a> <small>{{#private}}[private]{{/private}}{{#full_user_only}}[user-only]{{/full_user_only}}</small></h4>
+              <p class="info-line text-muted">submitted {{#dateformat}}{{created}}{{/dateformat}} by <a href="/user/{{user_aid}}">{{user_name}}</a> to {{#tag_name}}
+                <a href="/tag/{{tag_aid}}" class="label label-default"> {{tag_name}}</a>{{/tag_name}}</p>
+              <small>
+              <ul class="list-inline">
+                <li><a class="text-normal" href="/poll/{{aid}}">{{number_of_comments}} comments</a></li>
+                <li>{{year_hits}} views</li>
+              </ul>
+              </small> {{/records}}
+            </script>
+          </div>
+          <br>
+          <p><a href="/trending_polls"> more polls <i class="fa fa-arrow-right"></i></a></p>
+          <div id="trending_tags_div">
+            <script id="trending_tags_template" type="x-tmpl-mustache">
+              {{#0}} <span> <a class="text-normal" href="/trending_tags">trending tags:</a> </span>{{/0}} {{#.}} <a href="/tag/{{aid}}" class="label label-default">{{name}}</a> {{/.}}
+              <span><a href="/trending_tags"> <i class="fa fa-arrow-right"></i></a></span>
+            </script>
+          </div>
+        </div>
+      </div>
+      [[={{ }}=]] {{{footer}}}
+    </div>
+    {{{modals}}}
+  </div>
+</body>
+{{{scripts}}}
+<script src="../js/home.js"></script>
+<script src="../js/trending_tags.js"></script>
+<script src="../js/trending_polls.js"></script>
+
+</html>
