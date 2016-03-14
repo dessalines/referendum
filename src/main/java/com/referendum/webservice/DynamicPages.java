@@ -2,6 +2,8 @@ package com.referendum.webservice;
 
 import static spark.Spark.get;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +13,11 @@ import com.referendum.tools.Tools;
 public class DynamicPages {
 
 	static final Logger log = LoggerFactory.getLogger(API.class);
+	
+
 
 	public static void setup() {
+		
 		
 		get("poll/:pollId", (req, res) -> {
 			Tools.allowAllHeaders(req, res);

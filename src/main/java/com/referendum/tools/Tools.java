@@ -174,7 +174,7 @@ public class Tools {
 			}
 		}
 
-		log.info(GSON2.toJson(postMap));
+//		log.info(GSON2.toJson(postMap));
 
 		return postMap;
 
@@ -233,7 +233,7 @@ public class Tools {
 			Tools.unzip(new File(zipFile), new File(DataSources.SOURCE_CODE_HOME()));
 			//		new Tools().copyJarResourcesRecursively("src", configHome);
 
-			//			WriteMultilingualHTMLFiles.write();
+			WriteHTMLFiles.write();
 
 		} else {
 			log.info("The source directory already exists");
@@ -425,6 +425,14 @@ public class Tools {
 			throw new NoSuchElementException("Couldn't write result");
 		}
 		return s;
+	}
+	
+	public static void writeFile(String text, String path) {
+		try {
+			java.nio.file.Files.write(Paths.get(path), text.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static Boolean writeFileToResponse(File file, Request req, Response res) {
