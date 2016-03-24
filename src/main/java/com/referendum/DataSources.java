@@ -117,7 +117,7 @@ public class DataSources {
 
 	public static final Properties DB_PROP = Tools.loadProperties(DB_PROP_FILE);
 
-	public static final Integer EXPIRE_SECONDS = 86400;
+	public static final Integer EXPIRE_SECONDS = 86400 * 7; // stays logged in for 7 days
 	
 	
 	public static final String KEYSTORE_FILE() {return HOME_DIR() + "/keystore.jks";}
