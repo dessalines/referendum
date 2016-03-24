@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="../bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css">
   <!-- Bootstrap slider css -->
   <link rel="stylesheet" href="../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
+  <!-- Bootstrap Date-timepicker -->
+  <link rel="stylesheet" href="../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
   <!-- This main css -->
   <link href="../css/main2.css" rel="stylesheet">
 </head>

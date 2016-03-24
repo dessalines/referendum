@@ -58,9 +58,9 @@
                       </a>
                       <br>
                       <div class="collapse" id="advanced_options">
-                        <h5> Privacy</h5>
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-4">
+                            <h5> Privacy</h5>
                             <label class="radio-inline">
                               <input type="radio" name="public_radio" value="public" checked> Public
                             </label>
@@ -73,9 +73,14 @@
                               </label>
                             </div>
                             <div id="private_password" class="form-group hide">
-                              <div class="col-md-4">
-                                <input class="form-control" name="private_password" type="text" placeholder="Password" minlength="4" maxlength="140" />
-                              </div>
+                              <input class="form-control" name="private_password" type="text" placeholder="Password" minlength="4" maxlength="140" />
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <h5> Vote threshold </h5>
+                            <div class="input-group">
+                              <input name="pct_threshold" type="text" class="form-control" placeholder="10" data-bv-integer="true" data-bv-integer-message="Must be an integer" data-bv-greaterthan="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Must be > 0" data-bv-lessthan="true" data-bv-lessthan-value="100" data-bv-lessthan-message="Must be < 100" data-toggle="tooltip" data-placement="auto" title="A percentage cutoff that removes candidates with too few votes">
+                              <div class="input-group-addon">%</div>
                             </div>
                           </div>
                         </div>

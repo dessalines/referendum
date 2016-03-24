@@ -69,6 +69,9 @@
 <row name="add_candidates_expire_time" null="1" autoincrement="0">
 <datatype>TIMESTAMP</datatype>
 <default>NULL</default></row>
+<row name="pct_threshold" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>10</default></row>
 <row name="created" null="0" autoincrement="0">
 <datatype>TIMESTAMP</datatype>
 <default>CURRENT_TIMESTAMP</default></row>

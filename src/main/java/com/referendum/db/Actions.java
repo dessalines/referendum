@@ -65,7 +65,8 @@ public class Actions {
 	public static String savePoll(String userId, String pollId, 
 			String subject, String text, String password,
 			String pollSumTypeId, Boolean fullUsersOnly, 
-			Timestamp expireTime, Timestamp addCandidatesExpireTime, Response res) {
+			Timestamp expireTime, Timestamp addCandidatesExpireTime, 
+			Integer pctThreshold, Response res) {
 
 		Poll p = POLL.findFirst("id = ? and user_id = ?", pollId, userId);
 
@@ -78,7 +79,8 @@ public class Actions {
 				"poll_sum_type_id", pollSumTypeId,
 				"full_user_only", fullUsersOnly,
 				"expire_time", expireTime,
-				"add_candidates_expire_time", addCandidatesExpireTime).saveIt();
+				"add_candidates_expire_time", addCandidatesExpireTime,
+				"pct_threshold", pctThreshold).saveIt();
 
 
 		Discussion d = DISCUSSION.findFirst("id = ?", p.getString("discussion_id"));
@@ -488,7 +490,8 @@ public class Actions {
 
 		RangeElection re = new RangeElection(Integer.valueOf(pollId),
 				sumIdToRangeVotingSystemType().get(p.getInteger("poll_sum_type_id")), 
-				ballots);
+				ballots,
+				p.getInteger("pct_threshold"));
 
 
 		return Tools.nodeToJson(Transformations.rangeResultsJson(re));

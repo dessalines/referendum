@@ -26,14 +26,17 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 	public List<RangeBallot> ballots;
 	public List<RangeCandidateResult> rankings;
 	public Integer id;
+	public Integer minimumPctThreshold;
 
 	// A helpful map of candidates ids to ballots
 	Map<Integer, List<RangeCandidate>> candidateBallots;
 
-	public RangeElection(Integer id, RangeVotingSystemType type, List<RangeBallot> ballots) {
+	public RangeElection(Integer id, RangeVotingSystemType type, List<RangeBallot> ballots, 
+			Integer minimumPctThreshold) {
 		this.id = id;
 		this.type = type;
 		this.ballots = ballots;
+		this.minimumPctThreshold = minimumPctThreshold;
 
 		runElection();
 	}
@@ -77,6 +80,20 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 
 		// Loop over all the individual grouped candidates, and find the score
 		rankings = new ArrayList<>();
+		
+		// The highest number of ballots for any candidate
+		Integer maxVotes = 0;
+		for (Entry<Integer, List<RangeCandidate>> candidateGrouped : candidateBallots.entrySet()) {
+			Integer count = candidateGrouped.getValue().size();
+			if (count >= maxVotes) {
+				maxVotes = count;
+			}
+		}
+		
+		Integer threshold = (maxVotes * minimumPctThreshold / 100);
+		
+		log.info("vote count threshold = " + threshold);
+		
 
 		for (Entry<Integer, List<RangeCandidate>> candidateGrouped : candidateBallots.entrySet()) {
 
@@ -94,10 +111,15 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 				score = median(ints);
 			}
 
+			Integer count = candidateGrouped.getValue().size();
 			RangeCandidateResult result = new RangeCandidateResult(candidateGrouped.getKey(),
-					score, candidateGrouped.getValue().size());
+					score, count);
+			
+			log.info("candidate = " + candidateGrouped.getKey() + " , vote count = " + count);
 
-			rankings.add(result);
+			if (count >= threshold) {
+				rankings.add(result);
+			}
 
 		}
 
