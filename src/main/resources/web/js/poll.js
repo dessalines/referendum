@@ -686,4 +686,8 @@ function fillPollForm(data) {
     $('input[name="add_candidates_expire_time"]').val(moment(data['add_candidates_expire_time']).format(fmt));
   }
 
+  $('input[name="pct_threshold"]').val(data['pct_threshold']);
+
+
+
 }

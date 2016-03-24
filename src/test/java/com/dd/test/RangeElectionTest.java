@@ -59,7 +59,7 @@ public class RangeElectionTest extends TestCase {
 		
 		List<RangeBallot> ballots = setupBallots();
 		
-		RangeElection re = new RangeElection(1, RangeVotingSystemType.AVERAGE, ballots);
+		RangeElection re = new RangeElection(1, RangeVotingSystemType.AVERAGE, ballots, 10);
 		
 		log.info(Tools.GSON2.toJson(re.getRankings()));
 		

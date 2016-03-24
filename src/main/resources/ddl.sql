@@ -26,11 +26,14 @@ CREATE TABLE `poll` (
   `user_id` INTEGER NULL DEFAULT NULL,
   `private_password` VARCHAR(140) NULL DEFAULT NULL,
   `full_user_only` TINYINT(1) NOT NULL DEFAULT 0,
+  `expire_time` TIMESTAMP NULL DEFAULT NULL,
+  `add_candidates_expire_time` TIMESTAMP NULL DEFAULT NULL,
+  `pct_threshold` INTEGER NOT NULL DEFAULT 10,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`discussion_id`),
-  KEY (`aid`)
+KEY (`aid`)
 );
 
 -- ---
