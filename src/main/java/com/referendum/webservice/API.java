@@ -246,7 +246,7 @@ public class API {
 				Boolean fullUsersOnly = (vars.get("full_users_only") != null) ? true : false;
 				Timestamp expireTime = (vars.get("expire_time") != null) ? new Timestamp(Tools.DATE_PICKER_FORMAT.parse(vars.get("expire_time")).getTime()) : null ;
 				Timestamp addCandidatesExpireTime = (vars.get("add_candidates_expire_time") != null) ? new Timestamp(Tools.DATE_PICKER_FORMAT.parse(vars.get("add_candidates_expire_time")).getTime()) : null;
-				Integer pctThreshold = (vars.get("pct_threshold") != null) ? Integer.valueOf(vars.get("pct_threshold")) : 10;
+				Integer pctThreshold = (vars.get("pct_threshold") != null) ? Integer.valueOf(vars.get("pct_threshold")) : 30;
 				
 				String message = Actions.savePoll(uv.getId().toString(), pollId, 
 						subject, text, password, pollSumTypeId, fullUsersOnly, 

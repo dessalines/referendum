@@ -92,7 +92,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 		
 		Integer threshold = (maxVotes * minimumPctThreshold / 100);
 		
-		log.info("vote count threshold = " + threshold);
+		log.debug("vote count threshold = " + threshold);
 		
 
 		for (Entry<Integer, List<RangeCandidate>> candidateGrouped : candidateBallots.entrySet()) {
@@ -115,7 +115,7 @@ public class RangeElection implements RangeVotingSystem, RangeElectionResults {
 			RangeCandidateResult result = new RangeCandidateResult(candidateGrouped.getKey(),
 					score, count);
 			
-			log.info("candidate = " + candidateGrouped.getKey() + " , vote count = " + count);
+			log.debug("candidate = " + candidateGrouped.getKey() + " , vote count = " + count);
 
 			if (count >= threshold) {
 				rankings.add(result);
