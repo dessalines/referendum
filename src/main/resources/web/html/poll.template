@@ -318,9 +318,12 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="vote_tab">
-          <br>
+          
           <div class="row">
             <div class="col-md-12">
+              <p class="text-center"><i class="fa fa-question-circle hand" data-toggle="tooltip" data-placement="auto" 
+              title="To vote, click any of the thumbs up buttons, and slide higher for options you like, and lower for options you don't."></i>
+              </p>
               <div class="panel-group">
                 <div id="candidates_div">
                   <script id="candidates_template" type="x-tmpl-mustache">
